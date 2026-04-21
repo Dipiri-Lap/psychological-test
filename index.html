@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마음. — 나를 알아가는 심리테스트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── CSS Variables ────────────────────────────────── */
+    :root {
+      --c-main:    #1c1917;
+      --c-accent:  #e85d75;
+      --c-bg:      #faf8f5;
+      --c-surface: #ffffff;
+      --c-surf2:   #f3f0ea;
+      --c-text:    #1c1917;
+      --c-muted:   #9b9490;
+      --c-border:  #e8e3db;
+      --shadow:        0 2px 16px rgba(0,0,0,.06);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.13);
+      --r:   20px;
+      --r-sm: 14px;
+    }
+    [data-theme="dark"] {
+      --c-main:    #f0ece6;
+      --c-accent:  #ff4d72;
+      --c-bg:      #100f0e;
+      --c-surface: #1a1917;
+      --c-surf2:   #211f1d;
+      --c-text:    #f0ece6;
+      --c-muted:   #605c58;
+      --c-border:  #2a2724;
+      --shadow:        0 2px 16px rgba(0,0,0,.4);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.6);
+    }
+
+    /* ── Reset ────────────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      min-height: 100vh;
+      transition: background .35s, color .35s;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Header ───────────────────────────────────────── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--c-bg);
+      border-bottom: 1px solid var(--c-border);
+      transition: background .35s, border-color .35s;
+    }
+    .logo {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px;
+      letter-spacing: -1px;
+    }
+    .logo-dot { color: var(--c-accent); }
+
+    .theme-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--c-border);
+      background: var(--c-surface);
+      font-size: 17px;
+      display: grid;
+      place-items: center;
+      transition: border-color .2s, transform .3s;
+    }
+    .theme-btn:hover { border-color: var(--c-accent); transform: rotate(22deg); }
+
+    /* ── Main ─────────────────────────────────────────── */
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 18px 72px;
+    }
+
+    /* ── Hero Card ────────────────────────────────────── */
+    .hero-card {
+      display: block;
+      background: var(--c-surface);
+      color: var(--c-text);
+      border-radius: var(--r);
+      border: 1.5px solid var(--c-border);
+      margin-bottom: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      animation: slideUp .5s .05s cubic-bezier(.22,1,.36,1) both;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .2s;
+    }
+    .hero-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--c-accent);
+    }
+    .hero-card:hover .hero-img { transform: scale(1.04); }
+
+    .hero-thumb-wrap {
+      aspect-ratio: 3 / 2;
+      overflow: hidden;
+      background: var(--c-surf2);
+      position: relative;
+    }
+    /* ── Hero background image ── */
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+    .hot-badge {
+      position: absolute;
+      top: 12px; left: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--c-accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 100px;
+      letter-spacing: .4px;
+    }
+    .hero-body {
+      padding: 18px 20px 20px;
+    }
+    .hero-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px;
+      letter-spacing: -.5px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .hero-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--c-muted);
+      margin-bottom: 16px;
+    }
+    .hero-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hero-count {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--c-accent);
+      letter-spacing: .2px;
+    }
+    .go-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--c-accent);
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      color: #fff;
+      flex-shrink: 0;
+      transition: transform .2s;
+    }
+    .hero-card:hover .go-btn { transform: translateX(4px); }
+
+    /* ── Ad Placeholder ───────────────────────────────── */
+    .ad-slot {
+      border: 1.5px dashed var(--c-border);
+      background: var(--c-surf2);
+      border-radius: var(--r-sm);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      color: var(--c-muted);
+      margin-bottom: 28px;
+      animation: slideUp .5s .18s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* ── Filter Tabs ──────────────────────────────────── */
+    .filter-row {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+      margin-bottom: 18px;
+      animation: slideUp .5s .25s cubic-bezier(.22,1,.36,1) both;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+
+    .tab {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1.5px solid var(--c-border);
+      background: var(--c-surface);
+      color: var(--c-muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .tab:hover { border-color: var(--c-accent); color: var(--c-accent); }
+    .tab.active {
+      background: var(--c-main);
+      color: var(--c-bg);
+      border-color: var(--c-main);
+    }
+
+    /* ── Card Grid ────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 20px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity .4s,
+        transform .4s cubic-bezier(.22,1,.36,1),
+        border-color .2s,
+        box-shadow .25s;
+    }
+    .card.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card:hover {
+      border-color: var(--c-accent);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-5px);
+    }
+    .card.hidden { display: none; }
+
+    /* ── Card thumbnail ── */
+    .card-thumb-wrap {
+      aspect-ratio: 3 / 2;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      background: var(--c-surf2);
+      flex-shrink: 0;
+    }
+    .card-thumb {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .card:hover .card-thumb { transform: scale(1.05); }
+    .card-emoji { font-size: 38px; line-height: 1; margin-bottom: 14px; }
+
+.card-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 15px;
+      letter-spacing: -.3px;
+      line-height: 1.3;
+      margin-bottom: 7px;
+    }
+    .card-desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--c-muted);
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+    .card-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--c-accent);
+      letter-spacing: .2px;
+    }
+
+    /* ── Empty State ──────────────────────────────────── */
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 0;
+      color: var(--c-muted);
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 10px; }
+    .empty-msg { font-size: 14px; font-weight: 300; }
+
+    /* ── Animations ───────────────────────────────────── */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">마음<span class="logo-dot">.</span></a>
+  <button class="theme-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
+</header>
+
+<main>
+  <!-- Hero -->
+  <a href="test.html?id=jealousy" class="hero-card" id="heroCard">
+    <div class="hero-thumb-wrap">
+      <img class="hero-img" id="heroImg" src="" alt="">
+      <span class="hot-badge">🔥 지금 인기</span>
+    </div>
+    <div class="hero-body">
+      <h2 class="hero-title" id="heroTitle"></h2>
+      <p class="hero-desc" id="heroDesc"></p>
+      <div class="hero-footer">
+        <div class="hero-count">👥 <span id="heroCount"></span>명 참여</div>
+        <div class="go-btn">→</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- AdSense Placeholder -->
+  <div class="ad-slot">ADVERTISEMENT</div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-row" id="filterRow">
+    <button class="tab active" data-filter="전체">전체</button>
+    <button class="tab" data-filter="연애">💕 연애</button>
+    <button class="tab" data-filter="성격">🧠 성격</button>
+    <button class="tab" data-filter="재미">😂 재미</button>
+    <button class="tab" data-filter="인기">🔥 인기</button>
+  </div>
+
+  <!-- Card Grid -->
+  <div class="grid" id="cardGrid"></div>
+</main>
+
+<script>
+  /* ── Data ─────────────────────────────────────────── */
+  const tests = [
+    { id:"sbti",       emoji:"💜", title:"SBTI 성격 유형 테스트", desc:"나의 숨겨진 본능은? (30문항)",           category:"성격", count:45200 },
+    { id:"jealousy",   emoji:"🫣", title:"질투 유형 테스트",   desc:"쿨한 척하지만 속은 부글부글?",          category:"연애", count:21700 },
+    { id:"attachment", emoji:"💕", title:"애착 유형 테스트",   desc:"안정형? 불안형? 회피형?",               category:"연애", count:18000 },
+    { id:"moral",      emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
+    { id:"brain",      emoji:"🧠", title:"좌뇌 우뇌 테스트",   desc:"나는 논리파? 감성파?",                  category:"성격", count:6200  },
+    { id:"humor",      emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
+  ];
+
+  /* ── Helpers ──────────────────────────────────────── */
+  function fmt(n) {
+    if (n >= 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    if (n >= 1000)  return (n / 1000).toFixed(1) + 'K';
+    return n.toLocaleString();
+  }
+
+  /* ── Hero ─────────────────────────────────────────── */
+  const hero = tests.reduce((a, b) => a.count > b.count ? a : b);
+  document.getElementById('heroCard').href         = `test.html?id=${hero.id}`;
+  const heroImg = document.getElementById('heroImg');
+  heroImg.alt   = hero.title;
+  heroImg.onerror = () => { heroImg.style.display = 'none'; };
+  heroImg.src   = `images/${hero.id}/thumb.webp`;
+  document.getElementById('heroTitle').textContent = hero.title;
+  document.getElementById('heroDesc').textContent  = hero.desc;
+  document.getElementById('heroCount').textContent = fmt(hero.count);
+
+  /* ── Cards ────────────────────────────────────────── */
+  const topIds = [...tests].sort((a,b) => b.count - a.count).slice(0,3).map(t => t.id);
+  const grid   = document.getElementById('cardGrid');
+
+  tests.forEach((t, i) => {
+    const a = document.createElement('a');
+    a.href             = `test.html?id=${t.id}`;
+    a.className        = 'card';
+    a.dataset.category = t.category;
+    a.dataset.id       = t.id;
+    a.innerHTML = `
+      <div class="card-thumb-wrap">
+        <img class="card-thumb" src="images/${t.id}/thumb.webp" alt="${t.title}"
+          onerror="this.closest('.card-thumb-wrap').remove()">
+      </div>
+      <div class="card-title">${t.title}</div>
+      <div class="card-desc">${t.desc}</div>
+      <div class="card-count">👥 ${fmt(t.count)}명 참여</div>
+    `;
+    grid.appendChild(a);
+
+    /* stagger entrance */
+    setTimeout(() => a.classList.add('in'), 320 + i * 90);
+  });
+
+  /* ── Filter ───────────────────────────────────────── */
+  let activeFilter = '전체';
+
+  function applyFilter(f) {
+    activeFilter = f;
+    let any = false;
+    grid.querySelectorAll('.card').forEach(c => {
+      const show = f === '전체'
+        || c.dataset.category === f
+        || (f === '인기' && topIds.includes(c.dataset.id));
+      c.classList.toggle('hidden', !show);
+      if (show) any = true;
+    });
+
+    /* empty state */
+    let emp = grid.querySelector('.empty');
+    if (!any) {
+      if (!emp) {
+        emp = document.createElement('div');
+        emp.className = 'empty';
+        emp.innerHTML = '<div class="empty-icon">🔍</div><div class="empty-msg">해당 카테고리 테스트가 없어요</div>';
+        grid.appendChild(emp);
+      }
+    } else {
+      emp?.remove();
+    }
+  }
+
+  document.getElementById('filterRow').addEventListener('click', e => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    applyFilter(tab.dataset.filter);
+  });
+
+  /* ── Theme ────────────────────────────────────────── */
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeBtn');
+
+  function setTheme(t) {
+    html.dataset.theme = t;
+    btn.textContent    = t === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', t);
+  }
+
+  const saved = localStorage.getItem('theme')
+    ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  setTheme(saved);
+
+  btn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
+</script>
+</body>
+</html>
