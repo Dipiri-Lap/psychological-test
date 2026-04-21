@@ -1282,10 +1282,16 @@ function showScreen(id) {
 ══════════════════════════════════════════════════ */
 function requestFullscreen() {
   const el = document.documentElement;
-  (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen)?.call(el);
+  const fs = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
+  if (fs) {
+    fs.call(el).then(() => {
+      screen.orientation?.lock('portrait').catch(() => {});
+    }).catch(() => {});
+  }
 }
 
 function exitFullscreen() {
+  screen.orientation?.unlock();
   (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen)?.call(document);
 }
 
