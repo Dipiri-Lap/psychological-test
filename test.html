@@ -116,6 +116,13 @@
       padding: 0 18px;
       z-index: 150;
     }
+    #topNav .q-counter-nav {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.8px; color: var(--c-accent);
+      text-transform: uppercase;
+      display: none;
+    }
+    #topNav .q-counter-nav.visible { display: block; }
     .nav-btn {
       width: 38px; height: 38px;
       border-radius: 50%;
@@ -192,16 +199,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 52px 24px 0;
+      padding: 16px 24px 0;
       min-height: 0;
     }
 
-    .q-counter {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 1.8px; color: var(--c-accent);
-      text-transform: uppercase;
-      margin-bottom: 36px;
-    }
+    .q-counter { display: none; }
 
     /* Grid stacking: entering + exiting slides overlap cleanly */
     #slideWrap {
@@ -687,6 +689,7 @@
 <!-- Top nav -->
 <div id="topNav">
   <button class="nav-btn" id="backBtn" aria-label="뒤로가기" onclick="history.back()">←</button>
+  <span class="q-counter-nav" id="qCounterNav"></span>
   <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
 </div>
 
@@ -1289,7 +1292,11 @@ function renderQuestion(first) {
 
   // Progress + counter
   document.getElementById('progressFill').style.width = `${(qIndex / total) * 100}%`;
-  document.getElementById('qCounter').textContent = `Q${qIndex + 1}  ·  ${total}문항 중`;
+  const counterText = `Q${qIndex + 1}  ·  ${total}문항 중`;
+  document.getElementById('qCounter').textContent    = counterText;
+  const navCounter = document.getElementById('qCounterNav');
+  navCounter.textContent = counterText;
+  navCounter.classList.add('visible');
 
   // ── Question text (slide animation) ──────────────
   const wrap = document.getElementById('slideWrap');
