@@ -373,10 +373,10 @@
 <script>
   /* ── Data ─────────────────────────────────────────── */
   const tests = [
-    { id:"sbti",       emoji:"💜", title:"SBTI 성격 유형 테스트", desc:"나의 숨겨진 본능은? (30문항)",           category:"성격", count:45200 },
-    { id:"jealousy",   emoji:"🫣", title:"질투 유형 테스트",   desc:"쿨한 척하지만 속은 부글부글?",          category:"연애", count:21700 },
-    { id:"attachment", emoji:"💕", title:"애착 유형 테스트",   desc:"안정형? 불안형? 회피형?",               category:"연애", count:18000 },
-    { id:"brain",      emoji:"🧠", title:"좌뇌 우뇌 테스트",   desc:"나는 논리파? 감성파?",                  category:"성격", count:6200  },
+    { id:"sbti",       emoji:"💜", title:"SBTI 성격 유형 테스트", desc:"나의 숨겨진 본능은? (30문항)",           category:"성격", count:22600 },
+    { id:"jealousy",   emoji:"🫣", title:"질투 유형 테스트",   desc:"쿨한 척하지만 속은 부글부글?",          category:"연애", count:10850 },
+    { id:"attachment", emoji:"💕", title:"애착 유형 테스트",   desc:"안정형? 불안형? 회피형?",               category:"연애", count:9000 },
+    { id:"brain",      emoji:"🧠", title:"좌뇌 우뇌 테스트",   desc:"나는 논리파? 감성파?",                  category:"성격", count:3100  },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -475,6 +475,54 @@
   setTheme(saved);
 
   btn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
+</script>
+
+<!-- Firebase Integration -->
+<script type="module">
+  import { db, doc, onSnapshot, setDoc, getDoc } from './firebase-init.js';
+
+  const statsRef = doc(db, 'stats', 'participation');
+
+  // Initial base counts (same as in the 'tests' array)
+  const baseCounts = {
+    sbti: 22600,
+    jealousy: 10850,
+    attachment: 9000,
+    brain: 3100
+  };
+
+  // Sync with Firestore
+  onSnapshot(statsRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.data();
+      Object.keys(baseCounts).forEach(id => {
+        const totalCount = (data[id] || 0) + baseCounts[id];
+        updateCountDisplay(id, totalCount);
+      });
+    } else {
+      // Initialize Firestore with 0 if it doesn't exist
+      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0 });
+    }
+  });
+
+  function updateCountDisplay(id, count) {
+    // 1. Update Hero Card if it matches
+    const heroCard = document.getElementById('heroCard');
+    if (heroCard && heroCard.href.includes(`id=${id}`)) {
+      document.getElementById('heroCount').textContent = fmt(count);
+    }
+
+    // 2. Update Grid Cards
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      if (card.dataset.id === id) {
+        const countEl = card.querySelector('.card-count');
+        if (countEl) {
+          countEl.innerHTML = `👥 ${fmt(count)}명 참여`;
+        }
+      }
+    });
+  }
 </script>
 </body>
 </html>

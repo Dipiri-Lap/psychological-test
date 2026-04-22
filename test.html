@@ -1164,6 +1164,9 @@ let answersRaw = []; // For SBTI scoring logic
   // Auto-start if 'start=true' param exists
   if (isStarting) {
     startQuiz();
+    if (window.incrementParticipation) {
+      window.incrementParticipation(testId);
+    }
   }
 
   Object.keys(testData.results).forEach(k => { scores[k] = 0; });
@@ -1618,6 +1621,21 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2400);
 }
+</script>
+
+<!-- Firebase Integration -->
+<script type="module">
+  import { db, doc, updateDoc, increment } from './firebase-init.js';
+
+  window.incrementParticipation = function(id) {
+    if (!id) return;
+    const statsRef = doc(db, 'stats', 'participation');
+    updateDoc(statsRef, {
+      [id]: increment(1)
+    }).catch(err => {
+      console.error("Firebase update failed:", err);
+    });
+  };
 </script>
 </body>
 </html>
