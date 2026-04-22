@@ -400,46 +400,17 @@
       opacity: 0; animation: fadeIn .5s .1s ease both;
     }
 
-    .result-emoji-wrap { position: relative; margin-bottom: 28px; }
-    .result-emoji {
-      font-size: 100px; line-height: 1; display: block;
-      opacity: 0; transform: scale(.35);
-      transition: opacity .6s, transform .65s cubic-bezier(.34,1.56,.64,1);
-    }
-    .result-emoji.show { opacity: 1; transform: scale(1); }
-    .result-type-img {
-      width: 160px; height: 160px;
-      border-radius: 24px;
-      object-fit: cover;
-      display: block;
-      opacity: 0; transform: scale(.35);
-      transition: opacity .6s, transform .65s cubic-bezier(.34,1.56,.64,1);
-      box-shadow: var(--shadow-hover);
-    }
-    .result-type-img.show { opacity: 1; transform: scale(1); }
-    .result-emoji-ring {
-      position: absolute; inset: -18px;
-      border-radius: 50%; border: 2px solid var(--c-accent);
-      opacity: 0; transform: scale(.55);
-      transition: opacity .5s .35s, transform .55s .35s cubic-bezier(.34,1.56,.64,1);
-    }
-    .result-emoji-ring.show { opacity: .22; transform: scale(1); }
-
-    .result-label {
-      font-size: 12px; font-weight: 500; color: var(--c-muted);
-      margin-bottom: 10px;
-      opacity: 0; animation: fadeIn .5s .65s ease both;
-    }
     .result-type {
       font-family: 'Nanum Myeongjo', serif;
       font-size: 33px; letter-spacing: -.5px;
       margin-bottom: 22px; min-height: 1.3em; text-align: center;
+      opacity: 0; animation: fadeIn .5s .5s ease both;
     }
     .result-divider {
       width: 36px; height: 2px;
       background: var(--c-border); border-radius: 2px;
       margin: 0 auto 22px;
-      opacity: 0; animation: fadeIn .5s 1.7s ease both;
+      opacity: 0; animation: fadeIn .5s .7s ease both;
     }
     .result-desc {
       font-size: 14px; font-weight: 300; color: var(--c-muted);
@@ -452,12 +423,13 @@
     .share-card-preview {
       width: 100%; max-width: 320px;
       margin-bottom: 28px;
-      opacity: 0; animation: slideUp .6s 2.05s ease both;
+      opacity: 0; animation: fadeIn .6s .15s ease both;
     }
-    .share-card-preview p {
-      font-size: 11px; font-weight: 500;
-      color: var(--c-muted); letter-spacing: .5px;
-      text-align: center; margin-bottom: 10px;
+    .share-thumb-placeholder {
+      width: 100%; aspect-ratio: 340/480;
+      border-radius: 28px;
+      background: var(--c-surf2);
+      animation: pulse 1.4s ease-in-out infinite;
     }
 
     /* ── Action buttons */
@@ -741,21 +713,16 @@
 <!-- ④ Result -->
 <div class="screen" id="resultScreen">
   <div class="result-kicker">나의 유형은</div>
-  <div class="result-emoji-wrap">
-    <div class="result-emoji-ring" id="resultRing"></div>
-    <img class="result-type-img" id="resultTypeImg" src="" alt="" style="display:none" />
-    <span class="result-emoji" id="resultEmoji"></span>
+
+  <!-- Share card thumbnail (이미지 우선 배치) -->
+  <div class="share-card-preview">
+    <div class="share-thumb-placeholder" id="shareThumbPlaceholder"></div>
+    <img id="shareThumb" src="" alt="결과 카드 미리보기" style="display:none" />
   </div>
-  <div class="result-label" id="resultTestTitle"></div>
+
   <div class="result-type" id="resultType"></div>
   <div class="result-divider"></div>
   <p class="result-desc" id="resultDesc"></p>
-
-  <!-- Share card thumbnail preview -->
-  <div class="share-card-preview">
-    <p>📸 저장하고 공유해보세요</p>
-    <img id="shareThumb" src="" alt="결과 카드 미리보기" style="display:none" />
-  </div>
 
   <div class="action-btns">
     <button class="action-btn btn-save"  id="btnSave">
@@ -1434,10 +1401,9 @@ function showResult() {
   }
 
   // Populate result screen
-  document.getElementById('resultTestTitle').textContent = testData.title;
-  document.getElementById('resultDesc').textContent      = res.desc;
+  document.getElementById('resultDesc').textContent = res.desc;
 
-  // Populate share card
+  // Populate share card (off-screen)
   const shortDesc = res.desc.length > 55 ? res.desc.slice(0, 55) + '…' : res.desc;
   document.getElementById('scTag').textContent  = testData.title;
   document.getElementById('scType').textContent = res.type;
@@ -1445,11 +1411,11 @@ function showResult() {
   const scThumbImg = document.getElementById('scThumbImg');
   const scEmoji    = document.getElementById('scEmoji');
   if (testId === 'sbti') {
-    scThumbImg.src           = `images/sbti/${winner}.webp`;
+    scThumbImg.src = `images/sbti/${winner}.webp`;
     scThumbImg.style.display = 'block';
     scEmoji.style.display    = 'none';
   } else if (testData.thumb) {
-    scThumbImg.src           = testData.thumb;
+    scThumbImg.src = testData.thumb;
     scThumbImg.style.display = 'block';
     scEmoji.style.display    = 'none';
   } else {
@@ -1459,19 +1425,6 @@ function showResult() {
   }
 
   showScreen('resultScreen');
-
-  // Staggered emoji reveal
-  const emojiEl   = document.getElementById('resultEmoji');
-  const typeImgEl = document.getElementById('resultTypeImg');
-  const ringEl    = document.getElementById('resultRing');
-
-  typeImgEl.style.display = 'none';
-  emojiEl.textContent     = res.emoji;
-  emojiEl.style.display   = 'block';
-  requestAnimationFrame(() => setTimeout(() => {
-    emojiEl.classList.add('show');
-    ringEl.classList.add('show');
-  }, 80));
 
   // Typing effect for type name
   const typeEl = document.getElementById('resultType');
@@ -1483,10 +1436,10 @@ function showResult() {
       typeEl.textContent += chars[i++];
       if (i >= chars.length) clearInterval(iv);
     }, 75);
-  }, 700);
+  }, 400);
 
-  // Generate share card thumbnail after animations settle
-  setTimeout(generateThumb, 2400);
+  // Generate thumbnail early
+  setTimeout(generateThumb, 800);
 
   sessionStorage.setItem('resultType',  res.type);
   sessionStorage.setItem('resultEmoji', res.emoji);
@@ -1508,6 +1461,7 @@ async function generateThumb() {
     const thumb = document.getElementById('shareThumb');
     thumb.src   = canvas.toDataURL('image/png');
     thumb.style.display = 'block';
+    document.getElementById('shareThumbPlaceholder').style.display = 'none';
   } catch (_) { /* silently skip if unavailable */ }
 }
 
