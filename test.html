@@ -1577,10 +1577,12 @@ function showResult() {
   sessionStorage.setItem('resultEmoji', res.emoji);
   sessionStorage.setItem('resultCode',  winner);
 
-  // Load comments for this test
-  if (window.loadComments) {
-    window.loadComments(testId);
-  }
+  // Load comments — store testId globally and retry until module is ready
+  window._commentTestId = testId;
+  (function tryLoad(n) {
+    if (window.loadComments) { window.loadComments(testId); }
+    else if (n > 0) { setTimeout(() => tryLoad(n - 1), 300); }
+  })(20);
 }
 
 /* ══════════════════════════════════════════════════
@@ -1881,17 +1883,19 @@ function showToast(msg) {
 
     if (!body) return alert('내용을 입력해주세요!');
 
+    const tid = window._commentTestId || '';
+
     // 도배 방지: 해당 테스트에 이미 댓글을 남겼는지 확인
-    if (localStorage.getItem('my_comment_id_' + testId)) {
+    if (localStorage.getItem('my_comment_id_' + tid)) {
       return alert('이미 댓글을 남기셨습니다!');
     }
-    
+
     btn.disabled = true;
     btn.textContent = '⏳ 등록 중...';
 
     try {
       const docRef = await addDoc(collection(db, "comments"), {
-        testId: testId,
+        testId: tid,
         type: sessionStorage.getItem('resultType') || '',
         emoji: sessionStorage.getItem('resultEmoji') || '',
         nickname: nick || '익명',
@@ -1899,9 +1903,9 @@ function showToast(msg) {
         createdAt: serverTimestamp()
       });
       document.getElementById('commentBody').value = '';
-      
+
       // 작성 완료 기록 (문서 ID 저장)
-      localStorage.setItem('my_comment_id_' + testId, docRef.id);
+      localStorage.setItem('my_comment_id_' + tid, docRef.id);
       renderCommentFormState();
     } catch (e) {
       console.error(e);
@@ -1923,7 +1927,7 @@ function showToast(msg) {
     if (!confirm('정말 댓글을 삭제하시겠어요?')) return;
     try {
       await deleteDoc(doc(db, "comments", id));
-      localStorage.removeItem('my_comment_id_' + testId);
+      localStorage.removeItem('my_comment_id_' + (window._commentTestId || ''));
       renderCommentFormState();
       showToast('댓글이 삭제되었습니다.');
     } catch (e) {
@@ -1937,7 +1941,7 @@ function showToast(msg) {
     const form = document.querySelector('.comment-form');
     if (!form) return;
 
-    if (localStorage.getItem('my_comment_id_' + testId)) {
+    if (localStorage.getItem('my_comment_id_' + (window._commentTestId || ''))) {
       form.innerHTML = `
         <div style="text-align:center; padding:10px 0; color:var(--c-muted); font-size:13px; font-weight:500;">
           이미 댓글을 남기셨습니다. (삭제 후 재작성 가능) 💖
