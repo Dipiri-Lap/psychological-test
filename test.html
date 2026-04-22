@@ -1585,7 +1585,7 @@ function shareKakao() {
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
-      title: `${emoji} 나의 ${testData.title} 결과: ${type}`,
+      title: `${testData.emoji} ${testData.title}`,
       description: `${testData.subtitle} — 나는 어떤 유형일까?`,
       imageUrl,
       link: { mobileWebUrl: url, webUrl: url },
