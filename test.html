@@ -14,18 +14,18 @@
   <meta property="og:type"        content="website" />
   <meta property="og:title"       content="마음. — 심리테스트" id="ogTitle" />
   <meta property="og:description" content="나를 알아가는 심리테스트" id="ogDesc" />
-  <meta property="og:image"       content="https://your-domain.com/og-image.png" />
-  <meta property="og:url"         content="https://your-domain.com/test.html" id="ogUrl" />
+  <meta property="og:image"       content="https://psychological-test-mu.vercel.app/images/sbti/thumb.webp" />
+  <meta property="og:url"         content="https://psychological-test-mu.vercel.app/test.html" id="ogUrl" />
   <meta property="og:site_name"   content="마음." />
 
   <!-- ── Twitter Card ──────────────────────────────── -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="마음. — 심리테스트" />
   <meta name="twitter:description" content="나를 알아가는 심리테스트" />
-  <meta name="twitter:image"       content="https://your-domain.com/og-image.png" />
+  <meta name="twitter:image"       content="https://psychological-test-mu.vercel.app/images/sbti/thumb.webp" />
 
   <!-- ── Canonical ─────────────────────────────────── -->
-  <link rel="canonical" href="https://your-domain.com/test.html" id="canonical" />
+  <link rel="canonical" href="https://psychological-test-mu.vercel.app/test.html" id="canonical" />
 
   <!-- ── JSON-LD (Quiz Schema) ─────────────────────── -->
   <script type="application/ld+json" id="jsonld">{}</script>
@@ -795,7 +795,7 @@
       <div class="sc-divider"></div>
       <div class="sc-desc" id="scDesc"></div>
     </div>
-    <div class="sc-footer">마음. 심리테스트 · your-domain.com</div>
+    <div class="sc-footer">마음. 심리테스트 · psychological-test-mu.vercel.app</div>
   </div>
 </div>
 
@@ -1533,22 +1533,31 @@ function shareKakao() {
     return;
   }
   if (!Kakao.isInitialized()) {
-    Kakao.init('YOUR_KAKAO_APP_KEY');
+    Kakao.init('bbe63bfcba108e48b558a6554e0fd9c1');
   }
 
   const type  = sessionStorage.getItem('resultType')  || '';
   const emoji = sessionStorage.getItem('resultEmoji') || '';
+  const code  = sessionStorage.getItem('resultCode')  || '';
+  const base  = 'https://psychological-test-mu.vercel.app';
   const url   = location.href;
+  const testUrl = `${base}/test.html?id=${testId}`;
+  const imageUrl = (testId === 'sbti' && code)
+    ? `${base}/images/sbti/${code}.webp`
+    : `${base}/images/${testId}/thumb.webp`;
 
   Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
       title: `${emoji} 나의 ${testData.title} 결과: ${type}`,
       description: `${testData.subtitle} — 나는 어떤 유형일까?`,
-      imageUrl: 'https://your-domain.com/og-image.png',
+      imageUrl,
       link: { mobileWebUrl: url, webUrl: url },
     },
-    buttons: [{ title: '나도 테스트하기', link: { mobileWebUrl: url, webUrl: url } }],
+    buttons: [
+      { title: '나도 테스트하기', link: { mobileWebUrl: testUrl, webUrl: testUrl } },
+      { title: '결과 보기',       link: { mobileWebUrl: url,     webUrl: url     } },
+    ],
   });
 }
 
