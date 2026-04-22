@@ -6,7 +6,7 @@ const BASE = 'https://psychological-test-mu.vercel.app';
 const TEST_META = {
   sbti:       { title: 'SBTI 성격 유형 테스트',  desc: '나의 숨겨진 본능은? (30문항)',          img: '/images/sbti/thumb.webp' },
   jealousy:   { title: '질투 유형 테스트',        desc: '나의 질투 레벨은 어느 정도일까?',        img: '/images/jealousy/thumb.webp' },
-  attachment: { title: '애착 유형 테스트',        desc: '안정형? 불안형? 회피형?',               img: '/images/jealousy/thumb.webp' },
+  attachment: { title: '애착 유형 테스트',        desc: '안정형? 불안형? 회피형?',               img: '/images/attachment/thumb.webp' },
   moral:      { title: '도덕 정렬 테스트',        desc: '나는 Lawful Good? Chaotic Evil?',      img: '/images/jealousy/thumb.webp' },
   brain:      { title: '좌뇌 우뇌 테스트',        desc: '나는 논리파? 감성파?',                  img: '/images/jealousy/thumb.webp' },
   humor:      { title: '유머 스타일 테스트',       desc: '나의 웃음 코드는?',                    img: '/images/jealousy/thumb.webp' },
