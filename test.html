@@ -697,7 +697,7 @@
 
 <!-- Top nav -->
 <div id="topNav">
-  <button class="nav-btn" id="backBtn" aria-label="뒤로가기" onclick="history.back()">←</button>
+  <button class="nav-btn" id="backBtn" aria-label="뒤로가기" onclick="history.length > 1 ? history.back() : location.href='index.html'">←</button>
   <span class="q-counter-nav" id="qCounterNav"></span>
   <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
 </div>
