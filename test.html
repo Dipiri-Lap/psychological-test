@@ -1801,7 +1801,7 @@ function showToast(msg) {
 
 <!-- Firebase Integration -->
 <script type="module">
-  import { db, doc, updateDoc, increment } from './firebase-init.js';
+  import { db, doc, updateDoc, increment, collection, addDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp, deleteDoc } from './firebase-init.js';
 
   window.incrementParticipation = function(id) {
     if (!id) return;
@@ -1814,7 +1814,6 @@ function showToast(msg) {
   };
 
   // --- Comment Logic ---
-  import { collection, addDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from './firebase-init.js';
 
   let unsubscribeComments = null;
 
@@ -1918,7 +1917,6 @@ function showToast(msg) {
   }
 
   // 댓글 삭제 로직
-  import { deleteDoc } from './firebase-init.js';
   window.deleteComment = async function(id) {
     if (!confirm('정말 댓글을 삭제하시겠어요?')) return;
     try {
