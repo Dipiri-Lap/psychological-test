@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'https://psychological-test-mu.vercel.app';
+const BASE = 'https://testlab.tmhub.co.kr';
 
 const TEST_META = {
   sbti:       { title: 'SBTI 성격 유형 테스트',  desc: '나의 숨겨진 본능은? (30문항)',          img: '/images/sbti/thumb.webp' },

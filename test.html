@@ -14,18 +14,18 @@
   <meta property="og:type"        content="website" />
   <meta property="og:title"       content="마음. — 심리테스트" id="ogTitle" />
   <meta property="og:description" content="나를 알아가는 심리테스트" id="ogDesc" />
-  <meta property="og:image"       content="https://psychological-test-mu.vercel.app/images/sbti/thumb.webp" />
-  <meta property="og:url"         content="https://psychological-test-mu.vercel.app/test.html" id="ogUrl" />
+  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
+  <meta property="og:url"         content="https://testlab.tmhub.co.kr/test.html" id="ogUrl" />
   <meta property="og:site_name"   content="마음." />
 
   <!-- ── Twitter Card ──────────────────────────────── -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="마음. — 심리테스트" />
   <meta name="twitter:description" content="나를 알아가는 심리테스트" />
-  <meta name="twitter:image"       content="https://psychological-test-mu.vercel.app/images/sbti/thumb.webp" />
+  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
 
   <!-- ── Canonical ─────────────────────────────────── -->
-  <link rel="canonical" href="https://psychological-test-mu.vercel.app/test.html" id="canonical" />
+  <link rel="canonical" href="https://testlab.tmhub.co.kr/test.html" id="canonical" />
 
   <!-- ── JSON-LD (Quiz Schema) ─────────────────────── -->
   <script type="application/ld+json" id="jsonld">{}</script>
@@ -801,7 +801,7 @@
       <div class="sc-divider"></div>
       <div class="sc-desc" id="scDesc"></div>
     </div>
-    <div class="sc-footer">마음. 심리테스트 · psychological-test-mu.vercel.app</div>
+    <div class="sc-footer">마음. 심리테스트 · testlab.tmhub.co.kr</div>
   </div>
 </div>
 
@@ -1497,7 +1497,7 @@ function initKakao() {
 
 function shareIntro() {
   if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
-  const base    = 'https://psychological-test-mu.vercel.app';
+  const base    = 'https://testlab.tmhub.co.kr';
   const testUrl = `${base}/test.html?id=${testId}`;
   const imageUrl = testData.thumb
     ? `${base}/${testData.thumb}`
@@ -1524,7 +1524,7 @@ function shareKakao() {
   const type  = sessionStorage.getItem('resultType')  || '';
   const emoji = sessionStorage.getItem('resultEmoji') || '';
   const code  = sessionStorage.getItem('resultCode')  || '';
-  const base  = 'https://psychological-test-mu.vercel.app';
+  const base  = 'https://testlab.tmhub.co.kr';
   const url   = location.href;
   const testUrl = `${base}/test.html?id=${testId}`;
   const imageUrl = ((testId === 'sbti' || testId === 'attachment' || testId === 'brain') && code)
