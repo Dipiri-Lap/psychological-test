@@ -99,6 +99,7 @@
       transition: background .35s, color .35s;
     }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    a { text-decoration: none; color: inherit; }
 
     /* ── Progress Bar ────────────────────────────────── */
     #progressTrack {
@@ -694,7 +695,7 @@
     <span class="meta-pill" id="introQCount"></span>
     <span class="meta-pill">약 2분</span>
   </div>
-  <button class="start-btn" id="startBtn">시작하기 →</button>
+  <a class="start-btn" id="startBtn">시작하기 →</a>
   <button class="intro-share-btn" id="introShareBtn">
     <span>💬</span> 카카오톡 공유
   </button>
@@ -713,11 +714,12 @@
 
 <!-- ③ Loading -->
 <div class="screen" id="loadingScreen">
-  <div class="loading-spinner"></div>
-  <div>
+  <div class="loading-spinner" id="loadingSpinner"></div>
+  <div id="loadingInfo">
     <div class="loading-text">분석 중</div>
     <div class="loading-dots"><span>·</span><span>·</span><span>·</span></div>
   </div>
+  <a id="viewResultBtn" class="start-btn" style="display:none; margin-top:20px;">결과 확인하기 →</a>
 </div>
 
 <!-- ④ Result -->
@@ -1068,6 +1070,8 @@ let answersRaw = []; // For SBTI scoring logic
 
   const params = new URLSearchParams(location.search);
   testId   = params.get('id') || '';
+  const isStarting = params.get('start') === 'true';
+  const isDone     = params.get('done')  === 'true';
   
   if (testId === 'sbti' && typeof KBTI_QUESTIONS !== 'undefined') {
     testData = {
@@ -1121,6 +1125,15 @@ let answersRaw = []; // For SBTI scoring logic
   // Update meta tags & JSON-LD
   updateSEO();
 
+  if (isDone) {
+    const savedScores = sessionStorage.getItem('pending_scores');
+    const savedAnswers = sessionStorage.getItem('pending_answers_raw');
+    if (savedScores) scores = JSON.parse(savedScores);
+    if (savedAnswers) answersRaw = JSON.parse(savedAnswers);
+    showResult();
+    return;
+  }
+
   // Fill intro
   document.title = `마음. — ${testData.title}`;
   const introEmojiEl = document.getElementById('introEmoji');
@@ -1137,14 +1150,21 @@ let answersRaw = []; // For SBTI scoring logic
   document.getElementById('introSub').textContent    = testData.subtitle;
   document.getElementById('introQCount').textContent = `${testData.questions.length}문항`;
 
+  // Update startBtn href for hard navigation
+  document.getElementById('startBtn').href = `test.html?id=${testId}&start=true`;
+
   // Events
-  document.getElementById('startBtn').addEventListener('click', startQuiz);
   document.getElementById('introShareBtn').addEventListener('click', shareIntro);
   document.getElementById('themeBtn').addEventListener('click', toggleTheme);
   document.getElementById('btnKakao').addEventListener('click', shareKakao);
   document.getElementById('btnCopy').addEventListener('click', copyLink);
   document.getElementById('btnShare').addEventListener('click', shareNative);
   document.getElementById('btnSave').addEventListener('click', saveImage);
+
+  // Auto-start if 'start=true' param exists
+  if (isStarting) {
+    startQuiz();
+  }
 
   Object.keys(testData.results).forEach(k => { scores[k] = 0; });
 })();
@@ -1310,7 +1330,20 @@ function renderChoices(current, container) {
 function showLoading() {
   document.getElementById('progressFill').style.width = '100%';
   showScreen('loadingScreen');
-  setTimeout(showResult, 1700);
+  
+  // Save state for recovery after hard navigation
+  sessionStorage.setItem('pending_scores', JSON.stringify(scores));
+  sessionStorage.setItem('pending_answers_raw', JSON.stringify(answersRaw));
+
+  // Update button href
+  const btn = document.getElementById('viewResultBtn');
+  btn.href = `test.html?id=${testId}&done=true`;
+
+  setTimeout(() => {
+    document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('loadingInfo').style.display = 'none';
+    btn.style.display = 'inline-flex';
+  }, 2200);
 }
 
 function showResult() {
