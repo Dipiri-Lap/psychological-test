@@ -478,6 +478,7 @@
     .btn-save  { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-kakao { background: #FEE500; color: #1c1917; }
     .btn-copy  { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-share { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-more  { background: var(--c-main); color: var(--c-bg); }
     .btn-icon  { font-size: 19px; }
 
@@ -765,6 +766,9 @@
     </button>
     <button class="action-btn btn-copy"  id="btnCopy">
       <span class="btn-icon">🔗</span> 링크 복사
+    </button>
+    <button class="action-btn btn-share" id="btnShare">
+      <span class="btn-icon">↗</span> 다른 앱으로 공유
     </button>
     <a href="index.html" class="action-btn btn-more">
       <span class="btn-icon">✨</span> 다른 테스트 하러 가기
@@ -1239,6 +1243,7 @@ let answersRaw = []; // For SBTI scoring logic
   document.getElementById('themeBtn').addEventListener('click', toggleTheme);
   document.getElementById('btnKakao').addEventListener('click', shareKakao);
   document.getElementById('btnCopy').addEventListener('click', copyLink);
+  document.getElementById('btnShare').addEventListener('click', shareNative);
   document.getElementById('btnSave').addEventListener('click', saveImage);
 
   Object.keys(testData.results).forEach(k => { scores[k] = 0; });
@@ -1595,6 +1600,23 @@ function shareKakao() {
       { title: '다른 테스트 보기', link: { mobileWebUrl: `${base}/`, webUrl: `${base}/` } },
     ],
   });
+}
+
+async function shareNative() {
+  const type = sessionStorage.getItem('resultType') || '';
+  const text = `${testData.emoji} ${testData.title}${type ? ` — ${type}` : ''}`;
+  const url  = location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: text, url });
+    } catch (_) {}
+    return;
+  }
+
+  // 폴백: X / Threads 선택 토스트 대신 X로 바로 열기
+  const encoded = encodeURIComponent(`${text}\n${url}`);
+  window.open(`https://x.com/intent/post?text=${encoded}`, '_blank');
 }
 
 function copyLink() {
