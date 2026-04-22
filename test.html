@@ -1820,6 +1820,7 @@ function showToast(msg) {
 
   window.loadComments = function(tid) {
     if (!tid) return;
+    console.log("Loading comments for:", tid);
     if (unsubscribeComments) unsubscribeComments();
 
     const q = query(
@@ -1829,6 +1830,7 @@ function showToast(msg) {
     );
 
     unsubscribeComments = onSnapshot(q, (snapshot) => {
+      console.log("Comments found:", snapshot.size);
       const listEl = document.getElementById('commentList');
       const countEl = document.getElementById('commentCount');
       countEl.textContent = snapshot.size;
