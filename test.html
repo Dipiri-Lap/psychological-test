@@ -87,6 +87,43 @@
       --shadow-hover:  0 12px 40px rgba(0,0,0,.6);
     }
 
+    /* ── Share Modal ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+      z-index: 2000; display: none; align-items: flex-end; justify-content: center;
+      opacity: 0; transition: opacity .3s;
+    }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    .share-modal {
+      background: var(--c-surface); width: 100%; max-width: 480px;
+      border-radius: 24px 24px 0 0; padding: 24px 20px 40px;
+      transform: translateY(100%); transition: transform .3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+    }
+    .modal-overlay.active .share-modal { transform: translateY(0); }
+    .share-modal-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+    }
+    .share-modal-title { font-weight: 700; font-size: 18px; }
+    .share-modal-close { font-size: 24px; color: var(--c-muted); padding: 4px; }
+    
+    .share-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .share-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--c-text); font-weight: 500;
+    }
+    .share-icon-btn {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: grid; place-items: center; font-size: 24px;
+      background: var(--c-surf2); transition: transform .2s, background .2s;
+    }
+    .share-icon-btn:active { transform: scale(0.92); background: var(--c-border); }
+    .share-icon-btn.x { background: #000; color: #fff; }
+    .share-icon-btn.threads { background: #000; color: #fff; }
+    .share-icon-btn.facebook { background: #1877F2; color: #fff; }
+    .share-icon-btn.copy { background: var(--c-accent); color: #fff; }
+
     /* ── Reset ───────────────────────────────────────── */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height: 100%; }
@@ -802,6 +839,34 @@
       <div class="sc-desc" id="scDesc"></div>
     </div>
     <div class="sc-footer">마음. 심리테스트 · testlab.tmhub.co.kr</div>
+  </div>
+</div>
+
+<!-- ── Share Modal ────────────────────────────────── -->
+<div class="modal-overlay" id="shareModalOverlay">
+  <div class="share-modal">
+    <div class="share-modal-header">
+      <div class="share-modal-title">공유하기</div>
+      <button class="share-modal-close" onclick="closeShareModal()">✕</button>
+    </div>
+    <div class="share-grid">
+      <button class="share-item" onclick="shareTo('copy')">
+        <div class="share-icon-btn copy">🔗</div>
+        <span>링크 복사</span>
+      </button>
+      <button class="share-item" onclick="shareTo('x')">
+        <div class="share-icon-btn x">𝕏</div>
+        <span>X (트위터)</span>
+      </button>
+      <button class="share-item" onclick="shareTo('threads')">
+        <div class="share-icon-btn threads">🧵</div>
+        <span>스레드</span>
+      </button>
+      <button class="share-item" onclick="shareTo('facebook')">
+        <div class="share-icon-btn facebook">f</div>
+        <span>페이스북</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1557,13 +1622,45 @@ async function shareNative() {
   if (navigator.share) {
     try {
       await navigator.share({ title: text, url });
-    } catch (_) {}
-    return;
+      return;
+    } catch (_) {
+      // User cancelled or error, fall through to modal if it's not a cancel error
+    }
   }
 
-  // 폴백: X / Threads 선택 토스트 대신 X로 바로 열기
-  const encoded = encodeURIComponent(`${text}\n${url}`);
-  window.open(`https://x.com/intent/post?text=${encoded}`, '_blank');
+  // Show custom share modal
+  const overlay = document.getElementById('shareModalOverlay');
+  overlay.style.display = 'flex';
+  setTimeout(() => overlay.classList.add('active'), 10);
+}
+
+function closeShareModal() {
+  const overlay = document.getElementById('shareModalOverlay');
+  overlay.classList.remove('active');
+  setTimeout(() => overlay.style.display = 'none', 300);
+}
+
+function shareTo(platform) {
+  const type = sessionStorage.getItem('resultType') || '';
+  const text = `${testData.emoji} ${testData.title}${type ? ` — ${type}` : ''}`;
+  const url  = location.href;
+  const encodedText = encodeURIComponent(`${text}\n${url}`);
+
+  switch(platform) {
+    case 'x':
+      window.open(`https://x.com/intent/post?text=${encodedText}`, '_blank');
+      break;
+    case 'threads':
+      window.open(`https://www.threads.net/intent/post?text=${encodedText}`, '_blank');
+      break;
+    case 'facebook':
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+      break;
+    case 'copy':
+      copyLink();
+      break;
+  }
+  closeShareModal();
 }
 
 function copyLink() {
