@@ -1125,6 +1125,14 @@ let answersRaw = []; // For SBTI scoring logic
   // Update meta tags & JSON-LD
   updateSEO();
 
+  // Events
+  document.getElementById('introShareBtn').addEventListener('click', shareIntro);
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('btnKakao').addEventListener('click', shareKakao);
+  document.getElementById('btnCopy').addEventListener('click', copyLink);
+  document.getElementById('btnShare').addEventListener('click', shareNative);
+  document.getElementById('btnSave').addEventListener('click', saveImage);
+
   if (isDone) {
     const savedScores = sessionStorage.getItem('pending_scores');
     const savedAnswers = sessionStorage.getItem('pending_answers_raw');
@@ -1152,14 +1160,6 @@ let answersRaw = []; // For SBTI scoring logic
 
   // Update startBtn href for hard navigation
   document.getElementById('startBtn').href = `test.html?id=${testId}&start=true`;
-
-  // Events
-  document.getElementById('introShareBtn').addEventListener('click', shareIntro);
-  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
-  document.getElementById('btnKakao').addEventListener('click', shareKakao);
-  document.getElementById('btnCopy').addEventListener('click', copyLink);
-  document.getElementById('btnShare').addEventListener('click', shareNative);
-  document.getElementById('btnSave').addEventListener('click', saveImage);
 
   // Auto-start if 'start=true' param exists
   if (isStarting) {
