@@ -295,6 +295,39 @@
     }
     .intro-share-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
 
+    /* ── Intro Ad + Related Links ─────────────────── */
+    .intro-ad {
+      width: 100%; max-width: 380px;
+      margin-top: 32px;
+    }
+    .intro-related {
+      width: 100%; max-width: 380px;
+      margin-top: 28px; text-align: left;
+    }
+    .intro-related-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+      color: var(--c-muted); text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .intro-related-list {
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .intro-link-card {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 12px 16px;
+      text-decoration: none; color: var(--c-text);
+      transition: border-color .2s, transform .2s;
+    }
+    .intro-link-card:hover { border-color: var(--c-accent); transform: translateX(3px); }
+    .intro-link-card .ilc-emoji { font-size: 22px; flex-shrink: 0; }
+    .intro-link-card .ilc-info { flex: 1; min-width: 0; }
+    .intro-link-card .ilc-title { font-size: 14px; font-weight: 600; }
+    .intro-link-card .ilc-desc  { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
+    .intro-link-card .ilc-arrow { color: var(--c-muted); font-size: 14px; flex-shrink: 0; }
+
     /* ═══════════════════════════════════════════════
        QUIZ SCREEN — mobile-first: question top, choices bottom
     ═══════════════════════════════════════════════ */
@@ -787,6 +820,23 @@
   <button class="intro-share-btn" id="introShareBtn">
     <span>💬</span> 카카오톡 공유
   </button>
+
+  <!-- AdSense -->
+  <div class="intro-ad">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7327562206502398"
+         data-ad-slot="3769192952"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Related tests -->
+  <div class="intro-related">
+    <div class="intro-related-label">다른 테스트 보기</div>
+    <div id="introRelatedLinks" class="intro-related-list"></div>
+  </div>
 </div>
 
 <!-- ② Quiz -->
@@ -1294,6 +1344,27 @@ let answersRaw = []; // For SBTI scoring logic
   document.getElementById('introTitle').textContent  = testData.title;
   document.getElementById('introSub').textContent    = testData.subtitle;
   document.getElementById('introQCount').textContent = `${testData.questions.length}문항`;
+
+  // Related tests (exclude current)
+  const ALL_TESTS = [
+    { id: 'sbti',       emoji: '💜', title: 'SBTI 성격 유형 테스트', desc: '나의 숨겨진 본능은?' },
+    { id: 'jealousy',   emoji: '🫣', title: '질투 유형 테스트',      desc: '쿨한 척하지만 속은 부글부글?' },
+    { id: 'attachment', emoji: '💕', title: '애착 유형 테스트',      desc: '안정형? 불안형? 회피형?' },
+    { id: 'brain',      emoji: '🧠', title: '좌뇌 우뇌 테스트',      desc: '나는 논리파? 감성파?' },
+  ];
+  const relatedEl = document.getElementById('introRelatedLinks');
+  if (relatedEl) {
+    relatedEl.innerHTML = ALL_TESTS.filter(t => t.id !== testId).slice(0, 3).map(t => `
+      <a class="intro-link-card" href="test.html?id=${t.id}">
+        <span class="ilc-emoji">${t.emoji}</span>
+        <div class="ilc-info">
+          <div class="ilc-title">${t.title}</div>
+          <div class="ilc-desc">${t.desc}</div>
+        </div>
+        <span class="ilc-arrow">→</span>
+      </a>
+    `).join('');
+  }
 
   // Update startBtn href for hard navigation
   document.getElementById('startBtn').href = `test.html?id=${testId}&start=true`;
