@@ -1825,7 +1825,6 @@ function showToast(msg) {
     const q = query(
       collection(db, "comments"),
       where("testId", "==", tid),
-      orderBy("createdAt", "desc"),
       limit(50)
     );
 
@@ -1841,7 +1840,14 @@ function showToast(msg) {
 
       const myCommentId = localStorage.getItem('my_comment_id_' + testId);
 
-      listEl.innerHTML = snapshot.docs.map(doc => {
+      // 색인 없이 최신순 정렬을 위해 클라이언트 사이드에서 정렬
+      const docs = snapshot.docs.sort((a, b) => {
+        const timeA = a.data().createdAt?.seconds || 0;
+        const timeB = b.data().createdAt?.seconds || 0;
+        return timeB - timeA;
+      });
+
+      listEl.innerHTML = docs.map(doc => {
         const d = doc.data();
         const id = doc.id;
         const isMine = id === myCommentId;
