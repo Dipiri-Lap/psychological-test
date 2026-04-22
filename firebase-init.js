@@ -1,6 +1,9 @@
 // Firebase SDKs via CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc, increment, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { 
+  getFirestore, doc, getDoc, updateDoc, increment, setDoc, onSnapshot,
+  collection, addDoc, query, where, orderBy, limit, serverTimestamp, deleteDoc 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCScn7VbPmrLXb0u9yq-3l8tfFJcbPZxPw",
@@ -16,4 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
-export { db, doc, getDoc, updateDoc, increment, setDoc, onSnapshot };
+export { 
+  db, doc, getDoc, updateDoc, increment, setDoc, onSnapshot,
+  collection, addDoc, query, where, orderBy, limit, serverTimestamp, deleteDoc 
+};

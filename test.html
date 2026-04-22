@@ -124,6 +124,57 @@
     .share-icon-btn.facebook { background: #1877F2; color: #fff; }
     .share-icon-btn.copy { background: var(--c-accent); color: #fff; }
 
+    /* ── Comment Section ────────────────────────────── */
+    .comment-section { margin-top: 48px; text-align: left; }
+    .comment-header { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+    .comment-title { font-weight: 700; font-size: 20px; }
+    .comment-count { font-weight: 400; font-size: 14px; color: var(--c-muted); }
+
+    .comment-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+    .comment-item {
+      background: var(--c-surface); border: 1px solid var(--c-border);
+      border-radius: 16px; padding: 16px; position: relative;
+      animation: slideUp .4s ease backwards;
+    }
+    .comment-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .comment-tag {
+      background: var(--c-surf2); font-size: 11px; padding: 2px 8px;
+      border-radius: 100px; color: var(--c-muted); font-weight: 600;
+    }
+    .comment-nick { font-weight: 700; font-size: 14px; }
+    .comment-time { font-size: 11px; color: var(--c-muted); margin-left: 8px; }
+    .comment-delete {
+      margin-left: auto; font-size: 11px; color: #ff4d72; padding: 4px 8px;
+      cursor: pointer; opacity: 0.7; transition: opacity .2s;
+    }
+    .comment-delete:hover { opacity: 1; text-decoration: underline; }
+    .comment-body { font-size: 14px; line-height: 1.6; color: var(--c-text); white-space: pre-wrap; }
+
+    .comment-form {
+      background: var(--c-surf2); border-radius: 20px; padding: 20px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .comment-input-row { display: flex; gap: 8px; }
+    .comment-input {
+      background: var(--c-surface); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 10px 14px; font-size: 14px; font-family: inherit;
+      width: 100%; transition: border-color .2s;
+    }
+    .comment-input:focus { border-color: var(--c-accent); outline: none; }
+    .comment-textarea { min-height: 80px; resize: none; }
+    .comment-submit {
+      background: var(--c-accent); color: #fff; font-weight: 700;
+      border-radius: 10px; padding: 12px; font-size: 15px;
+      transition: opacity .2s, transform .2s;
+    }
+    .comment-submit:active { transform: scale(0.98); }
+    .comment-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* ── Reset ───────────────────────────────────────── */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height: 100%; }
@@ -792,23 +843,44 @@
     </script>
   </div>
 
-  <div class="action-btns">
-    <button class="action-btn btn-save"  id="btnSave">
-      <span class="btn-icon">💾</span> 결과 이미지 저장
-    </button>
-    <button class="action-btn btn-kakao" id="btnKakao">
-      <span class="btn-icon">💬</span> 카카오톡으로 공유
-    </button>
-    <button class="action-btn btn-copy"  id="btnCopy">
-      <span class="btn-icon">🔗</span> 링크 복사
-    </button>
-    <button class="action-btn btn-share" id="btnShare">
-      <span class="btn-icon">↗</span> 다른 앱으로 공유
-    </button>
-    <a href="index.html" class="action-btn btn-more">
+    <div class="action-btns">
+      <button class="action-btn btn-save"  id="btnSave">
+        <span class="btn-icon">💾</span> 결과 이미지 저장
+      </button>
+      <button class="action-btn btn-kakao" id="btnKakao">
+        <span class="btn-icon">💬</span> 카카오톡으로 공유
+      </button>
+      <button class="action-btn btn-copy"  id="btnCopy">
+        <span class="btn-icon">🔗</span> 링크 복사
+      </button>
+      <button class="action-btn btn-share" id="btnShare">
+        <span class="btn-icon">↗</span> 다른 앱으로 공유
+      </button>
+    </div>
+
+    <!-- ── Comment Section ──────────────────────────── -->
+    <div class="comment-section">
+      <div class="comment-header">
+        <span class="comment-title">한마디 나누기</span>
+        <span class="comment-count" id="commentCount">0</span>
+      </div>
+      
+      <div id="commentList" class="comment-list">
+        <!-- Comments will be injected here -->
+      </div>
+
+      <div class="comment-form">
+        <div class="comment-input-row">
+          <input type="text" id="commentNick" class="comment-input" placeholder="닉네임" maxlength="10">
+        </div>
+        <textarea id="commentBody" class="comment-input comment-textarea" placeholder="테스트 결과에 대해 이야기해봐요!" maxlength="120"></textarea>
+        <button class="comment-submit" id="commentSubmit">댓글 남기기</button>
+      </div>
+    </div>
+
+    <a href="index.html" class="action-btn btn-more" style="margin-top:24px;">
       <span class="btn-icon">✨</span> 다른 테스트 하러 가기
     </a>
-  </div>
 
   <!-- AdSense Slot -->
 </div>
@@ -1504,6 +1576,11 @@ function showResult() {
   sessionStorage.setItem('resultType',  res.type);
   sessionStorage.setItem('resultEmoji', res.emoji);
   sessionStorage.setItem('resultCode',  winner);
+
+  // Load comments for this test
+  if (window.loadComments) {
+    window.loadComments(testId);
+  }
 }
 
 /* ══════════════════════════════════════════════════
@@ -1735,6 +1812,146 @@ function showToast(msg) {
       console.error("Firebase update failed:", err);
     });
   };
+
+  // --- Comment Logic ---
+  import { collection, addDoc, query, where, orderBy, limit, onSnapshot, serverTimestamp } from './firebase-init.js';
+
+  let unsubscribeComments = null;
+
+  window.loadComments = function(tid) {
+    if (!tid) return;
+    if (unsubscribeComments) unsubscribeComments();
+
+    const q = query(
+      collection(db, "comments"),
+      where("testId", "==", tid),
+      orderBy("createdAt", "desc"),
+      limit(50)
+    );
+
+    unsubscribeComments = onSnapshot(q, (snapshot) => {
+      const listEl = document.getElementById('commentList');
+      const countEl = document.getElementById('commentCount');
+      countEl.textContent = snapshot.size;
+
+      if (snapshot.empty) {
+        listEl.innerHTML = '<div style="text-align:center; padding:40px 0; color:var(--c-muted); font-size:14px;">첫 번째 댓글을 남겨보세요! ✍️</div>';
+        return;
+      }
+
+      const myCommentId = localStorage.getItem('my_comment_id_' + testId);
+
+      listEl.innerHTML = snapshot.docs.map(doc => {
+        const d = doc.data();
+        const id = doc.id;
+        const isMine = id === myCommentId;
+        const time = d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleDateString('ko-KR', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '방금 전';
+        
+        return `
+          <div class="comment-item">
+            <div class="comment-item-header">
+              <span class="comment-tag">${d.emoji || ''} ${d.type || '테스트 완료'}</span>
+              <span class="comment-nick">${d.nickname || '익명'}</span>
+              <span class="comment-time">${time}</span>
+              ${isMine ? `<span class="comment-delete" onclick="deleteComment('${id}')">삭제</span>` : ''}
+            </div>
+            <div class="comment-body">${d.content}</div>
+          </div>
+        `;
+      }).join('');
+      
+      // 댓글 목록 로드 시 작성 상태 확인
+      renderCommentFormState();
+    });
+  };
+  // 댓글 작성 처리 함수
+  window.postCommentHandler = async () => {
+    const nick = document.getElementById('commentNick').value.trim();
+    const body = document.getElementById('commentBody').value.trim();
+    const btn  = document.getElementById('commentSubmit');
+
+    if (!body) return alert('내용을 입력해주세요!');
+
+    // 도배 방지: 해당 테스트에 이미 댓글을 남겼는지 확인
+    if (localStorage.getItem('my_comment_id_' + testId)) {
+      return alert('이미 댓글을 남기셨습니다!');
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ 등록 중...';
+
+    try {
+      const docRef = await addDoc(collection(db, "comments"), {
+        testId: testId,
+        type: sessionStorage.getItem('resultType') || '',
+        emoji: sessionStorage.getItem('resultEmoji') || '',
+        nickname: nick || '익명',
+        content: body,
+        createdAt: serverTimestamp()
+      });
+      document.getElementById('commentBody').value = '';
+      
+      // 작성 완료 기록 (문서 ID 저장)
+      localStorage.setItem('my_comment_id_' + testId, docRef.id);
+      renderCommentFormState();
+    } catch (e) {
+      console.error(e);
+      alert('댓글 등록에 실패했어요.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '댓글 남기기';
+    }
+  };
+
+  // 초기 로드 시 이벤트 바인딩
+  const initialSubmitBtn = document.getElementById('commentSubmit');
+  if (initialSubmitBtn) {
+    initialSubmitBtn.addEventListener('click', window.postCommentHandler);
+  }
+
+  // 댓글 삭제 로직
+  import { deleteDoc } from './firebase-init.js';
+  window.deleteComment = async function(id) {
+    if (!confirm('정말 댓글을 삭제하시겠어요?')) return;
+    try {
+      await deleteDoc(doc(db, "comments", id));
+      localStorage.removeItem('my_comment_id_' + testId);
+      renderCommentFormState();
+      showToast('댓글이 삭제되었습니다.');
+    } catch (e) {
+      console.error(e);
+      alert('삭제에 실패했습니다.');
+    }
+  };
+
+  // 댓글 작성 폼 상태 제어
+  function renderCommentFormState() {
+    const form = document.querySelector('.comment-form');
+    if (!form) return;
+
+    if (localStorage.getItem('my_comment_id_' + testId)) {
+      form.innerHTML = `
+        <div style="text-align:center; padding:10px 0; color:var(--c-muted); font-size:13px; font-weight:500;">
+          이미 댓글을 남기셨습니다. (삭제 후 재작성 가능) 💖
+        </div>
+      `;
+      form.style.background = 'transparent';
+      form.style.border = '1px dashed var(--c-border)';
+    } else {
+      // 폼 복구
+      form.style.background = 'var(--c-surf2)';
+      form.style.border = 'none';
+      form.innerHTML = `
+        <div class="comment-input-row">
+          <input type="text" id="commentNick" class="comment-input" placeholder="닉네임" maxlength="10">
+        </div>
+        <textarea id="commentBody" class="comment-input comment-textarea" placeholder="테스트 결과에 대해 이야기해봐요!" maxlength="120"></textarea>
+        <button class="comment-submit" id="commentSubmit">댓글 남기기</button>
+      `;
+      // 이벤트 리스너 재등록 필요
+      document.getElementById('commentSubmit').addEventListener('click', window.postCommentHandler);
+    }
+  }
 </script>
 </body>
 </html>
