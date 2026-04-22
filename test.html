@@ -1869,6 +1869,8 @@ function showToast(msg) {
       
       // 댓글 목록 로드 시 작성 상태 확인
       renderCommentFormState();
+    }, (error) => {
+      console.error("Comments load error:", error.code, error.message);
     });
   };
   // 댓글 작성 처리 함수
