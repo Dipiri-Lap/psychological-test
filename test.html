@@ -51,6 +51,9 @@
   <!-- ── Attachment Data ───────────────────────────── -->
   <script src="tests/attachment/attachment-test.js"></script>
 
+  <!-- ── Brain Data ────────────────────────────────── -->
+  <script src="tests/brain/brain-test.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -970,63 +973,7 @@ const tests = {
     }
   }, */
 
-  brain: {
-    title: "좌뇌 우뇌 테스트",
-    emoji: "🧠",
-    subtitle: "나는 논리파? 감성파?",
-    questions: [
-      {
-        q: "새로운 아이디어를 낼 때 나는?",
-        choices: [
-          { text: "데이터와 근거를 먼저 찾는다", emoji: "📊", score: {L:3} },
-          { text: "직관과 영감으로 시작한다", emoji: "✨", score: {R:3} },
-          { text: "둘 다 활용한다", emoji: "⚖️", score: {L:1,R:1} },
-          { text: "상황에 따라 다르다", emoji: "🎲", score: {L:1,R:1} },
-        ]
-      },
-      {
-        q: "영화를 볼 때 나는?",
-        choices: [
-          { text: "스토리 구조와 개연성을 분석한다", emoji: "🎬", score: {L:3} },
-          { text: "감정에 완전히 몰입한다", emoji: "😭", score: {R:3} },
-          { text: "둘 다", emoji: "🤹", score: {L:1,R:1} },
-          { text: "그냥 즐긴다", emoji: "🍿", score: {L:1,R:1} },
-        ]
-      },
-      {
-        q: "선물을 고를 때 나는?",
-        choices: [
-          { text: "실용성과 가성비를 따진다", emoji: "🧮", score: {L:3} },
-          { text: "상대가 감동할 것 같은 걸 고른다", emoji: "🎁", score: {R:3} },
-          { text: "목록을 만들어 비교한다", emoji: "📝", score: {L:2,R:1} },
-          { text: "직감대로 고른다", emoji: "💫", score: {R:2,L:1} },
-        ]
-      },
-      {
-        q: "스트레스받을 때 나는?",
-        choices: [
-          { text: "원인을 분석하고 해결책을 찾는다", emoji: "🔍", score: {L:3} },
-          { text: "음악 듣거나 감정을 표출한다", emoji: "🎵", score: {R:3} },
-          { text: "계획을 세워 하나씩 해결한다", emoji: "📋", score: {L:2} },
-          { text: "그냥 잘 자고 일어난다", emoji: "😴", score: {R:1,L:1} },
-        ]
-      },
-      {
-        q: "이 그림은? (👁️ 눈을 감고 떠올리세요)",
-        scale: true,
-        choices: [
-          { text: "직선·구조", emoji: "📐", score: {L:4} },
-          { text: "패턴·리듬", emoji: "🌀", score: {L:2,R:2} },
-          { text: "색·감각",   emoji: "🎨", score: {R:4} },
-          { text: "이야기·장면", emoji: "🎭", score: {R:3,L:1} },
-        ]
-      },
-    ],
-    results: {
-      L: { type: "좌뇌 우세형", emoji: "🔢", desc: "논리, 분석, 언어를 담당하는 좌뇌가 발달한 타입이에요. 체계적이고 근거 있는 사고를 선호하며, 계획을 세우고 실행하는 데 강점이 있습니다." },
-      R: { type: "우뇌 우세형", emoji: "🎨", desc: "창의성, 감성, 직관을 담당하는 우뇌가 발달한 타입이에요. 예술적 감각과 공감 능력이 뛰어나며, 새로운 아이디어를 떠올리는 데 탁월합니다." },
-    }
-  },
+  // brain: handled via tests/brain/brain-test.js
 
   /* humor: {
     title: "유머 스타일 테스트",
@@ -1133,6 +1080,17 @@ let answersRaw = []; // For SBTI scoring logic
         choices: q.choices  // { text, type } — emoji embedded in text
       })),
       results: ATTACHMENT_TYPES
+    };
+  } else if (testId === 'brain' && typeof BRAIN_QUESTIONS !== 'undefined') {
+    testData = {
+      title: "좌뇌 우뇌 테스트",
+      emoji: "🧠",
+      subtitle: "나는 논리파? 감성파? (20문항)",
+      questions: BRAIN_QUESTIONS.map(q => ({
+        q: q.question,
+        choices: q.choices  // { text, side } — emoji embedded in text
+      })),
+      results: BRAIN_TYPES
     };
   } else {
     testData = tests[testId];
@@ -1310,6 +1268,8 @@ function renderChoices(current, container) {
         answersRaw.push(choice.score);
       } else if (testId === 'attachment') {
         answersRaw.push(choice.type);
+      } else if (testId === 'brain') {
+        answersRaw.push({ side: choice.side });
       } else {
         Object.entries(choice.score).forEach(([k, v]) => { scores[k] = (scores[k] || 0) + v; });
       }
@@ -1365,6 +1325,16 @@ function showResult() {
       desc: typeData.desc,
       tagline: typeData.tagline
     };
+  } else if (testId === 'brain') {
+    const result = calcBrainType(answersRaw);
+    winner = result.type;
+    const typeData = result.typeInfo;
+    res = {
+      type: typeData.name,
+      emoji: typeData.emoji,
+      desc: typeData.desc,
+      tagline: typeData.tagline
+    };
   } else {
     winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
     res    = testData.results[winner];
@@ -1380,7 +1350,7 @@ function showResult() {
   document.getElementById('scDesc').textContent = cardText;
   const scThumbImg = document.getElementById('scThumbImg');
   const scEmoji    = document.getElementById('scEmoji');
-  if (testId === 'sbti' || testId === 'attachment') {
+  if (testId === 'sbti' || testId === 'attachment' || testId === 'brain') {
     scThumbImg.src = `images/${testId}/${winner}.webp`;
     scThumbImg.style.display = 'block';
     scEmoji.style.display    = 'none';
@@ -1451,7 +1421,7 @@ async function saveImage() {
     });
 
     const code     = sessionStorage.getItem('resultCode') || testData.title;
-    const filename = (testId === 'sbti' || testId === 'attachment') ? `${testId.toUpperCase()}_${code}.webp` : `마음_${testData.title}_결과.webp`;
+    const filename = (testId === 'sbti' || testId === 'attachment' || testId === 'brain') ? `${testId.toUpperCase()}_${code}.webp` : `마음_${testData.title}_결과.webp`;
     const link     = document.createElement('a');
     link.download  = filename;
     link.href      = canvas.toDataURL('image/webp', 0.92);
@@ -1507,7 +1477,7 @@ function shareKakao() {
   const base  = 'https://psychological-test-mu.vercel.app';
   const url   = location.href;
   const testUrl = `${base}/test.html?id=${testId}`;
-  const imageUrl = ((testId === 'sbti' || testId === 'attachment') && code)
+  const imageUrl = ((testId === 'sbti' || testId === 'attachment' || testId === 'brain') && code)
     ? `${base}/images/${testId}/${code}.webp`
     : `${base}/images/${testId}/thumb.webp`;
 
