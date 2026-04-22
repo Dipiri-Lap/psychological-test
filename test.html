@@ -328,6 +328,105 @@
     .intro-link-card .ilc-desc  { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
     .intro-link-card .ilc-arrow { color: var(--c-muted); font-size: 14px; flex-shrink: 0; }
 
+    /* ── SBTI Extra Sections ──────────────────────── */
+    #sbtiIntroExtra {
+      display: none;
+      width: 100%; max-width: 480px;
+      margin-top: 48px;
+      text-align: left;
+    }
+    .sbti-section {
+      margin-bottom: 40px;
+    }
+    .sbti-section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
+      color: var(--c-muted); text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .sbti-section-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 14px; color: var(--c-text);
+    }
+    .sbti-section-body {
+      font-size: 14px; line-height: 1.8; color: var(--c-muted);
+    }
+    /* reason cards */
+    .sbti-reason-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .sbti-reason-card {
+      background: var(--c-surface); border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm); padding: 16px 14px;
+    }
+    .sbti-reason-icon { font-size: 26px; margin-bottom: 8px; }
+    .sbti-reason-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .sbti-reason-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    /* type chips */
+    .sbti-type-chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .sbti-type-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--c-surf2); border: 1.5px solid var(--c-border);
+      border-radius: 100px; padding: 6px 13px;
+      font-size: 13px; font-weight: 600; color: var(--c-text);
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+      cursor: default;
+    }
+    .sbti-type-chip:hover { border-color: var(--c-accent); background: var(--c-surface); }
+    .sbti-type-chip.hidden-type { opacity: .55; }
+    /* FAQ */
+    .sbti-faq-item {
+      border-bottom: 1px solid var(--c-border);
+    }
+    .sbti-faq-q {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0; text-align: left;
+      font-size: 14px; font-weight: 600; color: var(--c-text);
+      cursor: pointer; gap: 12px;
+    }
+    .sbti-faq-q .faq-arrow {
+      flex-shrink: 0; font-size: 11px; color: var(--c-muted);
+      transition: transform .25s;
+    }
+    .sbti-faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .sbti-faq-a {
+      display: none; padding: 0 0 14px;
+      font-size: 13px; line-height: 1.8; color: var(--c-muted);
+    }
+    .sbti-faq-item.open .sbti-faq-a { display: block; }
+    /* step process */
+    .sbti-steps {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .sbti-step {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--c-surface); border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm); padding: 14px;
+    }
+    .sbti-step-num {
+      flex-shrink: 0; width: 28px; height: 28px;
+      background: var(--c-main); color: var(--c-bg);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .sbti-step-title { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+    .sbti-step-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    /* dimension tags */
+    .sbti-dim-grid {
+      display: grid; grid-template-columns: repeat(5,1fr); gap: 8px;
+    }
+    .sbti-dim-card {
+      background: var(--c-surf2); border-radius: var(--r-sm);
+      padding: 10px 8px; text-align: center;
+    }
+    .sbti-dim-emoji { font-size: 20px; }
+    .sbti-dim-name { font-size: 11px; font-weight: 700; margin-top: 4px; }
+    .sbti-dim-sub { font-size: 10px; color: var(--c-muted); margin-top: 2px; line-height: 1.4; }
+
     /* ═══════════════════════════════════════════════
        QUIZ SCREEN — mobile-first: question top, choices bottom
     ═══════════════════════════════════════════════ */
@@ -836,6 +935,197 @@
   <div class="intro-related">
     <div class="intro-related-label">다른 테스트 보기</div>
     <div id="introRelatedLinks" class="intro-related-list"></div>
+  </div>
+
+  <!-- SBTI-only extra content -->
+  <div id="sbtiIntroExtra">
+
+    <!-- What is SBTI -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">About</div>
+      <h2 class="sbti-section-title">SBTI 테스트란?</h2>
+      <p class="sbti-section-body">
+        SBTI(Subtle Behavior Type Indicator)는 겉으로 잘 드러나지 않는 행동 패턴과 본능적인 반응 방식을 분석하는 심리 유형 검사예요.
+        MBTI처럼 4글자 코드가 아닌, 26가지 고유 유형 이름으로 당신의 성격을 표현합니다.
+        총 30문항으로 이루어져 있으며, 5가지 핵심 차원(안정성·에너지·친화성·성취욕·사회성)을 기반으로 가장 가까운 유형을 도출해요.
+      </p>
+    </div>
+
+    <!-- 5 dimensions -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">측정 차원</div>
+      <h2 class="sbti-section-title">5가지 핵심 차원</h2>
+      <div class="sbti-dim-grid">
+        <div class="sbti-dim-card">
+          <div class="sbti-dim-emoji">🧘</div>
+          <div class="sbti-dim-name">안정성</div>
+          <div class="sbti-dim-sub">감정·충동 조절</div>
+        </div>
+        <div class="sbti-dim-card">
+          <div class="sbti-dim-emoji">⚡</div>
+          <div class="sbti-dim-name">에너지</div>
+          <div class="sbti-dim-sub">활력·외향성</div>
+        </div>
+        <div class="sbti-dim-card">
+          <div class="sbti-dim-emoji">🤝</div>
+          <div class="sbti-dim-name">친화성</div>
+          <div class="sbti-dim-sub">협력·공감 능력</div>
+        </div>
+        <div class="sbti-dim-card">
+          <div class="sbti-dim-emoji">🏆</div>
+          <div class="sbti-dim-name">성취욕</div>
+          <div class="sbti-dim-sub">목표·자기주도</div>
+        </div>
+        <div class="sbti-dim-card">
+          <div class="sbti-dim-emoji">🌐</div>
+          <div class="sbti-dim-name">사회성</div>
+          <div class="sbti-dim-sub">관계·소통 방식</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why take it -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">Why</div>
+      <h2 class="sbti-section-title">테스트를 해야 하는 이유</h2>
+      <div class="sbti-reason-grid">
+        <div class="sbti-reason-card">
+          <div class="sbti-reason-icon">🔍</div>
+          <div class="sbti-reason-title">숨겨진 본능 발견</div>
+          <div class="sbti-reason-desc">평소 의식하지 못했던 행동 패턴과 반응 방식을 객관적으로 파악할 수 있어요.</div>
+        </div>
+        <div class="sbti-reason-card">
+          <div class="sbti-reason-icon">💬</div>
+          <div class="sbti-reason-title">관계 이해에 도움</div>
+          <div class="sbti-reason-desc">친구, 연인, 동료와의 케미를 유형으로 비교해볼 수 있어요.</div>
+        </div>
+        <div class="sbti-reason-card">
+          <div class="sbti-reason-icon">🎯</div>
+          <div class="sbti-reason-title">26가지 고유 유형</div>
+          <div class="sbti-reason-desc">MBTI보다 세분화된 26가지 유형으로 나만의 이름을 찾아보세요.</div>
+        </div>
+        <div class="sbti-reason-card">
+          <div class="sbti-reason-icon">⏱️</div>
+          <div class="sbti-reason-title">빠르고 직관적</div>
+          <div class="sbti-reason-desc">30문항, 약 2분이면 완료. 길고 피곤한 테스트는 No.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How results are derived -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">Process</div>
+      <h2 class="sbti-section-title">어떻게 결과를 도출하나요?</h2>
+      <div class="sbti-steps">
+        <div class="sbti-step">
+          <div class="sbti-step-num">1</div>
+          <div>
+            <div class="sbti-step-title">30개 상황 질문에 답하기</div>
+            <div class="sbti-step-desc">실제 삶 속 상황을 기반으로 한 질문에 솔직하게 답해요.</div>
+          </div>
+        </div>
+        <div class="sbti-step">
+          <div class="sbti-step-num">2</div>
+          <div>
+            <div class="sbti-step-title">5개 차원 점수 산출</div>
+            <div class="sbti-step-desc">각 응답이 안정성·에너지·친화성·성취욕·사회성 점수로 변환돼요.</div>
+          </div>
+        </div>
+        <div class="sbti-step">
+          <div class="sbti-step-num">3</div>
+          <div>
+            <div class="sbti-step-title">26가지 유형과 패턴 매칭</div>
+            <div class="sbti-step-desc">나의 점수 프로필이 26개 유형 중 가장 가까운 유형과 매칭돼요.</div>
+          </div>
+        </div>
+        <div class="sbti-step">
+          <div class="sbti-step-num">4</div>
+          <div>
+            <div class="sbti-step-title">결과 확인 & 공유</div>
+            <div class="sbti-step-desc">나만의 유형 카드를 저장하고 친구에게 공유해보세요.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 26 types gallery -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">Types</div>
+      <h2 class="sbti-section-title">26가지 SBTI 유형</h2>
+      <div class="sbti-type-chips">
+        <span class="sbti-type-chip">🎮 CTRL</span>
+        <span class="sbti-type-chip">💸 ATM-er</span>
+        <span class="sbti-type-chip">😤 Dior-s</span>
+        <span class="sbti-type-chip">👑 BOSS</span>
+        <span class="sbti-type-chip">🙏 THAN-K</span>
+        <span class="sbti-type-chip">😱 OH-NO</span>
+        <span class="sbti-type-chip">🚀 GOGO</span>
+        <span class="sbti-type-chip">💋 SEXY</span>
+        <span class="sbti-type-chip">💖 LOVE-R</span>
+        <span class="sbti-type-chip">🤱 MUM</span>
+        <span class="sbti-type-chip">🎭 FAKE</span>
+        <span class="sbti-type-chip">🙆 OJBK</span>
+        <span class="sbti-type-chip">😒 MALO</span>
+        <span class="sbti-type-chip">🃏 JOKE-R</span>
+        <span class="sbti-type-chip">😮 WOC!</span>
+        <span class="sbti-type-chip">🤔 THIN-K</span>
+        <span class="sbti-type-chip">💩 SHIT</span>
+        <span class="sbti-type-chip">😴 ZZZZ</span>
+        <span class="sbti-type-chip">😢 POOR</span>
+        <span class="sbti-type-chip">🧘 MONK</span>
+        <span class="sbti-type-chip">😩 IMSB</span>
+        <span class="sbti-type-chip">🔇 SOLO</span>
+        <span class="sbti-type-chip">🤬 FUCK</span>
+        <span class="sbti-type-chip">💀 DEAD</span>
+        <span class="sbti-type-chip hidden-type">🍺 DRUNK ✨</span>
+        <span class="sbti-type-chip hidden-type">😇 HHHH ✨</span>
+      </div>
+      <p style="font-size:12px;color:var(--c-muted);margin-top:10px;">✨ 표시는 히든 유형이에요.</p>
+    </div>
+
+    <!-- FAQ -->
+    <div class="sbti-section">
+      <div class="sbti-section-label">FAQ</div>
+      <h2 class="sbti-section-title">자주 묻는 질문</h2>
+      <div class="sbti-faq-list">
+        <div class="sbti-faq-item">
+          <button class="sbti-faq-q" onclick="toggleFaq(this)">
+            SBTI와 MBTI의 차이가 뭔가요?
+            <span class="faq-arrow">▼</span>
+          </button>
+          <div class="sbti-faq-a">MBTI는 4가지 이분법적 축(E/I, S/N, T/F, J/P)으로 16가지 유형을 만들어요. SBTI는 5가지 차원을 각각 H/M/L 3단계로 측정하여 26가지 고유한 이름의 유형을 도출하기 때문에, 더 세분화된 성격 묘사가 가능해요.</div>
+        </div>
+        <div class="sbti-faq-item">
+          <button class="sbti-faq-q" onclick="toggleFaq(this)">
+            결과가 매번 달라질 수 있나요?
+            <span class="faq-arrow">▼</span>
+          </button>
+          <div class="sbti-faq-a">네, 가능해요. 현재 컨디션이나 최근 경험에 따라 답변이 달라질 수 있어요. 가장 평소의 나를 기준으로 답하는 게 정확도를 높이는 방법이에요.</div>
+        </div>
+        <div class="sbti-faq-item">
+          <button class="sbti-faq-q" onclick="toggleFaq(this)">
+            히든 유형은 어떻게 나오나요?
+            <span class="faq-arrow">▼</span>
+          </button>
+          <div class="sbti-faq-a">DRUNK와 HHHH는 특정 응답 패턴을 가진 사람에게만 나오는 희귀 유형이에요. 일반적인 응답 조합으로는 나오지 않아서 꽤 특별한 결과예요.</div>
+        </div>
+        <div class="sbti-faq-item">
+          <button class="sbti-faq-q" onclick="toggleFaq(this)">
+            26가지 유형 중 좋은 유형과 나쁜 유형이 있나요?
+            <span class="faq-arrow">▼</span>
+          </button>
+          <div class="sbti-faq-a">없어요. SHIT이든 CTRL이든 모든 유형은 그 자체로 의미 있는 성격 패턴이에요. 유형 이름이 자극적으로 보이더라도, 설명을 읽어보면 공감되는 부분이 훨씬 많을 거예요.</div>
+        </div>
+        <div class="sbti-faq-item">
+          <button class="sbti-faq-q" onclick="toggleFaq(this)">
+            테스트 결과를 저장하거나 공유할 수 있나요?
+            <span class="faq-arrow">▼</span>
+          </button>
+          <div class="sbti-faq-a">네! 결과 페이지에서 이미지로 저장하거나 카카오톡으로 바로 공유할 수 있어요. 친구에게 공유하고 서로의 유형을 비교해보세요.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1366,6 +1656,12 @@ let answersRaw = []; // For SBTI scoring logic
     `).join('');
   }
 
+  // Show SBTI-specific extra sections
+  if (testId === 'sbti') {
+    const extra = document.getElementById('sbtiIntroExtra');
+    if (extra) extra.style.display = 'block';
+  }
+
   // Update startBtn href for hard navigation
   document.getElementById('startBtn').href = `test.html?id=${testId}&start=true`;
 
@@ -1421,6 +1717,11 @@ function toggleTheme() {
 /* ══════════════════════════════════════════════════
    SCREENS
 ══════════════════════════════════════════════════ */
+function toggleFaq(btn) {
+  const item = btn.closest('.sbti-faq-item');
+  item.classList.toggle('open');
+}
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
