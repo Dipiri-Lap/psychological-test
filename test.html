@@ -300,33 +300,6 @@
       width: 100%; max-width: 380px;
       margin-top: 32px;
     }
-    .intro-related {
-      width: 100%; max-width: 380px;
-      margin-top: 28px; text-align: left;
-    }
-    .intro-related-label {
-      font-size: 11px; font-weight: 700; letter-spacing: 1.4px;
-      color: var(--c-muted); text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .intro-related-list {
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .intro-link-card {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--c-surface);
-      border: 1.5px solid var(--c-border);
-      border-radius: var(--r-sm);
-      padding: 12px 16px;
-      text-decoration: none; color: var(--c-text);
-      transition: border-color .2s, transform .2s;
-    }
-    .intro-link-card:hover { border-color: var(--c-accent); transform: translateX(3px); }
-    .intro-link-card .ilc-emoji { font-size: 22px; flex-shrink: 0; }
-    .intro-link-card .ilc-info { flex: 1; min-width: 0; }
-    .intro-link-card .ilc-title { font-size: 14px; font-weight: 600; }
-    .intro-link-card .ilc-desc  { font-size: 12px; color: var(--c-muted); margin-top: 2px; }
-    .intro-link-card .ilc-arrow { color: var(--c-muted); font-size: 14px; flex-shrink: 0; }
 
     /* ── SBTI Extra Sections ──────────────────────── */
     #sbtiIntroExtra {
@@ -931,12 +904,6 @@
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <!-- Related tests -->
-  <div class="intro-related">
-    <div class="intro-related-label">다른 테스트 보기</div>
-    <div id="introRelatedLinks" class="intro-related-list"></div>
-  </div>
-
   <!-- SBTI-only extra content -->
   <div id="sbtiIntroExtra">
 
@@ -946,7 +913,7 @@
       <h2 class="sbti-section-title">SBTI 테스트란?</h2>
       <p class="sbti-section-body">
         SBTI(Subtle Behavior Type Indicator)는 겉으로 잘 드러나지 않는 행동 패턴과 본능적인 반응 방식을 분석하는 심리 유형 검사예요.
-        MBTI처럼 4글자 코드가 아닌, 26가지 고유 유형 이름으로 당신의 성격을 표현합니다.
+        MBTI처럼 4글자 코드가 아닌, 27가지 고유 유형 이름으로 당신의 성격을 표현합니다.
         총 30문항으로 이루어져 있으며, 5가지 핵심 차원(안정성·에너지·친화성·성취욕·사회성)을 기반으로 가장 가까운 유형을 도출해요.
       </p>
     </div>
@@ -1001,8 +968,8 @@
         </div>
         <div class="sbti-reason-card">
           <div class="sbti-reason-icon">🎯</div>
-          <div class="sbti-reason-title">26가지 고유 유형</div>
-          <div class="sbti-reason-desc">MBTI보다 세분화된 26가지 유형으로 나만의 이름을 찾아보세요.</div>
+          <div class="sbti-reason-title">27가지 고유 유형</div>
+          <div class="sbti-reason-desc">MBTI보다 세분화된 27가지 유형으로 나만의 이름을 찾아보세요.</div>
         </div>
         <div class="sbti-reason-card">
           <div class="sbti-reason-icon">⏱️</div>
@@ -1034,8 +1001,8 @@
         <div class="sbti-step">
           <div class="sbti-step-num">3</div>
           <div>
-            <div class="sbti-step-title">26가지 유형과 패턴 매칭</div>
-            <div class="sbti-step-desc">나의 점수 프로필이 26개 유형 중 가장 가까운 유형과 매칭돼요.</div>
+            <div class="sbti-step-title">27가지 유형과 패턴 매칭</div>
+            <div class="sbti-step-desc">나의 점수 프로필이 27개 유형 중 가장 가까운 유형과 매칭돼요.</div>
           </div>
         </div>
         <div class="sbti-step">
@@ -1048,37 +1015,38 @@
       </div>
     </div>
 
-    <!-- 26 types gallery -->
+    <!-- 27 types gallery -->
     <div class="sbti-section">
       <div class="sbti-section-label">Types</div>
-      <h2 class="sbti-section-title">26가지 SBTI 유형</h2>
+      <h2 class="sbti-section-title">27가지 SBTI 유형</h2>
       <div class="sbti-type-chips">
-        <span class="sbti-type-chip">🎮 CTRL</span>
-        <span class="sbti-type-chip">💸 ATM-er</span>
-        <span class="sbti-type-chip">😤 Dior-s</span>
-        <span class="sbti-type-chip">👑 BOSS</span>
-        <span class="sbti-type-chip">🙏 THAN-K</span>
-        <span class="sbti-type-chip">😱 OH-NO</span>
-        <span class="sbti-type-chip">🚀 GOGO</span>
-        <span class="sbti-type-chip">💋 SEXY</span>
-        <span class="sbti-type-chip">💖 LOVE-R</span>
-        <span class="sbti-type-chip">🤱 MUM</span>
-        <span class="sbti-type-chip">🎭 FAKE</span>
-        <span class="sbti-type-chip">🙆 OJBK</span>
-        <span class="sbti-type-chip">😒 MALO</span>
-        <span class="sbti-type-chip">🃏 JOKE-R</span>
-        <span class="sbti-type-chip">😮 WOC!</span>
-        <span class="sbti-type-chip">🤔 THIN-K</span>
-        <span class="sbti-type-chip">💩 SHIT</span>
-        <span class="sbti-type-chip">😴 ZZZZ</span>
-        <span class="sbti-type-chip">😢 POOR</span>
-        <span class="sbti-type-chip">🧘 MONK</span>
-        <span class="sbti-type-chip">😩 IMSB</span>
-        <span class="sbti-type-chip">🔇 SOLO</span>
-        <span class="sbti-type-chip">🤬 FUCK</span>
-        <span class="sbti-type-chip">💀 DEAD</span>
-        <span class="sbti-type-chip hidden-type">🍺 DRUNK ✨</span>
-        <span class="sbti-type-chip hidden-type">😇 HHHH ✨</span>
+        <span class="sbti-type-chip">🎮 계획충</span>
+        <span class="sbti-type-chip">💸 현금인출기</span>
+        <span class="sbti-type-chip">😤 찐따</span>
+        <span class="sbti-type-chip">👑 리더</span>
+        <span class="sbti-type-chip">🙏 감사쟁이</span>
+        <span class="sbti-type-chip">😰 예민보살</span>
+        <span class="sbti-type-chip">⚡ 행동파</span>
+        <span class="sbti-type-chip">✨ 매력괴물</span>
+        <span class="sbti-type-chip">💕 연애뇌</span>
+        <span class="sbti-type-chip">🤱 돌봄장인</span>
+        <span class="sbti-type-chip">🎭 적응의달인</span>
+        <span class="sbti-type-chip">😌 결정장애</span>
+        <span class="sbti-type-chip">🐒 쪼렙</span>
+        <span class="sbti-type-chip">🃏 광대</span>
+        <span class="sbti-type-chip">🤯 멘붕러</span>
+        <span class="sbti-type-chip">🤔 생각쟁이</span>
+        <span class="sbti-type-chip">💩 프로불만러</span>
+        <span class="sbti-type-chip">💤 잠수충</span>
+        <span class="sbti-type-chip">💸 텅장러</span>
+        <span class="sbti-type-chip">🧘 속세포기자</span>
+        <span class="sbti-type-chip">😅 바보</span>
+        <span class="sbti-type-chip">🌌 아싸</span>
+        <span class="sbti-type-chip">😤 필터없음</span>
+        <span class="sbti-type-chip">⚰️ 좀비</span>
+        <span class="sbti-type-chip">🌀 폐인</span>
+        <span class="sbti-type-chip hidden-type">🍺 술꾼 ✨</span>
+        <span class="sbti-type-chip hidden-type">😂 ㅋㅋ장인 ✨</span>
       </div>
       <p style="font-size:12px;color:var(--c-muted);margin-top:10px;">✨ 표시는 히든 유형이에요.</p>
     </div>
@@ -1093,7 +1061,7 @@
             SBTI와 MBTI의 차이가 뭔가요?
             <span class="faq-arrow">▼</span>
           </button>
-          <div class="sbti-faq-a">MBTI는 4가지 이분법적 축(E/I, S/N, T/F, J/P)으로 16가지 유형을 만들어요. SBTI는 5가지 차원을 각각 H/M/L 3단계로 측정하여 26가지 고유한 이름의 유형을 도출하기 때문에, 더 세분화된 성격 묘사가 가능해요.</div>
+          <div class="sbti-faq-a">MBTI는 4가지 이분법적 축(E/I, S/N, T/F, J/P)으로 16가지 유형을 만들어요. SBTI는 5가지 차원을 각각 H/M/L 3단계로 측정하여 27가지 고유한 이름의 유형을 도출하기 때문에, 더 세분화된 성격 묘사가 가능해요.</div>
         </div>
         <div class="sbti-faq-item">
           <button class="sbti-faq-q" onclick="toggleFaq(this)">
@@ -1111,7 +1079,7 @@
         </div>
         <div class="sbti-faq-item">
           <button class="sbti-faq-q" onclick="toggleFaq(this)">
-            26가지 유형 중 좋은 유형과 나쁜 유형이 있나요?
+            27가지 유형 중 좋은 유형과 나쁜 유형이 있나요?
             <span class="faq-arrow">▼</span>
           </button>
           <div class="sbti-faq-a">없어요. SHIT이든 CTRL이든 모든 유형은 그 자체로 의미 있는 성격 패턴이에요. 유형 이름이 자극적으로 보이더라도, 설명을 읽어보면 공감되는 부분이 훨씬 많을 거예요.</div>
@@ -1634,27 +1602,6 @@ let answersRaw = []; // For SBTI scoring logic
   document.getElementById('introTitle').textContent  = testData.title;
   document.getElementById('introSub').textContent    = testData.subtitle;
   document.getElementById('introQCount').textContent = `${testData.questions.length}문항`;
-
-  // Related tests (exclude current)
-  const ALL_TESTS = [
-    { id: 'sbti',       emoji: '💜', title: 'SBTI 성격 유형 테스트', desc: '나의 숨겨진 본능은?' },
-    { id: 'jealousy',   emoji: '🫣', title: '질투 유형 테스트',      desc: '쿨한 척하지만 속은 부글부글?' },
-    { id: 'attachment', emoji: '💕', title: '애착 유형 테스트',      desc: '안정형? 불안형? 회피형?' },
-    { id: 'brain',      emoji: '🧠', title: '좌뇌 우뇌 테스트',      desc: '나는 논리파? 감성파?' },
-  ];
-  const relatedEl = document.getElementById('introRelatedLinks');
-  if (relatedEl) {
-    relatedEl.innerHTML = ALL_TESTS.filter(t => t.id !== testId).slice(0, 3).map(t => `
-      <a class="intro-link-card" href="test.html?id=${t.id}">
-        <span class="ilc-emoji">${t.emoji}</span>
-        <div class="ilc-info">
-          <div class="ilc-title">${t.title}</div>
-          <div class="ilc-desc">${t.desc}</div>
-        </div>
-        <span class="ilc-arrow">→</span>
-      </a>
-    `).join('');
-  }
 
   // Show SBTI-specific extra sections
   if (testId === 'sbti') {
