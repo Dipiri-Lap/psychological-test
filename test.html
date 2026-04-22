@@ -186,6 +186,15 @@
       transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
     }
     .start-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .intro-share-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #FEE500; color: #1c1917;
+      font-family: 'Nanum Myeongjo', serif; font-size: 16px;
+      padding: 14px 36px; border-radius: 100px;
+      margin-top: 14px;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+    }
+    .intro-share-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
 
     /* ═══════════════════════════════════════════════
        QUIZ SCREEN — mobile-first: question top, choices bottom
@@ -703,6 +712,9 @@
     <span class="meta-pill">약 2분</span>
   </div>
   <button class="start-btn" id="startBtn">시작하기 →</button>
+  <button class="intro-share-btn" id="introShareBtn">
+    <span>💬</span> 카카오톡 공유
+  </button>
 </div>
 
 <!-- ② Quiz -->
@@ -1223,6 +1235,7 @@ let answersRaw = []; // For SBTI scoring logic
 
   // Events
   document.getElementById('startBtn').addEventListener('click', startQuiz);
+  document.getElementById('introShareBtn').addEventListener('click', shareIntro);
   document.getElementById('themeBtn').addEventListener('click', toggleTheme);
   document.getElementById('btnKakao').addEventListener('click', shareKakao);
   document.getElementById('btnCopy').addEventListener('click', copyLink);
@@ -1527,14 +1540,37 @@ async function saveImage() {
 /* ══════════════════════════════════════════════════
    KAKAO / COPY
 ══════════════════════════════════════════════════ */
+function initKakao() {
+  if (typeof Kakao === 'undefined') return false;
+  if (!Kakao.isInitialized()) Kakao.init('bbe63bfcba108e48b558a6554e0fd9c1');
+  return true;
+}
+
+function shareIntro() {
+  if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
+  const base    = 'https://psychological-test-mu.vercel.app';
+  const testUrl = `${base}/test.html?id=${testId}`;
+  const imageUrl = testData.thumb
+    ? `${base}/${testData.thumb}`
+    : `${base}/images/sbti/thumb.webp`;
+
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: `${testData.emoji} ${testData.title}`,
+      description: testData.subtitle,
+      imageUrl,
+      link: { mobileWebUrl: testUrl, webUrl: testUrl },
+    },
+    buttons: [
+      { title: '테스트하기', link: { mobileWebUrl: testUrl, webUrl: testUrl } },
+      { title: '다른 테스트 보기', link: { mobileWebUrl: `${base}/`, webUrl: `${base}/` } },
+    ],
+  });
+}
+
 function shareKakao() {
-  if (typeof Kakao === 'undefined') {
-    showToast('카카오 SDK를 불러오는 중이에요.');
-    return;
-  }
-  if (!Kakao.isInitialized()) {
-    Kakao.init('bbe63bfcba108e48b558a6554e0fd9c1');
-  }
+  if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
 
   const type  = sessionStorage.getItem('resultType')  || '';
   const emoji = sessionStorage.getItem('resultEmoji') || '';
