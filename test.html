@@ -830,17 +830,15 @@
     <div id="dimAnalysisContent"></div>
   </div>
 
-  <!-- AdSense Slot (Description 하단으로 이동) -->
+  <!-- AdSense Slot -->
   <div style="margin: 40px auto 20px; text-align: center; width: 100%; max-width: 340px;">
     <ins class="adsbygoogle"
+         id="resultAdSlot"
          style="display:block"
          data-ad-client="ca-pub-7327562206502398"
          data-ad-slot="3769192952"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
   </div>
 
     <div class="action-btns">
@@ -1557,6 +1555,9 @@ function showResult() {
   }
 
   showScreen('resultScreen');
+
+  // Push AdSense after screen is visible (avoids width=0 error)
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(_) {}
 
   // Typing effect for type name
   const typeEl = document.getElementById('resultType');
