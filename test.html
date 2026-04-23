@@ -58,6 +58,9 @@
   <!-- ── Brain Data ────────────────────────────────── -->
   <script src="tests/brain/brain-test.js"></script>
 
+  <!-- ── FingerLove Data ───────────────────────────── -->
+  <script src="tests/fingerlove/finger-test.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -439,11 +442,11 @@
     }
 
     .q-img {
-      width: 100%;
+      width: 66%;
       height: auto;
       border-radius: 16px;
       display: block;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
     }
     .q-text {
       font-family: 'Nanum Myeongjo', serif;
@@ -608,6 +611,7 @@
       font-family: 'Nanum Myeongjo', serif;
       font-size: 33px; letter-spacing: -.5px;
       margin-bottom: 22px; min-height: 1.3em; text-align: center;
+      white-space: pre-wrap;
       opacity: 0; animation: fadeIn .5s .5s ease both;
     }
     .result-divider {
@@ -657,6 +661,35 @@
     .btn-share { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-more  { background: var(--c-main); color: var(--c-bg); }
     .btn-icon  { font-size: 19px; }
+
+    /* ── FingerLove Traits ──────────────────────────── */
+    .finger-traits {
+      width: 100%; max-width: 480px;
+      margin-top: 8px; margin-bottom: 16px;
+      opacity: 0; animation: slideUp .6s 2.0s ease both;
+    }
+    .finger-traits-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 15px; letter-spacing: -.3px;
+      text-align: center; margin-bottom: 16px;
+      color: var(--c-muted);
+    }
+    .finger-trait-card {
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 16px 18px;
+      margin-bottom: 10px;
+      transition: background .35s, border-color .35s;
+    }
+    .finger-trait-title {
+      font-size: 14px; font-weight: 700;
+      color: var(--c-text); margin-bottom: 6px;
+    }
+    .finger-trait-desc {
+      font-size: 13px; font-weight: 300;
+      color: var(--c-muted); line-height: 1.8;
+    }
 
     /* ── Dimension Analysis ────────────────────────── */
     .dim-analysis {
@@ -789,6 +822,7 @@
       font-family: 'Nanum Myeongjo', serif;
       font-size: 26px; color: #faf8f5;
       letter-spacing: -.5px; line-height: 1.2;
+      white-space: pre-wrap;
     }
     .sc-divider {
       width: 30px; height: 1.5px;
@@ -1143,6 +1177,12 @@
   <div class="result-type" id="resultType"></div>
   <div class="result-divider"></div>
   <p class="result-desc" id="resultDesc"></p>
+
+  <!-- 핑거러브 특성 카드 (fingerlove에서만 표시) -->
+  <div class="finger-traits" id="fingerTraits" style="display:none">
+    <div class="finger-traits-title">나의 연애 스타일 분석</div>
+    <div id="fingerTraitsContent"></div>
+  </div>
 
   <!-- SBTI 차원 분석 (sbti 테스트에서만 표시) -->
   <div class="dim-analysis" id="dimAnalysis" style="display:none">
@@ -1570,6 +1610,23 @@ let answersRaw = []; // For SBTI scoring logic
       })),
       results: BRAIN_TYPES
     };
+  } else if (testId === 'fingerlove' && typeof FINGER_QUESTION !== 'undefined') {
+    testData = {
+      title: "손가락 연애 스타일",
+      emoji: "🫶",
+      thumb: "images/fingerlove/thumb.webp",
+      subtitle: "손가락 하나로 알아보는 나의 연애 스타일",
+      questions: [{
+        q: FINGER_QUESTION.question,
+        img: "images/fingerlove/0.webp",
+        choices: FINGER_QUESTION.choices.map(c => ({
+          id: c.id,
+          text: `${c.label} (${c.sub})`,
+          emoji: c.emoji
+        }))
+      }],
+      results: FINGER_TYPES
+    };
   } else {
     testData = tests[testId];
   }
@@ -1712,8 +1769,8 @@ function renderQuestion(first) {
   const slide = document.createElement('div');
   slide.className = first ? 'q-slide' : 'q-slide enter-right';
   slide.innerHTML = `
-    <div class="q-text">${current.q}</div>
     ${current.img ? `<img class="q-img" src="${current.img}" alt="" />` : ''}
+    <div class="q-text">${current.q.replace(/\n/g, '<br>')}</div>
   `;
 
   const oldSlide = wrap.querySelector('.q-slide');
@@ -1778,6 +1835,8 @@ function renderChoices(current, container) {
         answersRaw.push(choice.type);
       } else if (testId === 'brain') {
         answersRaw.push({ side: choice.side });
+      } else if (testId === 'fingerlove') {
+        answersRaw.push(choice.id);
       } else {
         Object.entries(choice.score).forEach(([k, v]) => { scores[k] = (scores[k] || 0) + v; });
       }
@@ -1856,6 +1915,16 @@ function showResult() {
       desc: typeData.desc,
       tagline: typeData.tagline
     };
+  } else if (testId === 'fingerlove') {
+    winner = answersRaw[0];
+    const typeData = FINGER_TYPES[winner];
+    res = {
+      type: typeData.name,
+      emoji: typeData.emoji,
+      desc: typeData.tagline,
+      tagline: typeData.tagline
+    };
+    renderFingerTraits(typeData.traits, typeData.color);
   } else {
     winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
     res    = testData.results[winner];
@@ -1871,9 +1940,16 @@ function showResult() {
   document.getElementById('scDesc').textContent = cardText;
   const scThumbImg = document.getElementById('scThumbImg');
   const scEmoji    = document.getElementById('scEmoji');
+  const FINGER_IMG_IDX = { THUMB: 1, INDEX: 2, MIDDLE: 3, RING: 4, PINKY: 5 };
   if (testId === 'sbti' || testId === 'attachment' || testId === 'brain') {
     scThumbImg.src = `images/${testId}/${winner}.webp`;
     scThumbImg.style.display = 'block';
+    scEmoji.style.display    = 'none';
+  } else if (testId === 'fingerlove') {
+    scThumbImg.src = `images/fingerlove/${FINGER_IMG_IDX[winner]}.webp`;
+    scThumbImg.style.display = 'block';
+    scThumbImg.style.width   = '75%';
+    scThumbImg.style.margin  = '0 auto';
     scEmoji.style.display    = 'none';
   } else if (testData.thumb) {
     scThumbImg.src = testData.thumb;
@@ -1952,7 +2028,7 @@ async function saveImage() {
     });
 
     const code     = sessionStorage.getItem('resultCode') || testData.title;
-    const filename = (testId === 'sbti' || testId === 'attachment' || testId === 'brain') ? `${testId.toUpperCase()}_${code}.webp` : `마음_${testData.title}_결과.webp`;
+    const filename = (testId === 'sbti' || testId === 'attachment' || testId === 'brain' || testId === 'fingerlove') ? `${testId.toUpperCase()}_${code}.webp` : `마음_${testData.title}_결과.webp`;
     const link     = document.createElement('a');
     link.download  = filename;
     link.href      = canvas.toDataURL('image/webp', 0.92);
@@ -2008,8 +2084,11 @@ function shareKakao() {
   const base  = 'https://testlab.tmhub.co.kr';
   const url   = location.href;
   const testUrl = `${base}/test.html?id=${testId}`;
+  const _fingerIdxK = { THUMB: 1, INDEX: 2, MIDDLE: 3, RING: 4, PINKY: 5 };
   const imageUrl = ((testId === 'sbti' || testId === 'attachment' || testId === 'brain') && code)
     ? `${base}/images/${testId}/${code}.webp`
+    : (testId === 'fingerlove' && code in _fingerIdxK)
+    ? `${base}/images/fingerlove/${_fingerIdxK[code]}.webp`
     : `${base}/images/${testId}/thumb.webp`;
 
   Kakao.Share.sendDefault({
@@ -2093,6 +2172,21 @@ function copyLink() {
     ta.remove();
     doToast();
   }
+}
+
+/* ══════════════════════════════════════════════════
+   FINGERLOVE TRAITS RENDER
+══════════════════════════════════════════════════ */
+function renderFingerTraits(traits, color) {
+  const container = document.getElementById('fingerTraitsContent');
+  container.innerHTML = traits.map(t => `
+    <div class="finger-trait-card" style="border-left: 3px solid ${color};">
+      <div class="finger-trait-title">${t.title}</div>
+      <div class="finger-trait-desc">${t.desc}</div>
+    </div>
+  `).join('');
+  const section = document.getElementById('fingerTraits');
+  section.style.display = 'block';
 }
 
 /* ══════════════════════════════════════════════════
