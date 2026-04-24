@@ -255,3 +255,35 @@ function calcBrainType(answers) {
 if (typeof module !== 'undefined') {
   module.exports = { BRAIN_QUESTIONS, BRAIN_TYPES, calcBrainType };
 }
+
+// ============================================
+// 러너 설정 등록
+// ============================================
+
+window.TEST_CONFIGS = window.TEST_CONFIGS || {};
+
+window.TEST_CONFIGS['brain'] = {
+  data: {
+    title: "좌뇌 우뇌 테스트",
+    emoji: "🧠",
+    thumb: "images/brain/thumb.webp",
+    subtitle: "나는 논리파? 감성파? (20문항)",
+    questions: BRAIN_QUESTIONS.map(q => ({ q: q.question, choices: q.choices })),
+    results: BRAIN_TYPES
+  },
+  onAnswer(choice, state) {
+    state.answersRaw.push({ side: choice.side });
+  },
+  calcResult(state) {
+    const result = calcBrainType(state.answersRaw);
+    const winner = result.type;
+    const t      = result.typeInfo;
+    return { winner, type: t.name, emoji: t.emoji, desc: t.desc, tagline: t.tagline };
+  },
+  getShareImage(winner) {
+    return `images/brain/${winner}.webp`;
+  },
+  getSaveFilename(winner) {
+    return `BRAIN_${winner}.webp`;
+  }
+};

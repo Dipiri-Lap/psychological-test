@@ -160,3 +160,49 @@ function getFingerResult(fingerId) {
 if (typeof module !== 'undefined') {
   module.exports = { FINGER_QUESTION, FINGER_TYPES, getFingerResult };
 }
+
+// ============================================
+// 러너 설정 등록
+// ============================================
+
+const _FINGER_IMG_IDX = { THUMB: 1, INDEX: 2, MIDDLE: 3, RING: 4, PINKY: 5 };
+
+window.TEST_CONFIGS = window.TEST_CONFIGS || {};
+
+window.TEST_CONFIGS['fingerlove'] = {
+  data: {
+    title: "손가락 연애 스타일",
+    emoji: "🫶",
+    thumb: "images/fingerlove/thumb.webp",
+    subtitle: "손가락 하나로 알아보는 나의 연애 스타일",
+    questions: [{
+      q: FINGER_QUESTION.question,
+      img: "images/fingerlove/0.webp",
+      choices: FINGER_QUESTION.choices.map(c => ({
+        id: c.id,
+        text: `${c.label} (${c.sub})`,
+        emoji: c.emoji
+      }))
+    }],
+    results: FINGER_TYPES
+  },
+  onAnswer(choice, state) {
+    state.answersRaw.push(choice.id);
+  },
+  calcResult(state) {
+    const winner = state.answersRaw[0];
+    const t      = FINGER_TYPES[winner];
+    return { winner, type: t.name, emoji: t.emoji, desc: t.tagline, tagline: t.tagline };
+  },
+  getShareImage(winner) {
+    return `images/fingerlove/${_FINGER_IMG_IDX[winner]}.webp`;
+  },
+  getSaveFilename(winner) {
+    return `FINGERLOVE_${winner}.webp`;
+  },
+  shareImageStyle: { width: '75%', margin: '0 auto' },
+  afterResult(result) {
+    const t = FINGER_TYPES[result.winner];
+    renderFingerTraits(t.traits, t.color);
+  }
+};

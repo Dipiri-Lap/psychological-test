@@ -306,3 +306,35 @@ function calcAttachmentType(answers) {
 if (typeof module !== 'undefined') {
   module.exports = { ATTACHMENT_QUESTIONS, ATTACHMENT_TYPES, calcAttachmentType };
 }
+
+// ============================================
+// 러너 설정 등록
+// ============================================
+
+window.TEST_CONFIGS = window.TEST_CONFIGS || {};
+
+window.TEST_CONFIGS['attachment'] = {
+  data: {
+    title: "애착 유형 테스트",
+    emoji: "💞",
+    thumb: "images/attachment/thumb.webp",
+    subtitle: "나의 애착 유형은? (18문항)",
+    questions: ATTACHMENT_QUESTIONS.map(q => ({ q: q.question, choices: q.choices })),
+    results: ATTACHMENT_TYPES
+  },
+  onAnswer(choice, state) {
+    state.answersRaw.push(choice.type);
+  },
+  calcResult(state) {
+    const result = calcAttachmentType(state.answersRaw);
+    const winner = result.primary;
+    const t      = result.primaryInfo;
+    return { winner, type: t.name, emoji: t.emoji, desc: t.desc, tagline: t.tagline };
+  },
+  getShareImage(winner) {
+    return `images/attachment/${winner}.webp`;
+  },
+  getSaveFilename(winner) {
+    return `ATTACHMENT_${winner}.webp`;
+  }
+};
