@@ -396,7 +396,7 @@
     { id:"attachment", emoji:"💕", title:"애착 유형 테스트",    desc:"안정형? 불안형? 회피형?",               category:"연애", count:9000 },
     { id:"brain",      emoji:"🧠", title:"좌뇌 우뇌 테스트",    desc:"나는 논리파? 감성파?",                  category:"성격", count:3100  },
     { id:"fingerlove", emoji:"🫶", title:"손가락 연애 스타일",  desc:"손가락 하나로 알아보는 나의 연애 스타일", category:"연애", count:3000  },
-    { id:"sleeplove",  emoji:"😴", title:"잠자는 자세 연애 스타일", desc:"잠드는 자세로 알아보는 나의 연애 스타일", category:"연애", count:2000  },
+    { id:"sleeplove",  emoji:"😴", title:"잠자는 자세 연애 스타일", desc:"잠드는 자세로 알아보는 나의 연애 스타일", category:"연애", count:2000, thumb:"images/sleeplove/thumb.png"  },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -431,7 +431,7 @@
     a.dataset.id       = t.id;
     a.innerHTML = `
       <div class="card-thumb-wrap">
-        <img class="card-thumb" src="images/${t.id}/thumb.webp" alt="${t.title}"
+        <img class="card-thumb" src="${t.thumb || `images/${t.id}/thumb.webp`}" alt="${t.title}"
           onerror="this.closest('.card-thumb-wrap').remove()">
       </div>
       <div class="card-title">${t.title}</div>
