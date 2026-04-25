@@ -217,10 +217,10 @@ window.TEST_CONFIGS = window.TEST_CONFIGS || {};
 
 window.TEST_CONFIGS['pein'] = {
   data: {
-    title: "나의 폐인력 테스트",
+    title: "갓생 살긴 글렀나? 본격 폐인 지수 측정기",
     emoji: "🛋️",
     thumb: "images/Pein/thumb.webp",
-    subtitle: "오늘 하루로 측정하는 나의 폐인 지수 (10문항)",
+    subtitle: "본격 '현생 탈출' 테스트: 나의 폐인 레벨은? (10문항)",
     questions: PEIN_QUESTIONS.map(q => ({
       q: q.question,
       choices: q.choices.map(c => ({ text: c.text, score: c.score }))
