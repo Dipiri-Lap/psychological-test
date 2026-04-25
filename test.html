@@ -1663,17 +1663,20 @@ function updateSEO() {
   const thumbUrl = `${base}/${testData.thumb || `images/${testId}/thumb.webp`}`;
   const keywords = (_kw[testId] || '') + ', 심리테스트, 마음, 무료심리테스트';
 
+  const _q  = (sel) => document.querySelector(sel);
+  const _id = (id)  => document.getElementById(id);
+
   document.title = title;
-  document.getElementById('ogTitle').content  = title;
-  document.getElementById('ogDesc').content   = desc;
-  document.getElementById('ogImage').content  = thumbUrl;
-  document.getElementById('ogUrl').content    = url;
-  document.getElementById('twTitle').content  = title;
-  document.getElementById('twDesc').content   = desc;
-  document.getElementById('twImage').content  = thumbUrl;
-  document.getElementById('canonical').href   = url;
-  document.getElementById('metaKeywords').content = keywords;
-  document.querySelector('meta[name="description"]')?.setAttribute('content', desc);
+  _q('meta[property="og:title"]')?.setAttribute('content', title);
+  _q('meta[property="og:description"]')?.setAttribute('content', desc);
+  _q('meta[property="og:image"]')?.setAttribute('content', thumbUrl);
+  _q('meta[property="og:url"]')?.setAttribute('content', url);
+  _q('meta[name="twitter:title"]')?.setAttribute('content', title);
+  _q('meta[name="twitter:description"]')?.setAttribute('content', desc);
+  _q('meta[name="twitter:image"]')?.setAttribute('content', thumbUrl);
+  _q('meta[name="description"]')?.setAttribute('content', desc);
+  _q('meta[name="keywords"]')?.setAttribute('content', keywords);
+  if (_id('canonical')) _id('canonical').href = url;
 
   document.getElementById('jsonld').textContent = JSON.stringify({
     "@context": "https://schema.org",
