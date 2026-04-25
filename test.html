@@ -14,15 +14,18 @@
   <meta property="og:type"        content="website" />
   <meta property="og:title"       content="마음. — 심리테스트" id="ogTitle" />
   <meta property="og:description" content="나를 알아가는 심리테스트" id="ogDesc" />
-  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
+  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" id="ogImage" />
   <meta property="og:url"         content="https://testlab.tmhub.co.kr/test.html" id="ogUrl" />
   <meta property="og:site_name"   content="마음." />
 
   <!-- ── Twitter Card ──────────────────────────────── -->
   <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="마음. — 심리테스트" />
-  <meta name="twitter:description" content="나를 알아가는 심리테스트" />
-  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
+  <meta name="twitter:title"       content="마음. — 심리테스트" id="twTitle" />
+  <meta name="twitter:description" content="나를 알아가는 심리테스트" id="twDesc" />
+  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" id="twImage" />
+
+  <!-- ── Keywords ──────────────────────────────────── -->
+  <meta name="keywords" content="심리테스트, 성격테스트, 무료심리테스트" id="metaKeywords" />
 
   <!-- ── Canonical ─────────────────────────────────── -->
   <link rel="canonical" href="https://testlab.tmhub.co.kr/test.html" id="canonical" />
@@ -1640,16 +1643,35 @@ let answersRaw = [];
 /* ══════════════════════════════════════════════════
    SEO
 ══════════════════════════════════════════════════ */
+// 테스트별 SEO 키워드
+const _SEO_KEYWORDS = {
+  sbti:       'SBTI 테스트, 성격 유형 테스트, MBTI 심리테스트, 나의 성격 유형, 무료 심리테스트',
+  jealousy:   '질투 유형 테스트, 연애 심리테스트, 질투심 테스트, 연애 유형',
+  attachment: '애착 유형 테스트, 안정형 불안형 회피형, 연애 심리테스트, 애착 스타일',
+  brain:      '좌뇌 우뇌 테스트, 논리형 감성형, 뇌 유형 테스트, 두뇌 유형',
+  fingerlove: '손가락 연애 스타일, 손가락 심리테스트, 연애 유형 테스트',
+  sleeplove:  '수면 자세 심리테스트, 잠자는 자세 연애 스타일, 수면 유형',
+  pein:       '폐인 테스트, 갓생 테스트, 게으름 지수, 폐인력 측정, 자기계발 심리테스트',
+};
+
 function updateSEO() {
-  const title = `${testData.title} — 마음.`;
-  const desc  = testData.subtitle;
-  const url   = location.href;
+  const base     = 'https://testlab.tmhub.co.kr';
+  const title    = `${testData.title} — 마음.`;
+  const desc     = `${testData.subtitle} 지금 바로 무료로 해보세요!`;
+  const url      = location.href;
+  const thumbUrl = `${base}/${testData.thumb || `images/${testId}/thumb.webp`}`;
+  const keywords = (_SEO_KEYWORDS[testId] || '') + ', 심리테스트, 마음, 무료심리테스트';
 
   document.title = title;
   document.getElementById('ogTitle').content  = title;
   document.getElementById('ogDesc').content   = desc;
+  document.getElementById('ogImage').content  = thumbUrl;
   document.getElementById('ogUrl').content    = url;
+  document.getElementById('twTitle').content  = title;
+  document.getElementById('twDesc').content   = desc;
+  document.getElementById('twImage').content  = thumbUrl;
   document.getElementById('canonical').href   = url;
+  document.getElementById('metaKeywords').content = keywords;
   document.querySelector('meta[name="description"]')?.setAttribute('content', desc);
 
   document.getElementById('jsonld').textContent = JSON.stringify({
@@ -1658,8 +1680,13 @@ function updateSEO() {
     "name": testData.title,
     "description": desc,
     "url": url,
-    "author": { "@type": "Organization", "name": "마음." },
+    "inLanguage": "ko",
+    "keywords": keywords,
+    "author":    { "@type": "Organization", "name": "마음.", "url": base },
+    "publisher": { "@type": "Organization", "name": "마음.", "url": base },
     "numberOfQuestions": testData.questions.length,
+    "educationalLevel": "general",
+    "image": thumbUrl,
   });
 }
 
