@@ -1,0 +1,19 @@
+{
+  "name": "마음. 심리테스트",
+  "short_name": "마음.",
+  "description": "나를 알아가는 가장 즐거운 방법. 다양한 심리테스트와 성격 유형 검사.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8f5",
+  "theme_color": "#e85d75",
+  "lang": "ko",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "images/sbti/thumb.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

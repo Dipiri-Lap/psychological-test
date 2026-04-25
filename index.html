@@ -5,8 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>마음. — 나를 알아가는 심리테스트</title>
   <meta name="naver-site-verification" content="a25c627f8dfd8be0f9ba6632c3421d823116c71e" />
-  <meta name="description" content="나를 알아가는 가장 즐거운 방법, 마음. 다양한 심리테스트와 성격 유형 검사를 즐겨보세요." />
-  
+  <meta name="description" content="나를 알아가는 가장 즐거운 방법, 마음. SBTI·질투·애착·좌뇌우뇌·폐인력 등 다양한 무료 심리테스트를 즐겨보세요." />
+  <meta name="keywords" content="심리테스트, 성격테스트, MBTI, SBTI, 연애테스트, 무료심리테스트, 애착유형, 좌뇌우뇌, 폐인테스트, 마음" />
+
+  <!-- ── Open Graph ──────────────────────────────────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="마음. — 나를 알아가는 심리테스트" />
+  <meta property="og:description" content="SBTI·질투·애착·좌뇌우뇌·폐인력 등 무료 심리테스트 모음. 나를 알아가는 가장 즐거운 방법." />
+  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
+  <meta property="og:url"         content="https://testlab.tmhub.co.kr/" />
+  <meta property="og:site_name"   content="마음." />
+
+  <!-- ── Twitter Card ────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="마음. — 나를 알아가는 심리테스트" />
+  <meta name="twitter:description" content="SBTI·질투·애착·좌뇌우뇌·폐인력 등 무료 심리테스트 모음." />
+  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/sbti/thumb.webp" />
+
+  <!-- ── PWA Manifest ────────────────────────────────── -->
+  <link rel="manifest" href="manifest.json" />
+
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
   {
@@ -15,11 +33,30 @@
     "name": "마음. 심리테스트",
     "url": "https://testlab.tmhub.co.kr/",
     "description": "다양한 심리테스트를 통해 나를 알아가는 웹서비스입니다.",
+    "inLanguage": "ko",
     "potentialAction": {
       "@type": "SearchAction",
       "target": "https://testlab.tmhub.co.kr/index.html?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "마음. 심리테스트 목록",
+    "url": "https://testlab.tmhub.co.kr/",
+    "numberOfItems": 7,
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "SBTI 성격 유형 테스트",       "url": "https://testlab.tmhub.co.kr/test.html?id=sbti" },
+      { "@type": "ListItem", "position": 2, "name": "질투 유형 테스트",             "url": "https://testlab.tmhub.co.kr/test.html?id=jealousy" },
+      { "@type": "ListItem", "position": 3, "name": "애착 유형 테스트",             "url": "https://testlab.tmhub.co.kr/test.html?id=attachment" },
+      { "@type": "ListItem", "position": 4, "name": "좌뇌 우뇌 테스트",            "url": "https://testlab.tmhub.co.kr/test.html?id=brain" },
+      { "@type": "ListItem", "position": 5, "name": "손가락 연애 스타일",           "url": "https://testlab.tmhub.co.kr/test.html?id=fingerlove" },
+      { "@type": "ListItem", "position": 6, "name": "잠자는 자세 연애 스타일",      "url": "https://testlab.tmhub.co.kr/test.html?id=sleeplove" },
+      { "@type": "ListItem", "position": 7, "name": "갓생 살긴 글렀나? 본격 폐인 지수 측정기", "url": "https://testlab.tmhub.co.kr/test.html?id=pein" }
+    ]
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -432,8 +469,8 @@
     a.dataset.id       = t.id;
     a.innerHTML = `
       <div class="card-thumb-wrap">
-        <img class="card-thumb" src="${t.thumb || `images/${t.id}/thumb.webp`}" alt="${t.title}"
-          onerror="this.closest('.card-thumb-wrap').remove()">
+        <img class="card-thumb" src="${t.thumb || `images/${t.id}/thumb.webp`}" alt="${t.title} 심리테스트 결과 이미지"
+          loading="lazy" onerror="this.closest('.card-thumb-wrap').remove()">
       </div>
       <div class="card-title">${t.title}</div>
       <div class="card-desc">${t.desc}</div>
