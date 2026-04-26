@@ -74,7 +74,7 @@ const FOOD_TYPES = {
   RAMEN: {
     emoji: "🍜",
     food: "라면",
-    name: "감성적인 혼자 충전형",
+    name: "혼자가 편한 감성파",
     tagline: "혼자 끓여 혼자 먹는 라면이 제일 맛있어.",
     color: "#E74C3C",
     personality: [
