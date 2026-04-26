@@ -349,12 +349,6 @@
       color: var(--c-accent); margin-bottom: 16px;
       opacity: 0; animation: fadeIn .5s .1s ease both;
     }
-    .result-food-img {
-      width: 120px; height: 120px; border-radius: 50%;
-      object-fit: cover; margin-bottom: 20px;
-      box-shadow: var(--shadow-hover);
-      opacity: 0; animation: bumpIn .6s .2s cubic-bezier(.34,1.56,.64,1) both;
-    }
     .result-type {
       font-family: 'Nanum Myeongjo', serif;
       font-size: 28px; letter-spacing: -.5px; line-height: 1.3;
@@ -467,7 +461,8 @@
       padding: 5px 12px; border-radius: 100px;
     }
     .sc-food-img {
-      width: 120px; height: 120px; border-radius: 50%;
+      width: 100%; height: auto;
+      border-radius: 16px;
       object-fit: cover; display: block;
     }
     .sc-label { font-size: 11px; font-weight: 500; color: rgba(250,248,245,.45); letter-spacing: .3px; }
@@ -559,11 +554,12 @@
 
 <!-- ③ 로딩 -->
 <div class="screen" id="loadingScreen">
-  <div class="loading-spinner"></div>
-  <div>
+  <div class="loading-spinner" id="loadingSpinner"></div>
+  <div id="loadingInfo">
     <div class="loading-text">분석 중</div>
     <div class="loading-dots"><span>·</span><span>·</span><span>·</span></div>
   </div>
+  <button class="start-btn" id="viewResultBtn" style="display:none; margin-top:20px;">결과 확인하기 →</button>
 </div>
 
 <!-- ④ 결과 -->
@@ -575,7 +571,6 @@
     <img id="shareThumb" src="" alt="결과 카드" style="display:none" />
   </div>
 
-  <img class="result-food-img" id="resultFoodImg" src="" alt="" />
   <div class="result-type" id="resultType"></div>
   <div class="result-divider"></div>
   <div class="result-tagline" id="resultTagline"></div>
@@ -699,11 +694,19 @@ function showToast(msg) {
 /* ── Intro ── */
 document.getElementById('startBtn').addEventListener('click', startQuiz);
 document.getElementById('introShareBtn').addEventListener('click', shareIntro);
+document.getElementById('viewResultBtn').addEventListener('click', () => showResult(selectedFood));
 
 /* ── 퀴즈 시작 ── */
 function startQuiz() {
   showScreen('quizScreen');
   renderFoodGrid();
+  (function tryIncrement(n) {
+    if (window.incrementParticipation) {
+      window.incrementParticipation('foodtest1');
+    } else if (n > 0) {
+      setTimeout(() => tryIncrement(n - 1), 200);
+    }
+  })(15);
 }
 
 /* ── 사사분면 이미지 그리드 렌더링 ──
@@ -745,20 +748,27 @@ function renderFoodGrid() {
 }
 
 function onFoodSelect(cell) {
-  if (selectedFood) return; // 이미 선택됨
+  if (selectedFood) return;
   selectedFood = cell.dataset.id;
 
-  // 선택 표시
   cell.classList.add('selected');
-  document.querySelectorAll('.food-cell').forEach(c => {
-    c.classList.add('disabled');
-  });
-
+  document.querySelectorAll('.food-cell').forEach(c => c.classList.add('disabled'));
   document.getElementById('progressFill').style.width = '100%';
 
   setTimeout(() => {
+    // 로딩 화면 초기 상태로 리셋
+    document.getElementById('loadingSpinner').style.display = '';
+    document.getElementById('loadingInfo').style.display = '';
+    document.getElementById('viewResultBtn').style.display = 'none';
+
     showScreen('loadingScreen');
-    setTimeout(() => showResult(selectedFood), 1400);
+
+    // 2200ms 후 스피너 숨기고 결과 확인 버튼 표시
+    setTimeout(() => {
+      document.getElementById('loadingSpinner').style.display = 'none';
+      document.getElementById('loadingInfo').style.display = 'none';
+      document.getElementById('viewResultBtn').style.display = 'inline-flex';
+    }, 2200);
   }, 500);
 }
 
@@ -774,10 +784,6 @@ function showResult(foodId) {
   scFoodImg.src = `images/foodtest1/${imgIndex}.webp`;
   document.getElementById('scType').textContent = res.name;
   document.getElementById('scDesc').textContent = res.tagline;
-
-  // 결과 화면 채우기
-  const foodImg = document.getElementById('resultFoodImg');
-  foodImg.src = `images/foodtest1/${imgIndex}.webp`;
 
   const typeEl = document.getElementById('resultType');
   typeEl.textContent = '';
@@ -932,6 +938,20 @@ function shareTo(platform) {
   }
   closeShareModal();
 }
+</script>
+
+<script type="module">
+  import { db, doc, updateDoc, increment } from './firebase-init.js';
+
+  window.incrementParticipation = function(id) {
+    if (!id) return;
+    const statsRef = doc(db, 'stats', 'participation');
+    updateDoc(statsRef, {
+      [id]: increment(1)
+    }).catch(err => {
+      console.error('Firebase update failed:', err);
+    });
+  };
 </script>
 </body>
 </html>
