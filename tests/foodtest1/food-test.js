@@ -117,7 +117,7 @@ const FOOD_TYPES = {
     emoji: "🍦",
     food: "아이스크림",
     name: "감성 충만 위로 요청자",
-    tagline: "달달한 게 필요한 순간이 있어. 지금이 그때야.",
+    tagline: "달콤한 위로가 필요해!!",
     color: "#9B59B6",
     personality: [
       {
