@@ -1,0 +1,232 @@
+{
+  "testMeta": {
+    "title": "64 성격유형 빠른 분석 테스트",
+    "totalQuestions": 22,
+    "estimatedMinutes": 3,
+    "scaleType": "likert5",
+    "scaleLabels": {
+      "1": "매우 아니다",
+      "2": "아니다",
+      "3": "보통이다",
+      "4": "그렇다",
+      "5": "매우 그렇다"
+    },
+    "scoringNote": "각 문항은 해당 축의 한쪽 극을 측정. reverse=true인 문항은 점수를 반전(6-score)하여 계산. 각 축별 합산 점수가 중간값보다 높으면 첫 번째 극(E/S/T/J/A/C), 낮으면 두 번째 극(I/N/F/P/T/S)으로 판정.",
+    "axes": [
+      {
+        "code": "EI",
+        "questions": 4,
+        "high": "E",
+        "low": "I"
+      },
+      {
+        "code": "SN",
+        "questions": 4,
+        "high": "S",
+        "low": "N"
+      },
+      {
+        "code": "TF",
+        "questions": 4,
+        "high": "T",
+        "low": "F"
+      },
+      {
+        "code": "JP",
+        "questions": 4,
+        "high": "J",
+        "low": "P"
+      },
+      {
+        "code": "AT",
+        "questions": 3,
+        "high": "A",
+        "low": "T"
+      },
+      {
+        "code": "CS",
+        "questions": 3,
+        "high": "C",
+        "low": "S"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "새로운 사람들이 많은 모임에 가면 에너지가 충전되는 느낌이다.",
+      "category": "사회적 에너지"
+    },
+    {
+      "id": 2,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "혼자 있는 시간이 부족하면 지치고 예민해진다.",
+      "category": "에너지 회복"
+    },
+    {
+      "id": 5,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "처음 보는 사람에게도 자연스럽게 말을 건다.",
+      "category": "사회적 접근"
+    },
+    {
+      "id": 14,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "사람이 많은 장소에 오래 있으면 빨리 집에 가고 싶어진다.",
+      "category": "환경 선호"
+    },
+    {
+      "id": 18,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "뜬구름 잡는 이야기보다 구체적인 사실과 사례가 더 와닿는다.",
+      "category": "정보 선호"
+    },
+    {
+      "id": 19,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "눈앞의 현실보다 미래의 가능성에 더 흥미를 느낀다.",
+      "category": "시간 지향"
+    },
+    {
+      "id": 27,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "'만약에~' 하는 상상을 자주 한다.",
+      "category": "사고 방식"
+    },
+    {
+      "id": 32,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "감이나 직감보다 직접 확인한 데이터를 믿는다.",
+      "category": "정보 선호"
+    },
+    {
+      "id": 35,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "옳고 그름을 판단할 때 감정보다 논리적 근거를 우선시한다.",
+      "category": "판단 기준"
+    },
+    {
+      "id": 36,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "논쟁에서 이기는 것보다 관계가 상하지 않는 것이 더 중요하다.",
+      "category": "갈등 처리"
+    },
+    {
+      "id": 41,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "결정을 내릴 때 관련된 사람들의 감정보다 최선의 결과를 우선으로 따진다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 48,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "하고 싶은 말이 있어도 상대방이 상처받을 것 같으면 참는 편이다.",
+      "category": "갈등 처리"
+    },
+    {
+      "id": 52,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "여행 전에 일정을 미리 세우고 그대로 따르는 것이 편하다.",
+      "category": "계획성"
+    },
+    {
+      "id": 55,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "마감이 다가와야 비로소 집중력이 올라간다.",
+      "category": "시간 관리"
+    },
+    {
+      "id": 60,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "방이 어지러우면 마음도 어지러워져서 정리하고 싶어진다.",
+      "category": "환경 선호"
+    },
+    {
+      "id": 65,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "정해진 루틴보다 그때그때 기분에 따라 움직이는 게 좋다.",
+      "category": "계획성"
+    },
+    {
+      "id": 69,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "실수를 해도 금방 털어내고 다음 일에 집중한다.",
+      "category": "스트레스 회복"
+    },
+    {
+      "id": 70,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "남들이 나를 어떻게 생각하는지 자주 신경 쓰인다.",
+      "category": "자의식"
+    },
+    {
+      "id": 75,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "어려운 상황에서도 '어떻게든 되겠지'라는 생각이 먼저 든다.",
+      "category": "회복탄력성"
+    },
+    {
+      "id": 85,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "혼자 하는 것보다 팀으로 함께 하는 것이 더 좋은 결과를 낸다고 생각한다.",
+      "category": "협업 선호"
+    },
+    {
+      "id": 86,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "다른 사람의 도움 없이 내 힘으로 해결하는 것이 뿌듯하다.",
+      "category": "자립성"
+    },
+    {
+      "id": 91,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "팀의 분위기가 좋아야 일도 잘 된다.",
+      "category": "팀 관계"
+    }
+  ]
+}

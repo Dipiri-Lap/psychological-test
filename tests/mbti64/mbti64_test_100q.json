@@ -1,0 +1,856 @@
+{
+  "testMeta": {
+    "title": "64 성격유형 정밀 분석 테스트",
+    "totalQuestions": 100,
+    "estimatedMinutes": 15,
+    "scaleType": "likert5",
+    "scaleLabels": {
+      "1": "매우 아니다",
+      "2": "아니다",
+      "3": "보통이다",
+      "4": "그렇다",
+      "5": "매우 그렇다"
+    },
+    "scoringNote": "각 문항은 해당 축의 한쪽 극을 측정. reverse=true인 문항은 점수를 반전(6-score)하여 계산. 각 축별 합산 점수가 중간값보다 높으면 첫 번째 극(E/S/T/J/A/C), 낮으면 두 번째 극(I/N/F/P/T/S)으로 판정.",
+    "axes": [
+      {
+        "code": "EI",
+        "questions": 17,
+        "high": "E",
+        "low": "I"
+      },
+      {
+        "code": "SN",
+        "questions": 17,
+        "high": "S",
+        "low": "N"
+      },
+      {
+        "code": "TF",
+        "questions": 17,
+        "high": "T",
+        "low": "F"
+      },
+      {
+        "code": "JP",
+        "questions": 17,
+        "high": "J",
+        "low": "P"
+      },
+      {
+        "code": "AT",
+        "questions": 16,
+        "high": "A",
+        "low": "T"
+      },
+      {
+        "code": "CS",
+        "questions": 16,
+        "high": "C",
+        "low": "S"
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": 1,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "새로운 사람들이 많은 모임에 가면 에너지가 충전되는 느낌이다.",
+      "category": "사회적 에너지"
+    },
+    {
+      "id": 2,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "혼자 있는 시간이 부족하면 지치고 예민해진다.",
+      "category": "에너지 회복"
+    },
+    {
+      "id": 3,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "생각을 말로 하면서 정리하는 편이다.",
+      "category": "사고 표현"
+    },
+    {
+      "id": 4,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "대화할 때 먼저 머릿속으로 충분히 정리한 후 말한다.",
+      "category": "사고 표현"
+    },
+    {
+      "id": 5,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "처음 보는 사람에게도 자연스럽게 말을 건다.",
+      "category": "사회적 접근"
+    },
+    {
+      "id": 6,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "단체 카톡방보다 1:1 대화가 훨씬 편하다.",
+      "category": "소통 방식"
+    },
+    {
+      "id": 7,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "주말에 집에만 있으면 답답해서 밖에 나가고 싶어진다.",
+      "category": "에너지 회복"
+    },
+    {
+      "id": 8,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "파티에 초대받으면 가기 전에 이미 피곤함을 느낀다.",
+      "category": "사회적 에너지"
+    },
+    {
+      "id": 9,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "여럿이 함께하는 브레인스토밍에서 아이디어가 더 잘 나온다.",
+      "category": "협업 방식"
+    },
+    {
+      "id": 10,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "중요한 결정을 내릴 때 다른 사람과 상의하기보다 혼자 깊이 생각하고 싶다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 11,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "전화 통화가 문자나 메신저보다 빠르고 편하다.",
+      "category": "소통 방식"
+    },
+    {
+      "id": 12,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "갑작스러운 방문이나 전화가 오면 당황스럽다.",
+      "category": "사회적 접근"
+    },
+    {
+      "id": 13,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "조용한 카페보다 활기찬 카페가 더 집중이 잘 된다.",
+      "category": "환경 선호"
+    },
+    {
+      "id": 14,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "사람이 많은 장소에 오래 있으면 빨리 집에 가고 싶어진다.",
+      "category": "환경 선호"
+    },
+    {
+      "id": 15,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "친구의 친구도 내 친구라고 자연스럽게 생각한다.",
+      "category": "관계 범위"
+    },
+    {
+      "id": 16,
+      "axis": "EI",
+      "direction": "I",
+      "reverse": true,
+      "text": "친한 친구 몇 명과 깊이 만나는 게 많은 사람을 얕게 아는 것보다 낫다.",
+      "category": "관계 범위"
+    },
+    {
+      "id": 17,
+      "axis": "EI",
+      "direction": "E",
+      "reverse": false,
+      "text": "발표나 프레젠테이션을 하면 오히려 에너지가 올라간다.",
+      "category": "사회적 에너지"
+    },
+    {
+      "id": 18,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "뜬구름 잡는 이야기보다 구체적인 사실과 사례가 더 와닿는다.",
+      "category": "정보 선호"
+    },
+    {
+      "id": 19,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "눈앞의 현실보다 미래의 가능성에 더 흥미를 느낀다.",
+      "category": "시간 지향"
+    },
+    {
+      "id": 20,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "설명서나 매뉴얼을 꼼꼼히 읽고 순서대로 따라하는 편이다.",
+      "category": "학습 방식"
+    },
+    {
+      "id": 21,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "이미 검증된 방법보다 새로운 방법을 시도해보고 싶다.",
+      "category": "변화 성향"
+    },
+    {
+      "id": 22,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "비유나 은유보다 직접적이고 명확한 표현이 더 좋다.",
+      "category": "소통 선호"
+    },
+    {
+      "id": 23,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "대화 중에 갑자기 전혀 다른 아이디어가 떠올라 화제를 바꿀 때가 많다.",
+      "category": "사고 방식"
+    },
+    {
+      "id": 24,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "나무를 볼 때 숲 전체보다 나뭇잎의 모양이나 색깔을 먼저 관찰한다.",
+      "category": "관찰 방식"
+    },
+    {
+      "id": 25,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "어떤 사건을 들으면 그 뒤에 숨은 의미나 패턴을 찾으려 한다.",
+      "category": "관찰 방식"
+    },
+    {
+      "id": 26,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "경험해본 것 중에서 좋았던 방법을 다시 쓰는 것이 가장 안전하다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 27,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "'만약에~' 하는 상상을 자주 한다.",
+      "category": "사고 방식"
+    },
+    {
+      "id": 28,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "요리할 때 레시피를 정확히 따르는 것이 더 맛있는 결과를 낸다고 생각한다.",
+      "category": "실행 방식"
+    },
+    {
+      "id": 29,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "평범한 일상 속에서도 의미 있는 연결고리나 상징을 발견한다.",
+      "category": "인식 방식"
+    },
+    {
+      "id": 30,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "이론적 지식보다 실전 경험이 더 중요하다고 생각한다.",
+      "category": "학습 방식"
+    },
+    {
+      "id": 31,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "현재 무엇을 하고 있든 5년 후, 10년 후를 자주 상상한다.",
+      "category": "시간 지향"
+    },
+    {
+      "id": 32,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "감이나 직감보다 직접 확인한 데이터를 믿는다.",
+      "category": "정보 선호"
+    },
+    {
+      "id": 33,
+      "axis": "SN",
+      "direction": "N",
+      "reverse": true,
+      "text": "전혀 관련 없어 보이는 분야들 사이에서 공통점을 발견하면 흥분된다.",
+      "category": "인식 방식"
+    },
+    {
+      "id": 34,
+      "axis": "SN",
+      "direction": "S",
+      "reverse": false,
+      "text": "보고서를 쓸 때 숫자와 구체적 사실을 먼저 정리한다.",
+      "category": "실행 방식"
+    },
+    {
+      "id": 35,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "옳고 그름을 판단할 때 감정보다 논리적 근거를 우선시한다.",
+      "category": "판단 기준"
+    },
+    {
+      "id": 36,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "논쟁에서 이기는 것보다 관계가 상하지 않는 것이 더 중요하다.",
+      "category": "갈등 처리"
+    },
+    {
+      "id": 37,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "친구가 고민을 이야기하면 해결책을 먼저 제시하고 싶다.",
+      "category": "공감 방식"
+    },
+    {
+      "id": 38,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "영화나 드라마를 볼 때 감정이입이 너무 되어 힘들 때가 있다.",
+      "category": "감정 반응"
+    },
+    {
+      "id": 39,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "업무 피드백을 줄 때 기분보다 정확한 평가가 더 도움이 된다고 생각한다.",
+      "category": "피드백 방식"
+    },
+    {
+      "id": 40,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "상대방의 기분이 안 좋아 보이면 내 기분도 같이 가라앉는다.",
+      "category": "감정 반응"
+    },
+    {
+      "id": 41,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "결정을 내릴 때 관련된 사람들의 감정보다 최선의 결과를 우선으로 따진다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 42,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "다른 사람을 비판해야 하는 상황이 너무 불편하다.",
+      "category": "갈등 처리"
+    },
+    {
+      "id": 43,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "감정에 휩쓸려 결정하면 대부분 후회한다고 생각한다.",
+      "category": "판단 기준"
+    },
+    {
+      "id": 44,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "팀 프로젝트에서 누군가 소외되지 않았는지 신경이 쓰인다.",
+      "category": "관계 배려"
+    },
+    {
+      "id": 45,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "토론할 때 상대의 논리적 허점을 발견하면 바로 지적하는 편이다.",
+      "category": "소통 방식"
+    },
+    {
+      "id": 46,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "주변 사람들의 기대에 부응하지 못하면 매우 괴롭다.",
+      "category": "관계 배려"
+    },
+    {
+      "id": 47,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "공정함이 친절함보다 더 가치 있다고 생각한다.",
+      "category": "가치관"
+    },
+    {
+      "id": 48,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "하고 싶은 말이 있어도 상대방이 상처받을 것 같으면 참는 편이다.",
+      "category": "갈등 처리"
+    },
+    {
+      "id": 49,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "감사 인사나 칭찬보다 구체적이고 솔직한 피드백이 더 유용하다.",
+      "category": "피드백 방식"
+    },
+    {
+      "id": 50,
+      "axis": "TF",
+      "direction": "F",
+      "reverse": true,
+      "text": "사람들과의 조화가 깨지면 일에 집중할 수 없다.",
+      "category": "가치관"
+    },
+    {
+      "id": 51,
+      "axis": "TF",
+      "direction": "T",
+      "reverse": false,
+      "text": "실력이 부족한 사람에게는 현실적인 이야기를 해주는 것이 진짜 친절이다.",
+      "category": "공감 방식"
+    },
+    {
+      "id": 52,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "여행 전에 일정을 미리 세우고 그대로 따르는 것이 편하다.",
+      "category": "계획성"
+    },
+    {
+      "id": 53,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "계획대로 되지 않아도 크게 스트레스받지 않는다.",
+      "category": "유연성"
+    },
+    {
+      "id": 54,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "할 일 목록(투두리스트)을 만들고 하나씩 체크하는 게 뿌듯하다.",
+      "category": "과제 관리"
+    },
+    {
+      "id": 55,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "마감이 다가와야 비로소 집중력이 올라간다.",
+      "category": "시간 관리"
+    },
+    {
+      "id": 56,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "결정을 빨리 내리는 것이 좋은 결정이라고 생각한다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 57,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "선택지를 최대한 오래 열어두고 싶다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 58,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "약속 시간보다 항상 5~10분 일찍 도착하는 편이다.",
+      "category": "시간 관리"
+    },
+    {
+      "id": 59,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "즉흥적으로 결정된 약속이 계획된 약속보다 재미있다.",
+      "category": "유연성"
+    },
+    {
+      "id": 60,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "방이 어지러우면 마음도 어지러워져서 정리하고 싶어진다.",
+      "category": "환경 선호"
+    },
+    {
+      "id": 61,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "규칙이 너무 많으면 답답하고 숨이 막히는 느낌이다.",
+      "category": "구조 선호"
+    },
+    {
+      "id": 62,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "일을 시작하기 전에 끝까지의 순서를 먼저 정리한다.",
+      "category": "과제 관리"
+    },
+    {
+      "id": 63,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "하던 일을 중간에 멈추고 다른 일로 넘어가는 게 자연스럽다.",
+      "category": "과제 관리"
+    },
+    {
+      "id": 64,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "한 번 결정한 일은 왠만하면 바꾸지 않는다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 65,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "정해진 루틴보다 그때그때 기분에 따라 움직이는 게 좋다.",
+      "category": "계획성"
+    },
+    {
+      "id": 66,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "프로젝트를 마감일보다 미리 끝내야 마음이 편하다.",
+      "category": "시간 관리"
+    },
+    {
+      "id": 67,
+      "axis": "JP",
+      "direction": "P",
+      "reverse": true,
+      "text": "여러 가지 일을 동시에 벌려놓는 편이다.",
+      "category": "과제 관리"
+    },
+    {
+      "id": 68,
+      "axis": "JP",
+      "direction": "J",
+      "reverse": false,
+      "text": "불확실한 상황이 오래 지속되면 불안해진다.",
+      "category": "구조 선호"
+    },
+    {
+      "id": 69,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "실수를 해도 금방 털어내고 다음 일에 집중한다.",
+      "category": "스트레스 회복"
+    },
+    {
+      "id": 70,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "남들이 나를 어떻게 생각하는지 자주 신경 쓰인다.",
+      "category": "자의식"
+    },
+    {
+      "id": 71,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "나의 능력에 대해 전반적으로 자신감이 있다.",
+      "category": "자기효능감"
+    },
+    {
+      "id": 72,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "중요한 발표나 시험 전에 불안감이 크게 올라온다.",
+      "category": "스트레스 반응"
+    },
+    {
+      "id": 73,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "다른 사람의 비판도 감정적으로 받아들이지 않고 참고로 삼는다.",
+      "category": "비판 수용"
+    },
+    {
+      "id": 74,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "일이 잘못되면 내 탓인 것 같아 오래 자책한다.",
+      "category": "자기비판"
+    },
+    {
+      "id": 75,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "어려운 상황에서도 '어떻게든 되겠지'라는 생각이 먼저 든다.",
+      "category": "회복탄력성"
+    },
+    {
+      "id": 76,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "사소한 실수도 머릿속에서 계속 반복 재생된다.",
+      "category": "반추"
+    },
+    {
+      "id": 77,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "내 의견을 말할 때 주저하지 않는 편이다.",
+      "category": "자기표현"
+    },
+    {
+      "id": 78,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "완벽하게 준비되지 않으면 시작하기가 두렵다.",
+      "category": "완벽주의"
+    },
+    {
+      "id": 79,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "다른 사람과 비교하기보다 나만의 기준으로 만족한다.",
+      "category": "자기비교"
+    },
+    {
+      "id": 80,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "SNS에서 다른 사람의 성공을 보면 괜히 초조해진다.",
+      "category": "자기비교"
+    },
+    {
+      "id": 81,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "실패해도 배움의 과정이라고 받아들인다.",
+      "category": "회복탄력성"
+    },
+    {
+      "id": 82,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "밤에 잠들기 전, 낮에 있었던 일이 자꾸 떠오른다.",
+      "category": "반추"
+    },
+    {
+      "id": 83,
+      "axis": "AT",
+      "direction": "A",
+      "reverse": false,
+      "text": "새로운 도전 앞에서 걱정보다 기대감이 더 크다.",
+      "category": "스트레스 반응"
+    },
+    {
+      "id": 84,
+      "axis": "AT",
+      "direction": "T",
+      "reverse": true,
+      "text": "잘하고 있다는 말을 들어도 진짜인지 의심이 든다.",
+      "category": "자기효능감"
+    },
+    {
+      "id": 85,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "혼자 하는 것보다 팀으로 함께 하는 것이 더 좋은 결과를 낸다고 생각한다.",
+      "category": "협업 선호"
+    },
+    {
+      "id": 86,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "다른 사람의 도움 없이 내 힘으로 해결하는 것이 뿌듯하다.",
+      "category": "자립성"
+    },
+    {
+      "id": 87,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "의견 충돌이 생기면 서로 양보해서 합의점을 찾고 싶다.",
+      "category": "갈등 해결"
+    },
+    {
+      "id": 88,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "회의보다 혼자 조용히 작업할 때 더 생산적이다.",
+      "category": "작업 방식"
+    },
+    {
+      "id": 89,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "중요한 결정을 내릴 때 주변 사람들의 의견을 꼭 듣고 싶다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 90,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "내 방식대로 일하는 것이 가장 효율적이다.",
+      "category": "자율성"
+    },
+    {
+      "id": 91,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "팀의 분위기가 좋아야 일도 잘 된다.",
+      "category": "팀 관계"
+    },
+    {
+      "id": 92,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "그룹 프로젝트에서 역할을 나누기보다 혼자 전부 하고 싶을 때가 있다.",
+      "category": "작업 방식"
+    },
+    {
+      "id": 93,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "다른 사람의 성공이 나에게도 기쁜 일이라고 느낀다.",
+      "category": "공동체 의식"
+    },
+    {
+      "id": 94,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "남에게 부탁하는 것보다 직접 하는 게 마음 편하다.",
+      "category": "자립성"
+    },
+    {
+      "id": 95,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "리더가 되면 팀원들과 자주 소통하며 의견을 모으고 싶다.",
+      "category": "리더십 방식"
+    },
+    {
+      "id": 96,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "나만의 독자적인 방법을 개발하는 것이 즐겁다.",
+      "category": "자율성"
+    },
+    {
+      "id": 97,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "경쟁보다 협력이 더 좋은 결과를 만든다고 믿는다.",
+      "category": "가치관"
+    },
+    {
+      "id": 98,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "팀의 합의를 기다리는 것보다 내가 빠르게 결정하는 게 낫다.",
+      "category": "의사결정"
+    },
+    {
+      "id": 99,
+      "axis": "CS",
+      "direction": "C",
+      "reverse": false,
+      "text": "함께 성장하는 관계가 혼자 잘하는 것보다 가치 있다.",
+      "category": "공동체 의식"
+    },
+    {
+      "id": 100,
+      "axis": "CS",
+      "direction": "S",
+      "reverse": true,
+      "text": "최종 결과에 대한 책임은 나 혼자 지는 게 깔끔하다.",
+      "category": "리더십 방식"
+    }
+  ]
+}
