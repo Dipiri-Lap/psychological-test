@@ -21,7 +21,9 @@ window.TEST_CONFIGS['kakaotalklove'] = {
         type: v.emoji + ' ' + v.name,
         emoji: v.emoji,
         tagline: v.tagline,
-        desc: v.desc + '\n\n💪 강점: ' + v.strength + '\n⚠️ 약점: ' + v.weakness
+        desc: v.desc,
+        strength: v.strength,
+        weakness: v.weakness
       }])
     )
   },
@@ -36,8 +38,25 @@ window.TEST_CONFIGS['kakaotalklove'] = {
       type: t.emoji + ' ' + t.name,
       emoji: t.emoji,
       tagline: t.tagline,
-      desc: t.desc + '\n\n💪 강점: ' + t.strength + '\n⚠️ 약점: ' + t.weakness
+      desc: t.desc,
+      strength: t.strength,
+      weakness: t.weakness
     };
+  },
+  afterResult(result) {
+    const container = document.getElementById('kakaoTraits');
+    if (!container) return;
+    container.innerHTML = `
+      <div class="finger-trait-card" style="border-left: 3px solid #2ECC71;">
+        <div class="finger-trait-title">💪 강점</div>
+        <div class="finger-trait-desc">${result.strength}</div>
+      </div>
+      <div class="finger-trait-card" style="border-left: 3px solid #E74C3C;">
+        <div class="finger-trait-title">⚠️ 약점</div>
+        <div class="finger-trait-desc">${result.weakness}</div>
+      </div>
+    `;
+    container.style.display = 'block';
   },
   getShareImage(winner) {
     const map = { FAST: 0, STEADY: 1, CHILL: 2, ANXIOUS: 3, ROMANTIC: 4, MIXED: 5 };
