@@ -479,7 +479,8 @@
   }
 
   /* ── Hero Carousel ────────────────────────────────── */
-  const heroSlides = [...tests].sort((a, b) => b.count - a.count).slice(0, 5);
+  const heroOrder  = ['sbti', 'jealousy', 'brain', 'kakaotalklove', 'obsession', 'fingerlove'];
+  const heroSlides = heroOrder.map(id => tests.find(t => t.id === id)).filter(Boolean);
   const heroTrack  = document.getElementById('heroTrack');
   const heroDots   = document.getElementById('heroDots');
   let curSlide = 0, autoTimer = null;
