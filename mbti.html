@@ -863,7 +863,9 @@ function showLoadingScreen() {
   }, 2400);
 }
 
-document.getElementById('viewResultBtn').addEventListener('click', showResult);
+document.getElementById('viewResultBtn').addEventListener('click', () => {
+  location.href = 'mbti-result.html?type=' + axisScoreData.fullCode;
+});
 
 /* ═══════════════════════════════════════════════
    SCORING

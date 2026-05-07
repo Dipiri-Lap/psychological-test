@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="pageTitle">유형 결과 — 마음.</title>
+  <link rel="icon" href="images/favicon.webp" type="image/webp" />
+  <meta id="metaDesc" name="description" content="나의 64 성격유형 정밀 분석 결과" />
+  <meta property="og:type" content="website" />
+  <meta id="ogTitle" property="og:title" content="64 성격유형 결과 — 마음." />
+  <meta id="ogDesc" property="og:description" content="나의 성격유형 분석 결과를 확인해보세요." />
+  <meta property="og:image" content="https://testlab.tmhub.co.kr/images/mbti/thumb.webp" />
+  <meta property="og:site_name" content="마음." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398" crossorigin="anonymous"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+    integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+    crossorigin="anonymous"></script>
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --c-main:    #1c1917;
+      --c-accent:  #e85d75;
+      --c-bg:      #faf8f5;
+      --c-surface: #ffffff;
+      --c-surf2:   #f3f0ea;
+      --c-text:    #1c1917;
+      --c-muted:   #9b9490;
+      --c-border:  #e8e3db;
+      --shadow:        0 2px 16px rgba(0,0,0,.06);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.13);
+      --r:   20px;
+      --r-sm: 14px;
+      --gc: #e85d75;
+    }
+    [data-theme="dark"] {
+      --c-main:    #f0ece6;
+      --c-accent:  #ff4d72;
+      --c-bg:      #100f0e;
+      --c-surface: #1a1917;
+      --c-surf2:   #211f1d;
+      --c-text:    #f0ece6;
+      --c-muted:   #605c58;
+      --c-border:  #2a2724;
+      --shadow:        0 2px 16px rgba(0,0,0,.4);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.6);
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--c-bg); color: var(--c-text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    a { text-decoration: none; color: inherit; }
+
+    @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+    @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin    { to{transform:rotate(360deg)} }
+
+    /* ── Nav ── */
+    #topNav {
+      position: fixed;
+      top: max(10px, env(safe-area-inset-top));
+      left:0; right:0;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:0 18px; z-index:150;
+    }
+    .nav-btn {
+      width:38px; height:38px; border-radius:50%;
+      background:var(--c-surface); border:1.5px solid var(--c-border);
+      display:grid; place-items:center; font-size:16px;
+      transition: border-color .2s, transform .2s, background .35s;
+    }
+    .nav-btn:hover { border-color: var(--gc); }
+    #themeBtn:hover { transform: rotate(22deg); }
+
+    /* ── Toast ── */
+    #toast {
+      position:fixed; bottom:28px; left:50%;
+      transform: translateX(-50%) translateY(16px);
+      background:var(--c-main); color:var(--c-bg);
+      font-size:13px; font-weight:500;
+      padding:12px 24px; border-radius:100px;
+      opacity:0; transition:opacity .3s, transform .3s;
+      pointer-events:none; z-index:999; white-space:nowrap;
+    }
+    #toast.show { opacity:1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Loading / Error ── */
+    .state-screen {
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      gap:14px; text-align:center; padding:24px;
+    }
+    .loading-spinner {
+      width:44px; height:44px; border-radius:50%;
+      border:3px solid var(--c-border); border-top-color:var(--gc);
+      animation: spin 1s linear infinite;
+    }
+    .state-title {
+      font-family:'Nanum Myeongjo', serif;
+      font-size:20px; letter-spacing:-.3px;
+    }
+    .state-sub { font-size:14px; color:var(--c-muted); }
+    .state-btn {
+      margin-top:6px; padding:12px 28px; border-radius:100px;
+      background:var(--gc); color:#fff; font-size:14px; font-weight:600;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .state-btn:hover { transform:translateY(-2px); }
+
+    /* ── Result page ── */
+    #resultPage {
+      max-width:540px; margin:0 auto; width:100%;
+      padding:0 0 80px;
+      animation: fadeIn .5s ease both;
+    }
+
+    /* ── ① 히어로 ── */
+    .hero {
+      padding: 84px 24px 36px;
+      text-align: center;
+    }
+    .hero-group-badge {
+      display:inline-flex; align-items:center;
+      font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+      padding:6px 14px; border-radius:100px; margin-bottom:20px;
+      color:#fff; background:var(--gc);
+      animation: fadeIn .5s .1s ease both;
+    }
+    .hero-code {
+      font-family:'Nanum Myeongjo', serif;
+      font-size:56px; font-weight:800; letter-spacing:3px; line-height:1;
+      color:var(--gc); margin-bottom:14px;
+      animation: fadeIn .5s .15s ease both;
+    }
+    .hero-fullname {
+      font-family:'Nanum Myeongjo', serif;
+      font-size:22px; letter-spacing:-.3px; line-height:1.4;
+      margin-bottom:28px;
+      animation: fadeIn .5s .2s ease both;
+    }
+    .keyword-chips {
+      display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
+      animation: fadeIn .5s .25s ease both;
+    }
+    .keyword-chip {
+      font-size:12px; font-weight:500; padding:6px 14px; border-radius:100px;
+      border:1.5px solid var(--c-border); color:var(--c-text);
+      background:var(--c-surface);
+    }
+
+    /* ── 공통 섹션 ── */
+    .result-section {
+      border-top:1px solid var(--c-border);
+      animation: slideUp .5s ease both;
+    }
+    .section-inner { padding:28px 24px; }
+    .section-eyebrow {
+      font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+      color:var(--gc); margin-bottom:12px;
+    }
+
+    /* ── ② 유형 설명 ── */
+    .desc-title {
+      font-family:'Nanum Myeongjo', serif;
+      font-size:19px; letter-spacing:-.3px; line-height:1.5;
+      margin-bottom:20px;
+    }
+    .desc-body { display:flex; flex-direction:column; gap:14px; }
+    .desc-para {
+      font-size:14px; line-height:1.95; color:var(--c-text); font-weight:300;
+    }
+
+    /* ── ③ 6축 막대 ── */
+    .axis-wrap { background:var(--c-surface); }
+    .axis-section-title {
+      font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+      color:var(--c-muted); margin-bottom:22px; text-align:center;
+    }
+    .axis-row {
+      display:grid;
+      grid-template-columns: 88px 1fr 48px;
+      align-items:center; gap:12px;
+      margin-bottom:14px;
+    }
+    .axis-row:last-child { margin-bottom:0; }
+    .axis-pole-label {
+      display:flex; flex-direction:column; align-items:flex-end; text-align:right;
+    }
+    .axis-pole-code {
+      font-size:14px; font-weight:700; color:var(--gc);
+    }
+    .axis-pole-name {
+      font-size:11px; color:var(--c-muted); margin-top:1px;
+    }
+    .axis-track {
+      height:8px; background:var(--c-surf2); border-radius:4px; overflow:hidden;
+    }
+    .axis-fill {
+      height:100%; background:var(--gc); border-radius:4px;
+      width:0%; transition: width .9s cubic-bezier(.22,1,.36,1);
+    }
+    .axis-clarity {
+      font-size:11px; font-weight:600; color:var(--c-muted);
+      text-align:left;
+    }
+
+    /* ── ④ 심리적 기능 ── */
+    .func-grid { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+    .func-card {
+      background:var(--c-surface); border:1.5px solid var(--c-border);
+      border-radius:var(--r-sm); padding:16px 18px;
+      position:relative; overflow:hidden;
+    }
+    .func-card.dominant { border-color:var(--gc); background:rgba(0,0,0,0); }
+    .func-card.dominant::before {
+      content:''; position:absolute; inset:0;
+      background:var(--gc); opacity:.04; pointer-events:none;
+    }
+    .func-rank {
+      font-size:10px; font-weight:700; letter-spacing:1.3px; text-transform:uppercase;
+      color:var(--c-muted); margin-bottom:5px;
+    }
+    .func-card.dominant .func-rank { color:var(--gc); }
+    .func-name { font-size:15px; font-weight:700; margin-bottom:7px; }
+    .func-desc { font-size:13px; line-height:1.75; color:var(--c-muted); font-weight:300; }
+    .func-indicator {
+      position:absolute; bottom:0; left:0; height:2px;
+      background:var(--gc); opacity:.35;
+    }
+    .func-card.dominant .func-indicator { opacity:1; }
+
+    /* ── ⑤ 강점 ── */
+    .strengths-subline {
+      font-size:12px; color:var(--c-muted); margin-bottom:16px;
+    }
+    .strengths-list { display:flex; flex-direction:column; gap:8px; }
+    .strength-item {
+      display:flex; align-items:flex-start; gap:12px;
+      background:var(--c-surface); border:1.5px solid var(--c-border);
+      border-radius:var(--r-sm); padding:14px 16px;
+      font-size:13px; line-height:1.75; font-weight:300;
+    }
+    .strength-num {
+      font-size:12px; font-weight:700; color:var(--gc);
+      flex-shrink:0; padding-top:2px;
+    }
+    .strength-item.locked { position:relative; overflow:hidden; }
+    .strength-item.locked .strength-text {
+      filter:blur(5px); user-select:none; pointer-events:none; color:var(--c-muted);
+    }
+    .lock-overlay {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+      font-size:12px; font-weight:600; color:var(--c-muted);
+    }
+
+    /* ── ⑥ CTA ── */
+    .cta-wrap { padding:24px; animation: slideUp .5s .25s ease both; }
+    .cta-card {
+      padding:30px 24px;
+      background: var(--gc);
+      border-radius:var(--r); text-align:center;
+      position:relative; overflow:hidden;
+    }
+    .cta-card::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .cta-eyebrow {
+      font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+      color:rgba(255,255,255,.65); margin-bottom:10px;
+    }
+    .cta-title {
+      font-family:'Nanum Myeongjo', serif;
+      font-size:20px; color:#fff; line-height:1.5; margin-bottom:8px;
+    }
+    .cta-sub {
+      font-size:12px; color:rgba(255,255,255,.72); line-height:1.85;
+      margin-bottom:22px;
+    }
+    .cta-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      background:#fff; color:var(--gc);
+      font-size:15px; font-weight:700;
+      padding:14px 32px; border-radius:100px;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+      position:relative;
+    }
+    .cta-btn:hover { transform:translateY(-3px); box-shadow:0 14px 32px rgba(0,0,0,.25); }
+
+    /* ── 광고 ── */
+    .result-ad { padding:24px 24px 0; }
+
+    /* ── 공유 ── */
+    .share-section {
+      padding:8px 24px 0; display:flex; flex-direction:column; gap:10px;
+      animation: slideUp .5s .3s ease both;
+    }
+    .share-btn {
+      display:flex; align-items:center; justify-content:center;
+      gap:10px; padding:16px 20px; border-radius:var(--r-sm);
+      font-size:15px; font-weight:500;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+    }
+    .share-btn:hover { transform:translateY(-3px); box-shadow:var(--shadow-hover); }
+    .btn-kakao { background:#FEE500; color:#1c1917; }
+    .btn-copy  { background:var(--c-surface); color:var(--c-text); border:1.5px solid var(--c-border); }
+    .btn-retry { background:var(--c-surf2); color:var(--c-text); border:1.5px solid var(--c-border); }
+  </style>
+</head>
+<body>
+
+<div id="topNav">
+  <button class="nav-btn" id="backBtn" aria-label="뒤로가기">←</button>
+  <span id="navCode" style="font-size:11px;font-weight:700;letter-spacing:1.8px;color:var(--gc)"></span>
+  <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
+</div>
+
+<!-- 로딩 -->
+<div id="loadingEl" class="state-screen">
+  <div class="loading-spinner"></div>
+  <div class="state-sub">결과 불러오는 중…</div>
+</div>
+
+<!-- 오류 -->
+<div id="errorEl" class="state-screen" hidden>
+  <div class="state-title">결과를 찾을 수 없어요</div>
+  <div class="state-sub">테스트를 먼저 완료해주세요.</div>
+  <button class="state-btn" onclick="location.href='mbti.html'">테스트 하러 가기</button>
+</div>
+
+<!-- 결과 -->
+<main id="resultPage" hidden>
+
+  <!-- ① 히어로 -->
+  <div class="hero">
+    <div class="hero-group-badge" id="groupBadge"></div>
+    <div class="hero-code"    id="heroCode"></div>
+    <div class="hero-fullname" id="heroFullname"></div>
+    <div class="keyword-chips" id="keywordChips"></div>
+  </div>
+
+  <!-- ② 유형 설명 -->
+  <div class="result-section" style="animation-delay:.05s">
+    <div class="section-inner">
+      <div class="section-eyebrow">유형 설명</div>
+      <div class="desc-title" id="descTitle"></div>
+      <div class="desc-body"  id="descBody"></div>
+    </div>
+  </div>
+
+  <!-- ③ 6축 선호 분명도 -->
+  <div class="result-section axis-wrap" style="animation-delay:.1s">
+    <div class="section-inner">
+      <div class="axis-section-title">6축 선호 분명도</div>
+      <div id="axisBars"></div>
+    </div>
+  </div>
+
+  <!-- ④ 심리적 기능 -->
+  <div class="result-section" style="animation-delay:.15s">
+    <div class="section-inner">
+      <div class="section-eyebrow">심리적 기능</div>
+      <div class="func-grid" id="funcGrid"></div>
+    </div>
+  </div>
+
+  <!-- ⑤ 강점 -->
+  <div class="result-section" style="animation-delay:.2s">
+    <div class="section-inner">
+      <div class="section-eyebrow">핵심 강점</div>
+      <div class="strengths-subline">전체 강점 중 3개 공개 · 나머지는 PDF 리포트에서 확인</div>
+      <div class="strengths-list" id="strengthsList"></div>
+    </div>
+  </div>
+
+  <!-- ⑥ CTA -->
+  <div class="cta-wrap">
+    <div class="cta-card">
+      <div class="cta-eyebrow">PDF 전체 리포트</div>
+      <div class="cta-title">나의 완전한 성격 분석<br>리포트를 받아보세요</div>
+      <div class="cta-sub">
+        30개 다면척도 레이더 차트 · 스트레스 반응 4가지<br>
+        대인관계 스타일 · 최적 업무환경 · 성장 조언
+      </div>
+      <button class="cta-btn" id="ctaBtn">PDF 전체 리포트 받기 →</button>
+    </div>
+  </div>
+
+  <!-- 광고 -->
+  <div class="result-ad">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-7327562206502398"
+         data-ad-slot="3769192952"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- 공유 -->
+  <div class="share-section">
+    <button class="share-btn btn-kakao" id="btnKakao">💬 카카오톡으로 공유</button>
+    <button class="share-btn btn-copy"  id="btnCopy">🔗 링크 복사</button>
+    <button class="share-btn btn-retry" id="btnRetry">🔄 다시 테스트하기</button>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   THEME
+═══════════════════════════════════════ */
+(function() {
+  const saved = localStorage.getItem('theme');
+  const pref  = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.dataset.theme = saved || pref;
+  document.getElementById('themeBtn').textContent = (saved || pref) === 'dark' ? '☀️' : '🌙';
+})();
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme', next);
+});
+document.getElementById('backBtn').addEventListener('click', () => {
+  history.length > 1 ? history.back() : location.href = 'mbti.html';
+});
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ═══════════════════════════════════════
+   GROUP COLOR
+═══════════════════════════════════════ */
+const GROUP_MAP = {
+  NT: { name:'분석가형', color:'#8b5cf6' },
+  NF: { name:'외교관형', color:'#10b981' },
+  SJ: { name:'관리자형', color:'#3b82f6' },
+  SP: { name:'탐험가형', color:'#f59e0b' },
+};
+function getGroup(mbti) {
+  if (['INTJ','INTP','ENTJ','ENTP'].includes(mbti)) return GROUP_MAP.NT;
+  if (['INFJ','INFP','ENFJ','ENFP'].includes(mbti)) return GROUP_MAP.NF;
+  if (['ISTJ','ISFJ','ESTJ','ESFJ'].includes(mbti)) return GROUP_MAP.SJ;
+  return GROUP_MAP.SP;
+}
+
+/* ═══════════════════════════════════════
+   INIT — URL 파라미터에서 유형 읽기
+═══════════════════════════════════════ */
+const params   = new URLSearchParams(location.search);
+const typeCode = params.get('type'); // e.g. "INTJ-AS"
+
+if (!typeCode || !typeCode.includes('-')) {
+  showError();
+} else {
+  const [mbti, variant] = typeCode.split('-');
+  const jsonKey = `${mbti}_${variant}`;
+
+  fetch(`tests/mbti/results_${mbti}.json`)
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => {
+      const result = data[jsonKey];
+      if (!result) throw new Error();
+      renderResult(result, mbti);
+    })
+    .catch(showError);
+}
+
+function showError() {
+  document.getElementById('loadingEl').hidden = true;
+  document.getElementById('errorEl').hidden   = false;
+}
+
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
+function renderResult(d, mbti) {
+  const group = getGroup(mbti);
+  document.documentElement.style.setProperty('--gc', group.color);
+
+  document.title = `${d.code} "${d.fullName}" — 마음.`;
+  document.getElementById('navCode').textContent = d.code;
+
+  // ① 히어로
+  document.getElementById('groupBadge').textContent  = group.name;
+  document.getElementById('heroCode').textContent    = d.code;
+  document.getElementById('heroFullname').textContent = `"${d.fullName}"`;
+  document.getElementById('keywordChips').innerHTML  = d.typeDescription.keywords
+    .map(k => `<span class="keyword-chip">${k}</span>`).join('');
+
+  // ② 유형 설명
+  document.getElementById('descTitle').textContent = d.typeDescription.title;
+  document.getElementById('descBody').innerHTML = d.typeDescription.mainDescription
+    .split('\n\n').filter(Boolean)
+    .map(p => `<p class="desc-para">${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+
+  // ③ 6축 막대
+  renderAxisBars(d.clarityScores);
+
+  // ④ 심리적 기능
+  renderFunctions(d.cognitiveFunction);
+
+  // ⑤ 강점
+  renderStrengths(d.detailedTraits.generalStrengths);
+
+  // 표시
+  document.getElementById('loadingEl').hidden = true;
+  document.getElementById('resultPage').hidden = false;
+  try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(_) {}
+}
+
+/* ═══════════════════════════════════════
+   ③ 6축 막대 그래프
+   score 범위 10~20 → pct = (score-10)/10*100
+═══════════════════════════════════════ */
+const AXIS_CONFIG = [
+  { code:'EI', highCode:'E', highName:'외향', lowCode:'I', lowName:'내향' },
+  { code:'SN', highCode:'S', highName:'감각', lowCode:'N', lowName:'직관' },
+  { code:'TF', highCode:'T', highName:'사고', lowCode:'F', lowName:'감정' },
+  { code:'JP', highCode:'J', highName:'판단', lowCode:'P', lowName:'인식' },
+  { code:'AT', highCode:'A', highName:'자기확신', lowCode:'T', lowName:'신중' },
+  { code:'CS', highCode:'C', highName:'협력',  lowCode:'S', lowName:'독립' },
+];
+
+function renderAxisBars(scores) {
+  const container = document.getElementById('axisBars');
+  container.innerHTML = AXIS_CONFIG.map(ax => {
+    const s      = scores[ax.code];
+    const isHigh = s.direction === ax.highCode;
+    const code   = isHigh ? ax.highCode : ax.lowCode;
+    const name   = isHigh ? ax.highName : ax.lowName;
+    const pct    = Math.round(Math.min(100, Math.max(0, (s.score - 10) / 10 * 100)));
+    return `
+      <div class="axis-row">
+        <div class="axis-pole-label">
+          <span class="axis-pole-code">${code}</span>
+          <span class="axis-pole-name">${name}</span>
+        </div>
+        <div class="axis-track">
+          <div class="axis-fill" data-pct="${pct}"></div>
+        </div>
+        <span class="axis-clarity">${s.clarity}</span>
+      </div>`;
+  }).join('');
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      container.querySelectorAll('.axis-fill').forEach(el => {
+        el.style.width = el.dataset.pct + '%';
+      });
+    }, 120);
+  });
+}
+
+/* ═══════════════════════════════════════
+   ④ 심리적 기능
+═══════════════════════════════════════ */
+const FUNC_RANKS = [
+  { key:'dominant',  label:'주기능',    width:'100%', isDominant:true },
+  { key:'auxiliary', label:'부기능',    width:'68%' },
+  { key:'tertiary',  label:'3차 기능',  width:'42%' },
+  { key:'inferior',  label:'열등 기능', width:'22%' },
+];
+
+function renderFunctions(funcs) {
+  document.getElementById('funcGrid').innerHTML = FUNC_RANKS.map(r => {
+    const f = funcs[r.key];
+    return `
+      <div class="func-card${r.isDominant ? ' dominant' : ''}">
+        <div class="func-rank">${r.label}</div>
+        <div class="func-name">${f.name}</div>
+        <div class="func-desc">${f.description}</div>
+        <div class="func-indicator" style="width:${r.width}"></div>
+      </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════
+   ⑤ 강점 (3개 공개 + 나머지 잠금)
+═══════════════════════════════════════ */
+function renderStrengths(strengths) {
+  const items = strengths || [];
+  document.getElementById('strengthsList').innerHTML = items.map((s, i) => {
+    const locked = i >= 3;
+    return `
+      <div class="strength-item${locked ? ' locked' : ''}">
+        <span class="strength-num">${i + 1}</span>
+        <span class="strength-text">${s}</span>
+        ${locked ? `<div class="lock-overlay">🔒 PDF 리포트에서 확인</div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ */
+document.getElementById('ctaBtn').addEventListener('click', () => {
+  showToast('PDF 리포트 준비 중이에요 🙏');
+});
+
+/* ═══════════════════════════════════════
+   SHARE
+═══════════════════════════════════════ */
+function initKakao() {
+  if (typeof Kakao === 'undefined') return false;
+  if (!Kakao.isInitialized()) Kakao.init('bbe63bfcba108e48b558a6554e0fd9c1');
+  return true;
+}
+
+document.getElementById('btnKakao').addEventListener('click', () => {
+  if (!initKakao()) { showToast('카카오 SDK 로딩 중이에요.'); return; }
+  const base = 'https://testlab.tmhub.co.kr';
+  const url  = `${base}/mbti-result.html?type=${typeCode || ''}`;
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: `나의 성격유형은 ${typeCode || ''}`,
+      description: '64가지 정밀 성격유형 분석. 나는 어떤 유형일까?',
+      imageUrl: `${base}/images/mbti/thumb.webp`,
+      link: { mobileWebUrl: url, webUrl: url },
+    },
+    buttons: [
+      { title: '나도 해보기', link: { mobileWebUrl:`${base}/mbti.html`, webUrl:`${base}/mbti.html` } },
+    ],
+  });
+});
+
+document.getElementById('btnCopy').addEventListener('click', () => {
+  const url = location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => showToast('링크가 복사됐어요 🎉'));
+  } else {
+    const ta = Object.assign(document.createElement('textarea'), { value: url });
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    showToast('링크가 복사됐어요 🎉');
+  }
+});
+
+document.getElementById('btnRetry').addEventListener('click', () => {
+  location.href = 'mbti.html';
+});
+</script>
+</body>
+</html>
