@@ -7,7 +7,7 @@ window.TEST_CONFIGS['obsession'] = {
   data: {
     title: "나의 집착 레벨 테스트",
     emoji: "💀",
-    thumb: "images/obsession-test/4.png",
+    thumb: "images/obsession-test/thumb.webp",
     subtitle: "연인에게 나는 어느 정도 집착할까? (12문항)",
     questions: OBSESSION_QUESTIONS.map(q => ({
       q: q.question,
@@ -57,6 +57,6 @@ window.TEST_CONFIGS['obsession'] = {
   },
   getShareImage(winner) {
     const map = { FREE: 0, MILD: 1, MODERATE: 2, HIGH: 3, EXTREME: 4 };
-    return `images/obsession-test/${map[winner] ?? 0}.png`;
+    return `images/obsession-test/${map[winner] ?? 0}.webp`;
   }
 };
