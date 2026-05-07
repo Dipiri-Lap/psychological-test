@@ -152,23 +152,58 @@
       padding: 24px 18px 72px;
     }
 
+    /* ── Hero Carousel ────────────────────────────────── */
+    .hero-carousel {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--r);
+      margin-bottom: 8px;
+      animation: slideUp .5s .05s cubic-bezier(.22,1,.36,1) both;
+      touch-action: pan-y;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .hero-track {
+      display: flex;
+      will-change: transform;
+    }
+    .hero-track.animating {
+      transition: transform .42s cubic-bezier(.22,1,.36,1);
+    }
+    .hero-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 14px;
+      padding: 4px 0 2px;
+    }
+    .hero-dot {
+      width: 6px; height: 6px;
+      border-radius: 100px;
+      background: var(--c-border);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background .25s, width .25s;
+    }
+    .hero-dot.active {
+      width: 18px;
+      background: var(--c-accent);
+    }
+
     /* ── Hero Card ────────────────────────────────────── */
     .hero-card {
+      flex: 0 0 100%;
       display: block;
       background: var(--c-surface);
       color: var(--c-text);
-      border-radius: var(--r);
       border: 1.5px solid var(--c-border);
-      margin-bottom: 14px;
       overflow: hidden;
       cursor: pointer;
       text-decoration: none;
-      animation: slideUp .5s .05s cubic-bezier(.22,1,.36,1) both;
-      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, border-color .2s;
+      transition: border-color .2s;
     }
     .hero-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
       border-color: var(--c-accent);
     }
     .hero-card:hover .hero-img { transform: scale(1.04); }
@@ -387,21 +422,11 @@
 </header>
 
 <main>
-  <!-- Hero -->
-  <a href="test.html?id=jealousy" class="hero-card" id="heroCard">
-    <div class="hero-thumb-wrap">
-      <img class="hero-img" id="heroImg" src="" alt="">
-      <span class="hot-badge">🔥 지금 인기</span>
-    </div>
-    <div class="hero-body">
-      <h2 class="hero-title" id="heroTitle"></h2>
-      <p class="hero-desc" id="heroDesc"></p>
-      <div class="hero-footer">
-        <div class="hero-count">👥 <span id="heroCount"></span>명 참여</div>
-        <div class="go-btn">→</div>
-      </div>
-    </div>
-  </a>
+  <!-- Hero Carousel -->
+  <div class="hero-carousel" id="heroCarousel">
+    <div class="hero-track" id="heroTrack"></div>
+  </div>
+  <div class="hero-dots" id="heroDots"></div>
 
   <!-- AdSense Slot -->
   <div style="margin: 20px 0; text-align: center;">
@@ -453,16 +478,87 @@
     return n.toLocaleString();
   }
 
-  /* ── Hero ─────────────────────────────────────────── */
-  const hero = tests.reduce((a, b) => a.count > b.count ? a : b);
-  document.getElementById('heroCard').href         = `test.html?id=${hero.id}`;
-  const heroImg = document.getElementById('heroImg');
-  heroImg.alt   = hero.title;
-  heroImg.onerror = () => { heroImg.style.display = 'none'; };
-  heroImg.src   = `images/${hero.id}/thumb.webp`;
-  document.getElementById('heroTitle').textContent = hero.title;
-  document.getElementById('heroDesc').textContent  = hero.desc;
-  document.getElementById('heroCount').textContent = fmt(hero.count);
+  /* ── Hero Carousel ────────────────────────────────── */
+  const heroSlides = [...tests].sort((a, b) => b.count - a.count).slice(0, 5);
+  const heroTrack  = document.getElementById('heroTrack');
+  const heroDots   = document.getElementById('heroDots');
+  let curSlide = 0, autoTimer = null;
+  let dragStartX = 0, dragDelta = 0, isDragging = false;
+
+  heroSlides.forEach((t, i) => {
+    const thumb = t.thumb || `images/${t.id}/thumb.webp`;
+    const a = document.createElement('a');
+    a.href = t.url || `test.html?id=${t.id}`;
+    a.className = 'hero-card';
+    a.dataset.heroId = t.id;
+    a.innerHTML = `
+      <div class="hero-thumb-wrap">
+        <img class="hero-img" src="${thumb}" alt="${t.title}" loading="${i===0?'eager':'lazy'}"
+          onerror="this.closest('.hero-thumb-wrap').style.display='none'">
+        ${i === 0 ? '<span class="hot-badge">🔥 지금 인기</span>' : ''}
+      </div>
+      <div class="hero-body">
+        <h2 class="hero-title">${t.title}</h2>
+        <p class="hero-desc">${t.desc}</p>
+        <div class="hero-footer">
+          <div class="hero-count">👥 <span class="hero-cnt">${fmt(t.count)}</span>명 참여</div>
+          <div class="go-btn">→</div>
+        </div>
+      </div>
+    `;
+    heroTrack.appendChild(a);
+
+    const dot = document.createElement('button');
+    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+    dot.addEventListener('click', () => goTo(i));
+    heroDots.appendChild(dot);
+  });
+
+  function goTo(idx, animate = true) {
+    curSlide = ((idx % heroSlides.length) + heroSlides.length) % heroSlides.length;
+    if (animate) {
+      heroTrack.classList.add('animating');
+      heroTrack.addEventListener('transitionend', () => heroTrack.classList.remove('animating'), { once: true });
+    }
+    heroTrack.style.transform = `translateX(-${curSlide * 100}%)`;
+    heroDots.querySelectorAll('.hero-dot').forEach((d, i) => d.classList.toggle('active', i === curSlide));
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => goTo(curSlide + 1), 5000);
+  }
+
+  function onDragStart(x) {
+    isDragging = true; dragStartX = x; dragDelta = 0;
+    heroTrack.classList.remove('animating');
+  }
+  function onDragMove(x) {
+    if (!isDragging) return;
+    dragDelta = x - dragStartX;
+    heroTrack.style.transform = `translateX(calc(-${curSlide * 100}% + ${dragDelta}px))`;
+  }
+  function onDragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    const threshold = heroTrack.offsetWidth * 0.22;
+    if (dragDelta < -threshold) goTo(curSlide + 1);
+    else if (dragDelta > threshold) goTo(curSlide - 1);
+    else goTo(curSlide);
+  }
+
+  const carousel = document.getElementById('heroCarousel');
+  carousel.addEventListener('touchstart', e => onDragStart(e.touches[0].clientX), { passive: true });
+  carousel.addEventListener('touchmove',  e => onDragMove(e.touches[0].clientX),  { passive: true });
+  carousel.addEventListener('touchend',   onDragEnd);
+  carousel.addEventListener('mousedown',  e => { onDragStart(e.clientX); e.preventDefault(); });
+  window.addEventListener('mousemove',    e => onDragMove(e.clientX));
+  window.addEventListener('mouseup',      onDragEnd);
+  carousel.addEventListener('click', e => { if (Math.abs(dragDelta) > 8) e.preventDefault(); }, true);
+
+  resetTimer();
 
   /* ── Cards ────────────────────────────────────────── */
   const topIds = [...tests].sort((a,b) => b.count - a.count).slice(0,3).map(t => t.id);
@@ -577,22 +673,13 @@
   });
 
   function updateCountDisplay(id, count) {
-    // 1. Update Hero Card if it matches
-    const heroCard = document.getElementById('heroCard');
-    if (heroCard && heroCard.href.includes(`id=${id}`)) {
-      document.getElementById('heroCount').textContent = fmt(count);
-    }
+    // 1. Update Hero Carousel slides
+    document.querySelectorAll(`.hero-card[data-hero-id="${id}"] .hero-cnt`)
+      .forEach(el => { el.textContent = fmt(count); });
 
     // 2. Update Grid Cards
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-      if (card.dataset.id === id) {
-        const countEl = card.querySelector('.card-count');
-        if (countEl) {
-          countEl.innerHTML = `👥 ${fmt(count)}명 참여`;
-        }
-      }
-    });
+    document.querySelectorAll(`.card[data-id="${id}"] .card-count`)
+      .forEach(el => { el.innerHTML = `👥 ${fmt(count)}명 참여`; });
   }
 </script>
 </body>
