@@ -1,0 +1,26 @@
+{
+  "name": "psychological-test",
+  "version": "1.0.0",
+  "main": "firebase-init.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dipiri-Lap/psychological-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dipiri-Lap/psychological-test/issues"
+  },
+  "homepage": "https://github.com/Dipiri-Lap/psychological-test#readme",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "^24.43.0"
+  }
+}

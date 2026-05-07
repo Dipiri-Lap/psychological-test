@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>MBTI 정밀 분석 리포트</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    @page { size: A4; margin: 14mm 15mm; }
+
+    :root { --gc: #8b5cf6; --gc-light: rgba(139,92,246,.1); }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background:#fff; color:#1c1917;
+      -webkit-font-smoothing: antialiased;
+      font-size: 12px; line-height: 1.75;
+    }
+
+    /* ── 페이지 구분 ── */
+    .page { break-after: page; page-break-after: always; min-height: 257mm; position: relative; }
+    .page:last-child { break-after: auto; page-break-after: auto; }
+
+    /* ── 페이지 헤더 ── */
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 8px; margin-bottom: 20px;
+      border-bottom: 2px solid var(--gc);
+    }
+    .page-header-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: #9b9490;
+    }
+    .page-header-code {
+      font-size: 12px; font-weight: 700; color: var(--gc); letter-spacing: 1px;
+    }
+
+    /* ── 섹션 ── */
+    .section { margin-bottom: 24px; }
+    .section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: var(--gc);
+      margin-bottom: 12px;
+    }
+    .section-title::before {
+      content: ''; display: block; width: 4px; height: 16px;
+      background: var(--gc); border-radius: 2px; flex-shrink: 0;
+    }
+
+    /* ── 공통 카드 ── */
+    .card {
+      background: #f8f6f2; border-radius: 8px; padding: 12px 14px;
+    }
+    .bullet-list { display: flex; flex-direction: column; gap: 5px; }
+    .bullet-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      font-size: 11.5px; line-height: 1.8; color: #3a3633; font-weight: 300;
+    }
+    .bullet-item::before {
+      content: '·'; color: var(--gc); font-size: 16px;
+      line-height: 1.4; flex-shrink: 0; font-weight: 700;
+    }
+
+    /* ════════════════════════════════
+       COVER
+    ════════════════════════════════ */
+    .cover {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; min-height: 257mm;
+      padding: 40px;
+    }
+    .cover-brand {
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase; color: #9b9490;
+      margin-bottom: 48px;
+    }
+    .cover-group {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: #fff;
+      background: var(--gc); padding: 5px 16px; border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .cover-code {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 80px; font-weight: 800; letter-spacing: 6px; line-height: 1;
+      color: var(--gc); margin-bottom: 18px;
+    }
+    .cover-fullname {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 26px; letter-spacing: -.3px;
+      color: #1c1917; margin-bottom: 36px;
+    }
+    .cover-divider { width: 40px; height: 2px; background: var(--gc); margin: 0 auto 36px; }
+    .cover-keywords {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 8px; max-width: 420px;
+    }
+    .cover-keyword {
+      font-size: 11px; font-weight: 500;
+      padding: 5px 13px; border-radius: 100px;
+      border: 1.5px solid #e8e3db; color: #3a3633;
+    }
+    .cover-report-label {
+      margin-top: 48px;
+      font-size: 11px; color: #9b9490; letter-spacing: .5px;
+    }
+
+    /* ════════════════════════════════
+       6축 양방향 막대 그래프
+    ════════════════════════════════ */
+    .axis-chart { display: flex; flex-direction: column; gap: 10px; }
+    .axis-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 12px 1fr 52px;
+      align-items: center; gap: 0;
+    }
+    .axis-pole-left {
+      text-align: right; padding-right: 10px;
+    }
+    .axis-pole-right {
+      text-align: left; padding-left: 10px;
+    }
+    .axis-pole-code { font-size: 12px; font-weight: 700; color: #9b9490; display: block; }
+    .axis-pole-code.active { color: var(--gc); }
+    .axis-pole-name { font-size: 9.5px; color: #b0aba6; }
+    .axis-half-track {
+      height: 8px; background: #f0ece6; overflow: hidden;
+    }
+    .axis-half-left { border-radius: 4px 0 0 4px; display: flex; justify-content: flex-end; }
+    .axis-half-right { border-radius: 0 4px 4px 0; }
+    .axis-center-line {
+      width: 2px; height: 8px; background: #d4cfc9; flex-shrink: 0;
+    }
+    .axis-fill {
+      height: 100%; background: var(--gc);
+      transition: width .8s cubic-bezier(.22,1,.36,1);
+    }
+    .axis-fill-left { border-radius: 4px 0 0 4px; }
+    .axis-fill-right { border-radius: 0 4px 4px 0; }
+    .axis-clarity-badge {
+      font-size: 10px; font-weight: 600; padding: 2px 8px;
+      border-radius: 100px; background: var(--gc-light);
+      color: var(--gc); text-align: center; white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    /* ════════════════════════════════
+       유형 설명
+    ════════════════════════════════ */
+    .type-hero {
+      background: var(--gc-light); border-radius: 10px;
+      padding: 14px 16px; margin-bottom: 14px;
+      border-left: 4px solid var(--gc);
+    }
+    .type-hero-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 15px; font-weight: 700;
+      color: var(--gc); margin-bottom: 4px;
+    }
+    .desc-para {
+      font-size: 11.5px; line-height: 1.95;
+      color: #3a3633; font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .desc-para:last-child { margin-bottom: 0; }
+
+    /* 특성 그리드 */
+    .trait-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .trait-box {
+      background: #f8f6f2; border-radius: 8px; padding: 12px 14px;
+    }
+    .trait-box-title {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gc); margin-bottom: 8px;
+    }
+
+    /* ════════════════════════════════
+       심리적 기능 다이어그램
+    ════════════════════════════════ */
+    .func-flow {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin: 16px 0;
+    }
+    .func-circle {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .func-bubble {
+      width: 72px; height: 72px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: #fff;
+      text-align: center; line-height: 1.3;
+    }
+    .func-bubble.dominant  { background: #e85d75; font-size: 14px; width: 80px; height: 80px; }
+    .func-bubble.auxiliary { background: #10b981; }
+    .func-bubble.tertiary  { background: #60a5fa; }
+    .func-bubble.inferior  { background: #9ca3af; }
+    .func-rank-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #9b9490; text-align: center;
+    }
+    .func-rank-label.dominant { color: #e85d75; }
+    .func-arrow {
+      font-size: 20px; color: #d4cfc9; margin: 0 4px;
+      padding-bottom: 20px;
+    }
+    .func-cards { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .func-card {
+      border: 1.5px solid #e8e3db; border-radius: 8px;
+      padding: 10px 12px; position: relative; overflow: hidden;
+    }
+    .func-card.dominant { border-color: #e85d75; }
+    .func-card-rank {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #9b9490; margin-bottom: 3px;
+    }
+    .func-card.dominant .func-card-rank { color: #e85d75; }
+    .func-card-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .func-card-desc { font-size: 11px; line-height: 1.75; color: #5a5450; font-weight: 300; }
+    .func-card-bar {
+      position: absolute; bottom: 0; left: 0;
+      height: 2px; background: var(--gc); opacity: .3;
+    }
+    .func-card.dominant .func-card-bar { opacity: 1; background: #e85d75; }
+
+    /* ════════════════════════════════
+       스트레스 반응
+    ════════════════════════════════ */
+    .stress-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stress-card {
+      background: #f8f6f2; border-radius: 8px; padding: 12px 14px;
+      border-top: 3px solid var(--gc);
+    }
+    .stress-label {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gc); margin-bottom: 5px;
+    }
+    .stress-text { font-size: 11px; line-height: 1.8; color: #3a3633; font-weight: 300; }
+
+    /* ════════════════════════════════
+       30 다면척도
+    ════════════════════════════════ */
+    .facet-axis-header {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--gc); color: #fff;
+      border-radius: 8px; padding: 8px 14px;
+      margin-bottom: 10px;
+    }
+    .facet-axis-name { font-size: 12px; font-weight: 700; }
+    .facet-axis-poles { font-size: 10px; opacity: .85; }
+
+    /* 다면척도 양방향 바 헤더 */
+    .facet-chart-header {
+      display: grid;
+      grid-template-columns: 90px 1fr 12px 1fr 90px;
+      font-size: 9.5px; font-weight: 700; color: #9b9490;
+      text-align: center; margin-bottom: 6px;
+      padding: 0 0 4px 0; border-bottom: 1px solid #e8e3db;
+    }
+    .facet-chart-header .h-left { text-align: right; padding-right: 8px; }
+    .facet-chart-header .h-right { text-align: left; padding-left: 8px; }
+
+    /* 개별 facet 행 */
+    .facet-row { display: flex; flex-direction: column; margin-bottom: 14px; }
+    .facet-row:last-child { margin-bottom: 0; }
+    .facet-bar-row {
+      display: grid;
+      grid-template-columns: 90px 1fr 12px 1fr 90px;
+      align-items: center; margin-bottom: 4px;
+    }
+    .facet-label-left {
+      text-align: right; padding-right: 10px;
+      font-size: 10px; font-weight: 600; color: #3a3633;
+    }
+    .facet-label-right {
+      text-align: left; padding-left: 10px;
+      font-size: 10px; font-weight: 600; color: #3a3633;
+    }
+    .facet-label-left.active, .facet-label-right.active { color: var(--gc); font-weight: 700; }
+    .facet-half-track { height: 7px; background: #f0ece6; overflow: hidden; }
+    .facet-half-left { border-radius: 4px 0 0 4px; display: flex; justify-content: flex-end; }
+    .facet-half-right { border-radius: 0 4px 4px 0; }
+    .facet-center-line { width: 2px; height: 7px; background: #d4cfc9; flex-shrink: 0; }
+    .facet-fill { height: 100%; background: var(--gc); }
+    .facet-fill-left { border-radius: 4px 0 0 4px; }
+    .facet-fill-right { border-radius: 0 4px 4px 0; }
+
+    .facet-desc-row { padding: 0 0 0 2px; }
+    .facet-position-badge {
+      display: inline-block;
+      font-size: 9px; font-weight: 700; color: var(--gc);
+      background: var(--gc-light); padding: 1px 7px; border-radius: 100px;
+      margin-bottom: 3px;
+    }
+    .facet-desc {
+      font-size: 11px; line-height: 1.8; color: #5a5450; font-weight: 300;
+    }
+    .facet-separator { height: 1px; background: #f0ece6; margin: 10px 0; }
+
+    /* ════════════════════════════════
+       성장 조언
+    ════════════════════════════════ */
+    .advice-group { margin-bottom: 16px; }
+    .advice-group-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gc); margin-bottom: 8px;
+    }
+
+    /* ── 로딩 ── */
+    #stateEl {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #9b9490; background: #fff;
+    }
+    #reportEl { display: none; }
+  </style>
+</head>
+<body>
+
+<div id="stateEl">불러오는 중…</div>
+
+<div id="reportEl">
+
+  <!-- ══════════ PAGE 1: COVER ══════════ -->
+  <div class="page">
+    <div class="cover">
+      <div class="cover-brand">마음. · 64 성격유형 정밀 분석 리포트</div>
+      <div class="cover-group" id="coverGroup"></div>
+      <div class="cover-code" id="coverCode"></div>
+      <div class="cover-fullname" id="coverFullname"></div>
+      <div class="cover-divider"></div>
+      <div class="cover-keywords" id="coverKeywords"></div>
+      <div class="cover-report-label">마음. · testlab.tmhub.co.kr</div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE 2: 유형 설명 + 6축 분명도 ══════════ -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">유형 설명 · 6축 선호 분명도</span>
+      <span class="page-header-code" id="ph2Code"></span>
+    </div>
+
+    <div class="section">
+      <div class="section-title">나는 어떤 사람인가?</div>
+      <div class="type-hero">
+        <div class="type-hero-title" id="descTitle"></div>
+      </div>
+      <div id="descBody"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">6축 선호 분명도</div>
+      <div class="axis-chart" id="axisBars"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE 3: 세부 특성 ══════════ -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">세부 특성</span>
+      <span class="page-header-code" id="ph3Code"></span>
+    </div>
+
+    <div class="trait-grid">
+      <div class="trait-box">
+        <div class="trait-box-title">일반적인 강점</div>
+        <div class="bullet-list" id="strengthsList"></div>
+      </div>
+      <div class="trait-box">
+        <div class="trait-box-title">생산적인 업무 환경</div>
+        <div class="bullet-list" id="envList"></div>
+      </div>
+      <div class="trait-box">
+        <div class="trait-box-title">대인관계 스타일</div>
+        <div class="bullet-list" id="interpersonalList"></div>
+      </div>
+      <div class="trait-box">
+        <div class="trait-box-title">개발이 필요한 점</div>
+        <div class="bullet-list" id="devList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGE 4: 심리적 기능 + 스트레스 반응 ══════════ -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">심리적 기능 · 스트레스 반응</span>
+      <span class="page-header-code" id="ph4Code"></span>
+    </div>
+
+    <div class="section">
+      <div class="section-title">심리적 기능</div>
+      <!-- 플로우 다이어그램 -->
+      <div class="func-flow" id="funcFlow"></div>
+      <!-- 카드 상세 -->
+      <div class="func-cards" id="funcCards"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">스트레스 반응</div>
+      <div class="stress-grid" id="stressGrid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">성장 조언</div>
+      <div id="growthAdvice"></div>
+    </div>
+  </div>
+
+  <!-- ══════════ PAGES 5+: 30 다면척도 ══════════ -->
+  <div id="facetPages"></div>
+
+</div>
+
+<script>
+/* ── 그룹 ── */
+const GROUP_MAP = {
+  NT: { name:'분석가형', color:'#8b5cf6' },
+  NF: { name:'외교관형', color:'#10b981' },
+  SJ: { name:'관리자형', color:'#3b82f6' },
+  SP: { name:'탐험가형', color:'#f59e0b' },
+};
+function getGroup(mbti) {
+  if (['INTJ','INTP','ENTJ','ENTP'].includes(mbti)) return GROUP_MAP.NT;
+  if (['INFJ','INFP','ENFJ','ENFP'].includes(mbti)) return GROUP_MAP.NF;
+  if (['ISTJ','ISFJ','ESTJ','ESFJ'].includes(mbti)) return GROUP_MAP.SJ;
+  return GROUP_MAP.SP;
+}
+
+/* ── 6축 설정 ── */
+const AXIS_CONFIG = [
+  { code:'EI', highCode:'E', highName:'외향', lowCode:'I', lowName:'내향' },
+  { code:'SN', highCode:'S', highName:'감각', lowCode:'N', lowName:'직관' },
+  { code:'TF', highCode:'T', highName:'사고', lowCode:'F', lowName:'감정' },
+  { code:'JP', highCode:'J', highName:'판단', lowCode:'P', lowName:'인식' },
+  { code:'AT', highCode:'A', highName:'자기확신', lowCode:'T', lowName:'신중' },
+  { code:'CS', highCode:'C', highName:'협력',  lowCode:'S', lowName:'독립' },
+];
+
+const AXIS_LABELS = {
+  EI: { name:'EI — 에너지 방향', leftPole:'외향 (E)', rightPole:'내향 (I)' },
+  SN: { name:'SN — 인식 방식',   leftPole:'감각 (S)', rightPole:'직관 (N)' },
+  TF: { name:'TF — 판단 방식',   leftPole:'사고 (T)', rightPole:'감정 (F)' },
+  JP: { name:'JP — 생활 양식',   leftPole:'판단 (J)', rightPole:'인식 (P)' },
+  AT: { name:'AT — 자기확신도',  leftPole:'자기확신 (A)', rightPole:'신중 (T)' },
+  CS: { name:'CS — 협력 성향',   leftPole:'협력 (C)', rightPole:'독립 (S)' },
+};
+
+const FACET_POLES = {
+  EI1: { left:'능동성',      right:'수동성' },
+  EI2: { left:'표현적',      right:'보유적' },
+  EI3: { left:'다양한 관계', right:'밀접한 관계' },
+  EI4: { left:'활동적',      right:'반추적' },
+  EI5: { left:'열성적',      right:'정적' },
+  SN1: { left:'구체적',      right:'추상적' },
+  SN2: { left:'현실적',      right:'창의적' },
+  SN3: { left:'실용적',      right:'개념적' },
+  SN4: { left:'경험적',      right:'이론적' },
+  SN5: { left:'전통적',      right:'독창적' },
+  TF1: { left:'논리적',      right:'정서적' },
+  TF2: { left:'이성적',      right:'감성적' },
+  TF3: { left:'질문지향',    right:'협응지향' },
+  TF4: { left:'비평적',      right:'허용적' },
+  TF5: { left:'강인한',      right:'온건한' },
+  JP1: { left:'체계성',      right:'유연성' },
+  JP2: { left:'목표지향적',  right:'개방적' },
+  JP3: { left:'조기착수',    right:'임박착수' },
+  JP4: { left:'계획성',      right:'자발성' },
+  JP5: { left:'방법적',      right:'과정적' },
+  AT1: { left:'자기확신',    right:'자기의심' },
+  AT2: { left:'회복탄력',    right:'반추적' },
+  AT3: { left:'비교초월',    right:'비교민감' },
+  AT4: { left:'도전지향',    right:'준비지향' },
+  AT5: { left:'자기표현',    right:'자기억제' },
+  CS1: { left:'팀지향',      right:'개인지향' },
+  CS2: { left:'합의추구',    right:'독자결정' },
+  CS3: { left:'관계중시',    right:'과업중시' },
+  CS4: { left:'협력의식',    right:'자립의식' },
+  CS5: { left:'수용적 리더십', right:'지시적 리더십' },
+};
+
+/* ── Init ── */
+const params   = new URLSearchParams(location.search);
+const typeCode = params.get('type');
+
+if (!typeCode || !typeCode.includes('-')) {
+  document.getElementById('stateEl').textContent = '?type=INTJ-AS 형식으로 접근해주세요.';
+} else {
+  const [mbti, variant] = typeCode.split('-');
+  fetch(`tests/mbti/results_${mbti}.json`)
+    .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+    .then(data => {
+      const d = data[`${mbti}_${variant}`];
+      if (!d) throw new Error();
+      render(d, mbti);
+    })
+    .catch(() => {
+      document.getElementById('stateEl').textContent = '데이터를 불러올 수 없습니다.';
+    });
+}
+
+/* ════════════════════════════
+   RENDER
+════════════════════════════ */
+function render(d, mbti) {
+  const group = getGroup(mbti);
+  document.documentElement.style.setProperty('--gc', group.color);
+  document.documentElement.style.setProperty('--gc-light', hexToRgba(group.color, 0.08));
+  document.title = `${d.code} 정밀 분석 리포트`;
+
+  /* 커버 */
+  document.getElementById('coverGroup').textContent    = group.name;
+  document.getElementById('coverCode').textContent     = d.code;
+  document.getElementById('coverFullname').textContent = `"${d.fullName}"`;
+  document.getElementById('coverKeywords').innerHTML   = d.typeDescription.keywords
+    .map(k => `<span class="cover-keyword">${k}</span>`).join('');
+
+  /* 페이지 헤더 코드 */
+  ['ph2Code','ph3Code','ph4Code'].forEach(id => {
+    document.getElementById(id).textContent = d.code;
+  });
+
+  /* 유형 설명 */
+  document.getElementById('descTitle').textContent = d.typeDescription.title;
+  document.getElementById('descBody').innerHTML = d.typeDescription.mainDescription
+    .split('\n\n').filter(Boolean)
+    .map(p => `<p class="desc-para">${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+
+  /* 6축 양방향 막대 */
+  renderAxisBars(d.clarityScores);
+
+  /* 세부 특성 */
+  renderBulletList('strengthsList',     d.detailedTraits.generalStrengths);
+  renderBulletList('envList',           d.detailedTraits.productiveEnvironment);
+  renderBulletList('interpersonalList', d.detailedTraits.interpersonalStyle);
+  renderBulletList('devList',           d.detailedTraits.developmentAreas);
+
+  /* 심리적 기능 */
+  renderFunctions(d.cognitiveFunction);
+
+  /* 스트레스 반응 */
+  renderStress(d.stressResponse);
+
+  /* 성장 조언 */
+  renderGrowth(d.growthAdvice);
+
+  /* 30 다면척도 */
+  renderFacetPages(d.facetResults, d.clarityScores, d.code);
+
+  /* 표시 */
+  document.getElementById('stateEl').style.display = 'none';
+  document.getElementById('reportEl').style.display = 'block';
+}
+
+/* ════════════════
+   6축 양방향 막대
+════════════════ */
+function renderAxisBars(scores) {
+  const container = document.getElementById('axisBars');
+  container.innerHTML = AXIS_CONFIG.map(ax => {
+    const s       = scores[ax.code];
+    const isHigh  = s.direction === ax.highCode; // 왼쪽(high pole) 방향
+    const pct     = Math.round(Math.min(100, Math.max(5, (s.score - 10) / 15 * 100)));
+
+    const leftFill  = isHigh  ? `width:${pct}%` : 'width:0%';
+    const rightFill = !isHigh ? `width:${pct}%` : 'width:0%';
+
+    return `
+      <div class="axis-row">
+        <div class="axis-pole-left">
+          <span class="axis-pole-code${isHigh ? ' active' : ''}">${ax.highCode}</span>
+          <span class="axis-pole-name">${ax.highName}</span>
+        </div>
+        <div class="axis-half-track axis-half-left">
+          <div class="axis-fill axis-fill-left" style="${leftFill}"></div>
+        </div>
+        <div class="axis-center-line"></div>
+        <div class="axis-half-track axis-half-right">
+          <div class="axis-fill axis-fill-right" style="${rightFill}"></div>
+        </div>
+        <div class="axis-pole-right">
+          <span class="axis-pole-code${!isHigh ? ' active' : ''}">${ax.lowCode}</span>
+          <span class="axis-pole-name">${ax.lowName}</span>
+        </div>
+        <span class="axis-clarity-badge">${s.clarity}</span>
+      </div>`;
+  }).join('');
+}
+
+/* ════════════════
+   심리적 기능
+════════════════ */
+const FUNC_CFG = [
+  { key:'dominant',  label:'주기능',    cls:'dominant',  color:'#e85d75', size:80, barW:'100%' },
+  { key:'auxiliary', label:'부기능',    cls:'auxiliary', color:'#10b981', size:72, barW:'68%'  },
+  { key:'tertiary',  label:'3차 기능',  cls:'tertiary',  color:'#60a5fa', size:72, barW:'42%'  },
+  { key:'inferior',  label:'열등 기능', cls:'inferior',  color:'#9ca3af', size:72, barW:'22%'  },
+];
+
+function renderFunctions(funcs) {
+  /* 플로우 다이어그램 */
+  document.getElementById('funcFlow').innerHTML = FUNC_CFG.map((r, i) => {
+    const f    = funcs[r.key];
+    const name = f.name.split(' ')[0]; // "직관" from "직관 (Ni)"
+    const arrow = i < 3 ? `<div class="func-arrow">▶</div>` : '';
+    return `
+      <div class="func-circle">
+        <div class="func-bubble ${r.cls}" style="width:${r.size}px;height:${r.size}px;background:${r.color}">
+          ${name}
+        </div>
+        <div class="func-rank-label ${r.cls}">${r.label}</div>
+      </div>
+      ${arrow}`;
+  }).join('');
+
+  /* 상세 카드 */
+  document.getElementById('funcCards').innerHTML = FUNC_CFG.map(r => {
+    const f = funcs[r.key];
+    return `
+      <div class="func-card ${r.cls}">
+        <div class="func-card-rank">${r.label}</div>
+        <div class="func-card-name">${f.name}</div>
+        <div class="func-card-desc">${f.description}</div>
+        <div class="func-card-bar" style="width:${r.barW}"></div>
+      </div>`;
+  }).join('');
+}
+
+/* ════════════════
+   스트레스 반응
+════════════════ */
+function renderStress(s) {
+  document.getElementById('stressGrid').innerHTML = [
+    { label:'주기능 과도 사용',    text: s.overuseDominant },
+    { label:'부기능 과도 사용',    text: s.overuseAuxiliary },
+    { label:'기능 억제',           text: s.suppressedFunctions },
+    { label:'극심한 스트레스 시',  text: s.extremeStress },
+  ].map(r => `
+    <div class="stress-card">
+      <div class="stress-label">${r.label}</div>
+      <div class="stress-text">${r.text}</div>
+    </div>`).join('');
+}
+
+/* ════════════════
+   성장 조언
+════════════════ */
+function renderGrowth(g) {
+  document.getElementById('growthAdvice').innerHTML = `
+    <div class="advice-group">
+      <div class="advice-group-label">유형 공통 조언</div>
+      <div class="bullet-list">${(g.forType||[]).map(s=>`<div class="bullet-item">${s}</div>`).join('')}</div>
+    </div>
+    <div class="advice-group">
+      <div class="advice-group-label">변형 특화 조언</div>
+      <div class="bullet-list">${(g.forVariant||[]).map(s=>`<div class="bullet-item">${s}</div>`).join('')}</div>
+    </div>`;
+}
+
+/* ════════════════
+   30 다면척도 — 축별 페이지
+════════════════ */
+function renderFacetPages(facets, clarityScores, code) {
+  const container = document.getElementById('facetPages');
+  const axisKeys  = Object.keys(facets);
+
+  container.innerHTML = axisKeys.map(axisCode => {
+    const axInfo  = AXIS_LABELS[axisCode] || { name: axisCode, leftPole:'', rightPole:'' };
+    const axCfg   = AXIS_CONFIG.find(a => a.code === axisCode);
+    const axDir   = clarityScores[axisCode]?.direction;
+    const prefIsLeft = axCfg && (axDir === axCfg.highCode);
+
+    const facetKeys = Object.keys(facets[axisCode]);
+
+    const facetRows = facetKeys.map(key => {
+      const f     = facets[axisCode][key];
+      const pos   = f.position || '';
+      const poles = FACET_POLES[key] || { left: key, right: key };
+
+      const isIn  = pos.includes('선호 내');
+      const isOut = pos.includes('선호 외');
+      const isMid = pos.includes('중간범위');
+      const pct   = Math.round((f.score / 5) * 100);
+
+      let fillLeft  = '0%';
+      let fillRight = '0%';
+      let labelLeftActive  = false;
+      let labelRightActive = false;
+
+      if (isMid) {
+        // extract lean direction from position string e.g. "중간범위 (팀지향)"
+        const leanStr  = (pos.match(/\((.+)\)/) || [])[1] || '';
+        const leftIdx  = leanStr.indexOf(poles.left);
+        const rightIdx = leanStr.indexOf(poles.right);
+        if (leftIdx !== -1 && (rightIdx === -1 || leftIdx < rightIdx)) {
+          fillLeft = '28%';
+        } else if (rightIdx !== -1) {
+          fillRight = '28%';
+        } else {
+          fillLeft = '18%'; fillRight = '18%';
+        }
+      } else if (isIn && prefIsLeft) {
+        fillLeft  = `${pct}%`; labelLeftActive  = true;
+      } else if (isIn && !prefIsLeft) {
+        fillRight = `${pct}%`; labelRightActive = true;
+      } else if (isOut && prefIsLeft) {
+        fillRight = `${pct}%`; labelRightActive = true;
+      } else if (isOut && !prefIsLeft) {
+        fillLeft  = `${pct}%`; labelLeftActive  = true;
+      }
+
+      return `
+        <div class="facet-row">
+          <div class="facet-bar-row">
+            <div class="facet-label-left${labelLeftActive ? ' active' : ''}">${poles.left}</div>
+            <div class="facet-half-track facet-half-left">
+              <div class="facet-fill facet-fill-left" style="width:${fillLeft}"></div>
+            </div>
+            <div class="facet-center-line"></div>
+            <div class="facet-half-track facet-half-right">
+              <div class="facet-fill facet-fill-right" style="width:${fillRight}"></div>
+            </div>
+            <div class="facet-label-right${labelRightActive ? ' active' : ''}">${poles.right}</div>
+          </div>
+          <div class="facet-desc-row">
+            <span class="facet-position-badge">${pos}</span>
+            <div class="facet-desc">${f.description}</div>
+          </div>
+        </div>
+        <div class="facet-separator"></div>`;
+    }).join('');
+
+    return `
+      <div class="page">
+        <div class="page-header">
+          <span class="page-header-title">30 다면척도 — ${axInfo.name}</span>
+          <span class="page-header-code">${code}</span>
+        </div>
+        <div class="facet-axis-header">
+          <span class="facet-axis-name">${axInfo.name}</span>
+          <span class="facet-axis-poles">${axInfo.leftPole} ↔ ${axInfo.rightPole}</span>
+        </div>
+        <div class="facet-chart-header">
+          <span class="h-left">← ${axInfo.leftPole}</span>
+          <span></span><span></span><span></span>
+          <span class="h-right">${axInfo.rightPole} →</span>
+        </div>
+        ${facetRows}
+      </div>`;
+  }).join('');
+}
+
+/* ════════════════
+   Helpers
+════════════════ */
+function renderBulletList(id, items) {
+  document.getElementById(id).innerHTML = (items || [])
+    .map(s => `<div class="bullet-item">${s}</div>`).join('');
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+</script>
+</body>
+</html>
