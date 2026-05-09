@@ -48,7 +48,7 @@
     "@type": "ItemList",
     "name": "마음. 심리테스트 목록",
     "url": "https://testlab.tmhub.co.kr/",
-    "numberOfItems": 9,
+    "numberOfItems": 10,
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "SBTI 성격 유형 테스트",       "url": "https://testlab.tmhub.co.kr/test.html?id=sbti" },
       { "@type": "ListItem", "position": 2, "name": "질투 유형 테스트",             "url": "https://testlab.tmhub.co.kr/test.html?id=jealousy" },
@@ -59,7 +59,8 @@
       { "@type": "ListItem", "position": 7, "name": "갓생 살긴 글렀나? 본격 폐인 지수 측정기", "url": "https://testlab.tmhub.co.kr/test.html?id=pein" },
       { "@type": "ListItem", "position": 8, "name": "음식으로 보는 나의 심리 상태", "url": "https://testlab.tmhub.co.kr/foodtest1.html" },
       { "@type": "ListItem", "position": 9, "name": "카톡 답장 스타일로 보는 연애 유형", "url": "https://testlab.tmhub.co.kr/test.html?id=kakaotalklove" },
-      { "@type": "ListItem", "position": 10, "name": "나의 집착 레벨 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=obsession" }
+      { "@type": "ListItem", "position": 10, "name": "나의 집착 레벨 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=obsession" },
+      { "@type": "ListItem", "position": 11, "name": "폰 배터리로 보는 내 성격", "url": "https://testlab.tmhub.co.kr/battery.html" }
     ]
   }
   </script>
@@ -467,6 +468,7 @@
     { id:"foodtest1",  emoji:"🍕", title:"음식으로 보는 나의 심리 상태", desc:"지금 당기는 음식 하나로 내 마음 상태를 알아봐요", category:"재미", count:1800, thumb:"images/foodtest1/thumb.webp", url:"foodtest1.html" },
     { id:"kakaotalklove", emoji:"💬", title:"카톡 답장 스타일로 보는 연애 유형", desc:"카톡 하나로 알아보는 나의 연애 타입 (12문항)", category:"연애", count:1200, thumb:"images/kakaotalklove/thumb.png" },
     { id:"obsession", emoji:"💀", title:"나의 집착 레벨 테스트", desc:"연인에게 나는 어느 정도 집착할까? (12문항)", category:"연애", count:800, thumb:"images/obsession-test/thumb.webp" },
+    { id:"battery", emoji:"🔋", title:"폰 배터리로 보는 내 성격", desc:"지금 내 배터리 %로 성격을 바로 알아봐요", category:"재미", count:500, thumb:"images/battery/Thumb.webp", url:"battery.html" },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -656,7 +658,8 @@
     pein:         5000,
     foodtest1:    1800,
     kakaotalklove: 1200,
-    obsession: 800
+    obsession: 800,
+    battery: 500
   };
 
   // Sync with Firestore
@@ -669,7 +672,7 @@
       });
     } else {
       // Initialize Firestore with 0 if it doesn't exist
-      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0 });
+      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0 });
     }
   });
 

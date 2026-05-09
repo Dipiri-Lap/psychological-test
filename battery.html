@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마음. — 폰 배터리로 보는 내 성격</title>
+  <link rel="icon" href="images/favicon.webp" type="image/webp" />
+  <meta name="description" content="지금 내 폰 배터리 몇 %야? 딱 그것만으로 당신의 성격을 알아봐요." />
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#100f0e" media="(prefers-color-scheme: dark)" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="폰 배터리로 보는 내 성격 — 마음." />
+  <meta property="og:description" content="지금 내 폰 배터리 몇 %야? 딱 그것만으로 당신의 성격을 알아봐요." />
+  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/battery/Thumb.webp" />
+  <meta property="og:url"         content="https://testlab.tmhub.co.kr/battery.html" />
+  <meta property="og:site_name"   content="마음." />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="폰 배터리로 보는 내 성격 — 마음." />
+  <meta name="twitter:description" content="지금 내 폰 배터리 몇 %야? 딱 그것만으로 당신의 성격을 알아봐요." />
+  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/battery/Thumb.webp" />
+  <meta name="keywords" content="폰배터리 심리테스트, 배터리 성격테스트, 무료 심리테스트, 마음" />
+  <link rel="canonical" href="https://testlab.tmhub.co.kr/battery.html" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398" crossorigin="anonymous"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+    integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+    crossorigin="anonymous"></script>
+  <script src="tests/battery/battery-test.js"></script>
+
+  <style>
+    :root {
+      --c-main:    #1c1917;
+      --c-accent:  #e85d75;
+      --c-bg:      #faf8f5;
+      --c-surface: #ffffff;
+      --c-surf2:   #f3f0ea;
+      --c-text:    #1c1917;
+      --c-muted:   #9b9490;
+      --c-border:  #e8e3db;
+      --shadow:        0 2px 16px rgba(0,0,0,.06);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.13);
+      --r:   20px;
+      --r-sm: 14px;
+    }
+    [data-theme="dark"] {
+      --c-main:    #f0ece6;
+      --c-accent:  #ff4d72;
+      --c-bg:      #100f0e;
+      --c-surface: #1a1917;
+      --c-surf2:   #211f1d;
+      --c-text:    #f0ece6;
+      --c-muted:   #605c58;
+      --c-border:  #2a2724;
+      --shadow:        0 2px 16px rgba(0,0,0,.4);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.6);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background .35s, color .35s;
+    }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── Top Nav ── */
+    #topNav {
+      position: fixed;
+      top: max(10px, env(safe-area-inset-top)); left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 18px; z-index: 150;
+    }
+    .nav-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--c-surface); border: 1.5px solid var(--c-border);
+      display: grid; place-items: center; font-size: 16px;
+      transition: border-color .2s, transform .2s, background .35s;
+    }
+    .nav-btn:hover { border-color: var(--c-accent); }
+    #themeBtn:hover { transform: rotate(22deg); }
+
+    /* ── Screens ── */
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--c-main); color: var(--c-bg);
+      font-size: 13px; font-weight: 500;
+      padding: 12px 24px; border-radius: 100px;
+      opacity: 0; transition: opacity .3s, transform .3s;
+      pointer-events: none; z-index: 999; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── Animations ── */
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bumpIn  { from { opacity: 0; transform: scale(.45); } to { opacity: 1; transform: scale(1); } }
+
+    /* ══════════════════════════════════════════
+       INTRO SCREEN
+    ══════════════════════════════════════════ */
+    #introScreen {
+      align-items: center; justify-content: center;
+      padding: 88px 24px 56px; text-align: center;
+      animation: fadeIn .6s ease both;
+    }
+    .intro-thumb {
+      width: 100%; max-width: 300px;
+      border-radius: 24px; object-fit: cover;
+      aspect-ratio: 4/3; margin-bottom: 28px;
+      box-shadow: var(--shadow-hover);
+      animation: bumpIn .7s .1s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .intro-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 26px; letter-spacing: -.5px; line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .intro-sub {
+      font-size: 14px; font-weight: 300; color: var(--c-muted);
+      line-height: 1.7; margin-bottom: 36px;
+    }
+    .intro-meta {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-bottom: 40px;
+    }
+    .meta-pill {
+      font-size: 12px; font-weight: 500; color: var(--c-muted);
+      background: var(--c-surf2); padding: 6px 14px; border-radius: 100px;
+    }
+    .start-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--c-main); color: var(--c-bg);
+      font-family: 'Nanum Myeongjo', serif; font-size: 18px;
+      padding: 18px 52px; border-radius: 100px;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+    }
+    .start-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+
+    /* ══════════════════════════════════════════
+       QUIZ SCREEN
+    ══════════════════════════════════════════ */
+    #quizScreen {
+      max-width: 480px; margin: 0 auto; width: 100%;
+      padding: 0;
+    }
+
+    .quiz-header {
+      padding: 76px 24px 0;
+      text-align: center;
+      animation: fadeIn .5s ease both;
+    }
+    .q-subtitle {
+      font-size: 12px; font-weight: 500; letter-spacing: 1.5px;
+      color: var(--c-accent); text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .q-image-wrap {
+      margin: 20px 24px 0;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: var(--shadow);
+      animation: fadeIn .5s .1s ease both;
+    }
+    .q-image {
+      width: 100%; display: block;
+      object-fit: cover;
+    }
+    .q-text {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; letter-spacing: -.4px; line-height: 1.55;
+      margin-top: 4px;
+    }
+    .q-hint {
+      font-size: 13px; color: var(--c-muted); margin-top: 8px;
+      font-weight: 300;
+    }
+
+    /* ── Choice Buttons ── */
+    .choices {
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 20px 20px max(24px, env(safe-area-inset-bottom));
+      animation: slideUp .5s .2s ease both;
+    }
+    .choice-btn {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 14px 18px;
+      text-align: left;
+      transition:
+        border-color .22s,
+        box-shadow .22s,
+        transform .22s cubic-bezier(.34,1.56,.64,1);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .choice-btn:hover {
+      border-color: var(--c-accent);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .choice-btn:active { transform: scale(.98); }
+
+    .choice-bar-wrap {
+      flex-shrink: 0;
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      background: var(--c-surf2);
+      display: flex; align-items: flex-end;
+      padding: 6px;
+      overflow: hidden;
+    }
+    .choice-bar {
+      width: 100%;
+      border-radius: 4px;
+      transition: height .6s cubic-bezier(.22,1,.36,1);
+    }
+    .choice-info { flex: 1; }
+    .choice-label {
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .choice-sub {
+      font-size: 12px; font-weight: 300; color: var(--c-muted);
+    }
+    .choice-emoji { font-size: 22px; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════
+       RESULT SCREEN
+    ══════════════════════════════════════════ */
+    #resultScreen {
+      align-items: center;
+      padding: 80px 20px 72px;
+      max-width: 480px; margin: 0 auto; width: 100%;
+    }
+    .result-kicker {
+      font-size: 11px; font-weight: 700; letter-spacing: 2px;
+      color: var(--c-accent); margin-bottom: 12px;
+      opacity: 0; animation: fadeIn .5s .1s ease both;
+    }
+    .result-image-wrap {
+      width: 100%; max-width: 320px;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: var(--shadow-hover); margin-bottom: 28px;
+      opacity: 0; animation: bumpIn .7s .2s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .result-image {
+      width: 100%; display: block;
+      object-fit: cover;
+    }
+    .result-type {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 28px; letter-spacing: -.5px; line-height: 1.3;
+      margin-bottom: 10px; text-align: center;
+      opacity: 0; animation: fadeIn .5s .5s ease both;
+    }
+    .result-tagline {
+      font-size: 14px; font-weight: 300; color: var(--c-muted);
+      font-style: italic; text-align: center; margin-bottom: 32px;
+      opacity: 0; animation: fadeIn .5s .65s ease both;
+    }
+    .result-divider {
+      width: 36px; height: 2px;
+      background: var(--c-border); border-radius: 2px;
+      margin: 0 auto 28px;
+      opacity: 0; animation: fadeIn .5s .65s ease both;
+    }
+    .personality-cards {
+      width: 100%; margin-bottom: 36px;
+      opacity: 0; animation: slideUp .6s .85s ease both;
+    }
+    .personality-card {
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      padding: 18px 18px 16px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      transition: background .35s, border-color .35s;
+    }
+    .personality-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--result-color, var(--c-accent));
+      border-radius: 0 2px 2px 0;
+    }
+    .personality-card-title {
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 8px; padding-left: 4px;
+    }
+    .personality-card-desc {
+      font-size: 13px; font-weight: 300; color: var(--c-muted);
+      line-height: 1.8; padding-left: 4px;
+    }
+
+    /* ── Action Buttons ── */
+    .action-btns {
+      display: flex; flex-direction: column; gap: 10px;
+      width: 100%; max-width: 320px;
+      opacity: 0; animation: slideUp .5s 1.2s ease both;
+    }
+    .action-btn {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; padding: 16px 20px; border-radius: var(--r-sm);
+      font-size: 15px; font-weight: 500;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
+      text-decoration: none; cursor: pointer;
+    }
+    .action-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .btn-retry  { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-kakao  { background: #FEE500; color: #1c1917; }
+    .btn-copy   { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-share  { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-more   { background: var(--c-main); color: var(--c-bg); }
+    .btn-icon   { font-size: 19px; }
+
+    /* ── Ad slot ── */
+    .ad-inline {
+      width: 100%; max-width: 380px;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+
+<nav id="topNav">
+  <button class="nav-btn" id="backBtn" aria-label="뒤로가기">←</button>
+  <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
+</nav>
+
+<!-- ══════ INTRO SCREEN ══════ -->
+<section class="screen active" id="introScreen">
+  <img class="intro-thumb" src="images/battery/0.webp" alt="폰 배터리 성격 테스트" />
+  <h1 class="intro-title">폰 배터리로 보는<br>내 성격</h1>
+  <p class="intro-sub">지금 내 폰 배터리 몇 %야?<br>딱 그것만으로 당신의 성격을 알아봐요.</p>
+  <div class="intro-meta">
+    <span class="meta-pill">🔋 1문항</span>
+    <span class="meta-pill">⚡ 즉시 결과</span>
+    <span class="meta-pill">무료</span>
+  </div>
+  <button class="start-btn" id="startBtn">테스트 시작 →</button>
+
+  <div class="ad-inline" style="margin-top:32px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7327562206502398"
+         data-ad-slot="3769192952"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</section>
+
+<!-- ══════ QUIZ SCREEN ══════ -->
+<section class="screen" id="quizScreen">
+  <div class="quiz-header">
+    <div class="q-subtitle">🔋 Battery Test</div>
+    <div class="q-text">지금 당신의 폰 배터리는 몇 %인가요?</div>
+    <div class="q-hint">지금 바로 확인하고 골라보세요</div>
+  </div>
+
+  <div class="q-image-wrap">
+    <img class="q-image" src="images/battery/0.webp" alt="배터리 질문 이미지" />
+  </div>
+
+  <div class="choices" id="choiceList"></div>
+</section>
+
+<!-- ══════ RESULT SCREEN ══════ -->
+<section class="screen" id="resultScreen">
+  <div class="result-kicker">🔋 당신의 배터리 성격은</div>
+
+  <div class="result-image-wrap">
+    <img class="result-image" id="resultImage" src="" alt="결과 이미지" />
+  </div>
+
+  <h2 class="result-type" id="resultType"></h2>
+  <p class="result-tagline" id="resultTagline"></p>
+  <div class="result-divider"></div>
+
+  <div class="personality-cards" id="personalityCards"></div>
+
+  <div class="ad-inline" style="margin-bottom:16px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7327562206502398"
+         data-ad-slot="3769192952"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <div class="action-btns">
+    <button class="action-btn btn-retry" id="retryBtn">
+      <span class="btn-icon">🔄</span> 다시 하기
+    </button>
+    <button class="action-btn btn-kakao" id="kakaoBtn">
+      <span class="btn-icon">💬</span> 카카오톡 공유
+    </button>
+    <button class="action-btn btn-copy" id="copyBtn">
+      <span class="btn-icon">🔗</span> 링크 복사
+    </button>
+    <button class="action-btn btn-share" id="shareBtn" style="display:none;">
+      <span class="btn-icon">📤</span> 공유하기
+    </button>
+    <a class="action-btn btn-more" href="index.html">
+      <span class="btn-icon">🧠</span> 다른 테스트 보기
+    </a>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<script>
+  /* ── Theme ── */
+  const html    = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) {
+    html.dataset.theme = t;
+    themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', t);
+  }
+  const savedTheme = localStorage.getItem('theme')
+    ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  setTheme(savedTheme);
+  themeBtn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ── Screen Nav ── */
+  const screens = { intro: document.getElementById('introScreen'), quiz: document.getElementById('quizScreen'), result: document.getElementById('resultScreen') };
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => showScreen('quiz'));
+
+  document.getElementById('backBtn').addEventListener('click', () => {
+    if (screens.result.classList.contains('active'))  { showScreen('quiz'); return; }
+    if (screens.quiz.classList.contains('active'))    { showScreen('intro'); return; }
+    window.location.href = 'index.html';
+  });
+
+  /* ── Build Choice Buttons ── */
+  const IMAGE_MAP = { FULL: '1', MID: '2', LOW: '3', DEAD: '4' };
+
+  const choiceList = document.getElementById('choiceList');
+  BATTERY_QUESTION.choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.dataset.id = c.id;
+    btn.innerHTML = `
+      <div class="choice-bar-wrap">
+        <div class="choice-bar" style="height:0; background:${c.color}; width:100%;"></div>
+      </div>
+      <div class="choice-info">
+        <div class="choice-label" style="color:${c.color}">${c.label}</div>
+        <div class="choice-sub">${c.sub}</div>
+      </div>
+      <div class="choice-emoji">${c.emoji}</div>
+    `;
+    btn.addEventListener('click', () => selectChoice(c.id));
+    choiceList.appendChild(btn);
+
+    /* animate bar in after paint */
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      btn.querySelector('.choice-bar').style.height = c.barWidth;
+    }));
+  });
+
+  /* ── Handle Choice ── */
+  function selectChoice(id) {
+    const result = getBatteryResult(id);
+    if (!result) return;
+    renderResult(result, id);
+    showScreen('result');
+    recordParticipation();
+  }
+
+  function renderResult(r, id) {
+    document.documentElement.style.setProperty('--result-color', r.color);
+
+    document.getElementById('resultImage').src = `images/battery/${IMAGE_MAP[id]}.webp`;
+    document.getElementById('resultImage').alt = r.name;
+    document.getElementById('resultType').textContent = r.name;
+    document.getElementById('resultTagline').textContent = r.tagline;
+
+    const cards = document.getElementById('personalityCards');
+    cards.innerHTML = '';
+    r.personality.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'personality-card';
+      card.innerHTML = `
+        <div class="personality-card-title">${p.title}</div>
+        <div class="personality-card-desc">${p.desc}</div>
+      `;
+      cards.appendChild(card);
+    });
+  }
+
+  /* ── Retry ── */
+  document.getElementById('retryBtn').addEventListener('click', () => showScreen('quiz'));
+
+  /* ── Toast ── */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  /* ── Copy Link ── */
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText('https://testlab.tmhub.co.kr/battery.html')
+      .then(() => showToast('링크가 복사됐어요!'))
+      .catch(() => showToast('복사에 실패했어요'));
+  });
+
+  /* ── Web Share API ── */
+  if (navigator.share) {
+    document.getElementById('shareBtn').style.display = '';
+    document.getElementById('shareBtn').addEventListener('click', () => {
+      navigator.share({
+        title: '폰 배터리로 보는 내 성격 — 마음.',
+        text: '내 배터리로 성격을 알아봤더니...😮',
+        url: 'https://testlab.tmhub.co.kr/battery.html'
+      }).catch(() => {});
+    });
+  }
+
+  /* ── Kakao Share ── */
+  document.getElementById('kakaoBtn').addEventListener('click', () => {
+    if (!window.Kakao || !Kakao.isInitialized()) {
+      showToast('카카오 SDK 로딩 중이에요');
+      return;
+    }
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '폰 배터리로 보는 내 성격 — 마음.',
+        description: '지금 내 배터리 %로 성격을 알아봐요!',
+        imageUrl: 'https://testlab.tmhub.co.kr/images/battery/Thumb.webp',
+        link: { mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html', webUrl: 'https://testlab.tmhub.co.kr/battery.html' }
+      },
+      buttons: [{ title: '테스트 하러가기', link: { mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html', webUrl: 'https://testlab.tmhub.co.kr/battery.html' } }]
+    });
+  });
+
+  /* ── Kakao Init ── */
+  if (window.Kakao && !Kakao.isInitialized()) {
+    Kakao.init('YOUR_KAKAO_JS_KEY');
+  }
+
+  /* ── Firebase participation ── */
+  function recordParticipation() {
+    try {
+      import('./firebase-init.js').then(({ db, doc, getDoc, setDoc, updateDoc, increment }) => {
+        const ref = doc(db, 'stats', 'participation');
+        getDoc(ref).then(snap => {
+          if (snap.exists()) updateDoc(ref, { battery: increment(1) });
+          else setDoc(ref, { battery: 1 }, { merge: true });
+        });
+      }).catch(() => {});
+    } catch(_) {}
+  }
+</script>
+</body>
+</html>
