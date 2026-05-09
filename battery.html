@@ -581,6 +581,9 @@
     viewBtn.style.display = 'none';
 
     setTimeout(() => {
+      document.querySelector('#loadingScreen .loading-spinner').style.display = 'none';
+      document.querySelector('#loadingScreen .loading-text').style.display = 'none';
+      document.querySelector('#loadingScreen .loading-dots').style.display = 'none';
       viewBtn.style.display = '';
       viewBtn.onclick = () => showScreen('result');
     }, 2000);
@@ -658,7 +661,13 @@
   });
 
   /* ── Retry ── */
-  document.getElementById('retryBtn').addEventListener('click', () => showScreen('quiz'));
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    document.querySelector('#loadingScreen .loading-spinner').style.display = '';
+    document.querySelector('#loadingScreen .loading-text').style.display = '';
+    document.querySelector('#loadingScreen .loading-dots').style.display = '';
+    document.getElementById('viewResultBtn').style.display = 'none';
+    showScreen('quiz');
+  });
 
   /* ── Toast ── */
   function showToast(msg) {
