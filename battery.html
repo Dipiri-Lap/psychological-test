@@ -28,6 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
     integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
     crossorigin="anonymous"></script>
@@ -110,6 +111,7 @@
     @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes bumpIn  { from { opacity: 0; transform: scale(.45); } to { opacity: 1; transform: scale(1); } }
+    @keyframes pulse   { 0%,100% { opacity:1; } 50% { opacity:.35; } }
 
     /* ══════════════════════════════════════════
        INTRO SCREEN
@@ -157,9 +159,7 @@
     ══════════════════════════════════════════ */
     #quizScreen {
       max-width: 480px; margin: 0 auto; width: 100%;
-      padding: 0;
     }
-
     .quiz-header {
       padding: 76px 24px 0;
       text-align: center;
@@ -170,16 +170,6 @@
       color: var(--c-accent); text-transform: uppercase;
       margin-bottom: 10px;
     }
-    .q-image-wrap {
-      margin: 20px 24px 0;
-      border-radius: 20px; overflow: hidden;
-      box-shadow: var(--shadow);
-      animation: fadeIn .5s .1s ease both;
-    }
-    .q-image {
-      width: 100%; display: block;
-      object-fit: cover;
-    }
     .q-text {
       font-family: 'Nanum Myeongjo', serif;
       font-size: 22px; letter-spacing: -.4px; line-height: 1.55;
@@ -189,6 +179,13 @@
       font-size: 13px; color: var(--c-muted); margin-top: 8px;
       font-weight: 300;
     }
+    .q-image-wrap {
+      margin: 20px 24px 0;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: var(--shadow);
+      animation: fadeIn .5s .1s ease both;
+    }
+    .q-image { width: 100%; display: block; object-fit: cover; }
 
     /* ── Choice Buttons ── */
     .choices {
@@ -203,17 +200,10 @@
       border-radius: var(--r-sm);
       padding: 14px 18px;
       text-align: left;
-      transition:
-        border-color .22s,
-        box-shadow .22s,
-        transform .22s cubic-bezier(.34,1.56,.64,1);
+      transition: border-color .22s, box-shadow .22s, transform .22s cubic-bezier(.34,1.56,.64,1);
       -webkit-tap-highlight-color: transparent;
     }
-    .choice-btn:hover {
-      border-color: var(--c-accent);
-      box-shadow: var(--shadow-hover);
-      transform: translateY(-2px);
-    }
+    .choice-btn:hover { border-color: var(--c-accent); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
     .choice-btn:active { transform: scale(.98); }
 
     .choice-bar-wrap {
@@ -222,22 +212,12 @@
       border-radius: 10px;
       background: var(--c-surf2);
       display: flex; align-items: flex-end;
-      padding: 6px;
-      overflow: hidden;
+      padding: 6px; overflow: hidden;
     }
-    .choice-bar {
-      width: 100%;
-      border-radius: 4px;
-      transition: height .6s cubic-bezier(.22,1,.36,1);
-    }
+    .choice-bar { width: 100%; border-radius: 4px; transition: height .6s cubic-bezier(.22,1,.36,1); }
     .choice-info { flex: 1; }
-    .choice-label {
-      font-size: 15px; font-weight: 700;
-      margin-bottom: 2px;
-    }
-    .choice-sub {
-      font-size: 12px; font-weight: 300; color: var(--c-muted);
-    }
+    .choice-label { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .choice-sub { font-size: 12px; font-weight: 300; color: var(--c-muted); }
     .choice-emoji { font-size: 22px; flex-shrink: 0; }
 
     /* ══════════════════════════════════════════
@@ -250,34 +230,38 @@
     }
     .result-kicker {
       font-size: 11px; font-weight: 700; letter-spacing: 2px;
-      color: var(--c-accent); margin-bottom: 12px;
+      color: var(--c-accent); margin-bottom: 20px;
       opacity: 0; animation: fadeIn .5s .1s ease both;
     }
-    .result-image-wrap {
+
+    /* Share card preview (shown in result) */
+    .share-card-preview {
       width: 100%; max-width: 320px;
-      border-radius: 20px; overflow: hidden;
-      box-shadow: var(--shadow-hover); margin-bottom: 28px;
-      opacity: 0; animation: bumpIn .7s .2s cubic-bezier(.34,1.56,.64,1) both;
+      margin-bottom: 28px;
+      opacity: 0; animation: fadeIn .6s .15s ease both;
     }
-    .result-image {
-      width: 100%; display: block;
-      object-fit: cover;
+    .share-thumb-placeholder {
+      width: 100%; aspect-ratio: 340/480;
+      border-radius: 28px;
+      background: var(--c-surf2);
+      animation: pulse 1.4s ease-in-out infinite;
     }
+    #shareThumb {
+      width: 100%; border-radius: 28px;
+      box-shadow: var(--shadow-hover);
+      display: block;
+    }
+
     .result-type {
       font-family: 'Nanum Myeongjo', serif;
-      font-size: 28px; letter-spacing: -.5px; line-height: 1.3;
+      font-size: 30px; letter-spacing: -.5px; line-height: 1.3;
       margin-bottom: 10px; text-align: center;
       opacity: 0; animation: fadeIn .5s .5s ease both;
-    }
-    .result-tagline {
-      font-size: 14px; font-weight: 300; color: var(--c-muted);
-      font-style: italic; text-align: center; margin-bottom: 32px;
-      opacity: 0; animation: fadeIn .5s .65s ease both;
     }
     .result-divider {
       width: 36px; height: 2px;
       background: var(--c-border); border-radius: 2px;
-      margin: 0 auto 28px;
+      margin: 0 auto 22px;
       opacity: 0; animation: fadeIn .5s .65s ease both;
     }
     .personality-cards {
@@ -290,8 +274,7 @@
       border-radius: var(--r-sm);
       padding: 18px 18px 16px;
       margin-bottom: 10px;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
       transition: background .35s, border-color .35s;
     }
     .personality-card::before {
@@ -301,14 +284,8 @@
       background: var(--result-color, var(--c-accent));
       border-radius: 0 2px 2px 0;
     }
-    .personality-card-title {
-      font-size: 14px; font-weight: 700;
-      margin-bottom: 8px; padding-left: 4px;
-    }
-    .personality-card-desc {
-      font-size: 13px; font-weight: 300; color: var(--c-muted);
-      line-height: 1.8; padding-left: 4px;
-    }
+    .personality-card-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; padding-left: 4px; }
+    .personality-card-desc  { font-size: 13px; font-weight: 300; color: var(--c-muted); line-height: 1.8; padding-left: 4px; }
 
     /* ── Action Buttons ── */
     .action-btns {
@@ -324,17 +301,65 @@
       text-decoration: none; cursor: pointer;
     }
     .action-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .btn-save   { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-retry  { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-kakao  { background: #FEE500; color: #1c1917; }
     .btn-copy   { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
-    .btn-share  { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
     .btn-more   { background: var(--c-main); color: var(--c-bg); }
     .btn-icon   { font-size: 19px; }
 
-    /* ── Ad slot ── */
-    .ad-inline {
-      width: 100%; max-width: 380px;
-      margin: 8px 0;
+    /* ── Ad ── */
+    .ad-inline { width: 100%; max-width: 380px; margin: 8px 0; }
+
+    /* ══════════════════════════════════════════
+       INSTAGRAM-STYLE SHARE CARD (off-screen)
+    ══════════════════════════════════════════ */
+    #shareCard {
+      position: fixed; left: -9999px; top: 0;
+      width: 340px; height: 480px;
+      background: #1c1917;
+      border-radius: 28px; overflow: hidden;
+      display: flex; flex-direction: column;
+      padding: 20px 24px;
+      font-family: 'Noto Sans KR', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .sc-blobs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .sc-blob { position: absolute; border-radius: 50%; }
+    .sc-blob-1 { width: 220px; height: 220px; top: -80px; right: -70px; background: #e85d75; opacity: .18; }
+    .sc-blob-2 { width: 160px; height: 160px; bottom: -60px; left: -40px; background: #e85d75; opacity: .10; }
+    .sc-blob-3 { width: 80px;  height: 80px;  top: 40%;    left: -20px; background: #ff9a3c; opacity: .12; }
+    .sc-inner {
+      position: relative; flex: 1;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .sc-header { display: flex; justify-content: space-between; align-items: center; }
+    .sc-logo { font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #faf8f5; letter-spacing: -1px; }
+    .sc-logo-dot { color: #e85d75; }
+    .sc-tag {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: #e85d75; background: rgba(232,93,117,.14);
+      padding: 5px 12px; border-radius: 100px;
+    }
+    .sc-center {
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center; gap: 10px; flex: 1;
+      justify-content: center;
+    }
+    .sc-thumb-img {
+      width: 100%; height: auto;
+      border-radius: 16px; object-fit: cover; display: block;
+    }
+    .sc-label { font-size: 11px; font-weight: 500; color: rgba(250,248,245,.45); letter-spacing: .3px; }
+    .sc-type {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 24px; color: #faf8f5; letter-spacing: -.5px; line-height: 1.3;
+    }
+    .sc-divider { width: 30px; height: 1.5px; background: rgba(250,248,245,.18); margin: 0 auto; }
+    .sc-desc { font-size: 11.5px; color: rgba(250,248,245,.5); line-height: 1.7; font-weight: 300; max-width: 240px; }
+    .sc-footer {
+      font-size: 10px; color: rgba(250,248,245,.25);
+      font-weight: 500; letter-spacing: .5px; text-align: center;
     }
   </style>
 </head>
@@ -345,9 +370,9 @@
   <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
 </nav>
 
-<!-- ══════ INTRO SCREEN ══════ -->
+<!-- ══════ INTRO ══════ -->
 <section class="screen active" id="introScreen">
-  <img class="intro-thumb" src="images/battery/0.webp" alt="폰 배터리 성격 테스트" />
+  <img class="intro-thumb" src="images/battery/Thumb.webp" alt="폰 배터리 성격 테스트" />
   <h1 class="intro-title">폰 배터리로 보는<br>내 성격</h1>
   <p class="intro-sub">지금 내 폰 배터리 몇 %야?<br>딱 그것만으로 당신의 성격을 알아봐요.</p>
   <div class="intro-meta">
@@ -356,81 +381,96 @@
     <span class="meta-pill">무료</span>
   </div>
   <button class="start-btn" id="startBtn">테스트 시작 →</button>
-
   <div class="ad-inline" style="margin-top:32px;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7327562206502398"
-         data-ad-slot="3769192952"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-7327562206502398" data-ad-slot="3769192952"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 </section>
 
-<!-- ══════ QUIZ SCREEN ══════ -->
+<!-- ══════ QUIZ ══════ -->
 <section class="screen" id="quizScreen">
   <div class="quiz-header">
     <div class="q-subtitle">🔋 Battery Test</div>
     <div class="q-text">지금 당신의 폰 배터리는 몇 %인가요?</div>
     <div class="q-hint">지금 바로 확인하고 골라보세요</div>
   </div>
-
   <div class="q-image-wrap">
     <img class="q-image" src="images/battery/0.webp" alt="배터리 질문 이미지" />
   </div>
-
   <div class="choices" id="choiceList"></div>
 </section>
 
-<!-- ══════ RESULT SCREEN ══════ -->
+<!-- ══════ RESULT ══════ -->
 <section class="screen" id="resultScreen">
-  <div class="result-kicker">🔋 당신의 배터리 성격은</div>
+  <div class="result-kicker">나의 유형은</div>
 
-  <div class="result-image-wrap">
-    <img class="result-image" id="resultImage" src="" alt="결과 이미지" />
+  <!-- Share card preview (html2canvas로 생성) -->
+  <div class="share-card-preview">
+    <div class="share-thumb-placeholder" id="shareThumbPlaceholder"></div>
+    <img id="shareThumb" src="" alt="결과 카드 미리보기" style="display:none" />
   </div>
 
   <h2 class="result-type" id="resultType"></h2>
-  <p class="result-tagline" id="resultTagline"></p>
   <div class="result-divider"></div>
 
   <div class="personality-cards" id="personalityCards"></div>
 
   <div class="ad-inline" style="margin-bottom:16px;">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7327562206502398"
-         data-ad-slot="3769192952"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-7327562206502398" data-ad-slot="3769192952"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <div class="action-btns">
-    <button class="action-btn btn-retry" id="retryBtn">
-      <span class="btn-icon">🔄</span> 다시 하기
+    <button class="action-btn btn-save" id="saveBtn">
+      <span class="btn-icon">💾</span> 결과 이미지 저장
     </button>
     <button class="action-btn btn-kakao" id="kakaoBtn">
-      <span class="btn-icon">💬</span> 카카오톡 공유
+      <span class="btn-icon">💬</span> 카카오톡으로 공유
     </button>
     <button class="action-btn btn-copy" id="copyBtn">
       <span class="btn-icon">🔗</span> 링크 복사
     </button>
-    <button class="action-btn btn-share" id="shareBtn" style="display:none;">
-      <span class="btn-icon">📤</span> 공유하기
+    <button class="action-btn btn-retry" id="retryBtn">
+      <span class="btn-icon">🔄</span> 다시 하기
     </button>
     <a class="action-btn btn-more" href="index.html">
-      <span class="btn-icon">🧠</span> 다른 테스트 보기
+      <span class="btn-icon">✨</span> 다른 테스트 하러 가기
     </a>
   </div>
 </section>
 
 <div id="toast"></div>
 
+<!-- ══════ SHARE CARD (off-screen, html2canvas 캡처용) ══════ -->
+<div id="shareCard" aria-hidden="true">
+  <div class="sc-blobs">
+    <div class="sc-blob sc-blob-1"></div>
+    <div class="sc-blob sc-blob-2"></div>
+    <div class="sc-blob sc-blob-3"></div>
+  </div>
+  <div class="sc-inner">
+    <div class="sc-header">
+      <div class="sc-logo">마음<span class="sc-logo-dot">.</span></div>
+      <div class="sc-tag">폰 배터리 성격</div>
+    </div>
+    <div class="sc-center">
+      <img class="sc-thumb-img" id="scThumbImg" src="" alt="" />
+      <div class="sc-label">나의 유형</div>
+      <div class="sc-type" id="scType"></div>
+      <div class="sc-divider"></div>
+      <div class="sc-desc" id="scDesc"></div>
+    </div>
+    <div class="sc-footer">마음. 심리테스트 · testlab.tmhub.co.kr</div>
+  </div>
+</div>
+
 <script>
   /* ── Theme ── */
-  const html    = document.documentElement;
+  const html = document.documentElement;
   const themeBtn = document.getElementById('themeBtn');
   function setTheme(t) {
     html.dataset.theme = t;
@@ -443,22 +483,24 @@
   themeBtn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
 
   /* ── Screen Nav ── */
-  const screens = { intro: document.getElementById('introScreen'), quiz: document.getElementById('quizScreen'), result: document.getElementById('resultScreen') };
+  const screens = {
+    intro:  document.getElementById('introScreen'),
+    quiz:   document.getElementById('quizScreen'),
+    result: document.getElementById('resultScreen')
+  };
   function showScreen(name) {
     Object.values(screens).forEach(s => s.classList.remove('active'));
     screens[name].classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   document.getElementById('startBtn').addEventListener('click', () => showScreen('quiz'));
-
   document.getElementById('backBtn').addEventListener('click', () => {
-    if (screens.result.classList.contains('active'))  { showScreen('quiz'); return; }
-    if (screens.quiz.classList.contains('active'))    { showScreen('intro'); return; }
+    if (screens.result.classList.contains('active')) { showScreen('quiz'); return; }
+    if (screens.quiz.classList.contains('active'))   { showScreen('intro'); return; }
     window.location.href = 'index.html';
   });
 
-  /* ── Build Choice Buttons ── */
+  /* ── Build Choices ── */
   const IMAGE_MAP = { FULL: '1', MID: '2', LOW: '3', DEAD: '4' };
 
   const choiceList = document.getElementById('choiceList');
@@ -468,7 +510,7 @@
     btn.dataset.id = c.id;
     btn.innerHTML = `
       <div class="choice-bar-wrap">
-        <div class="choice-bar" style="height:0; background:${c.color}; width:100%;"></div>
+        <div class="choice-bar" style="height:0;background:${c.color};width:100%;"></div>
       </div>
       <div class="choice-info">
         <div class="choice-label" style="color:${c.color}">${c.label}</div>
@@ -478,14 +520,12 @@
     `;
     btn.addEventListener('click', () => selectChoice(c.id));
     choiceList.appendChild(btn);
-
-    /* animate bar in after paint */
     requestAnimationFrame(() => requestAnimationFrame(() => {
       btn.querySelector('.choice-bar').style.height = c.barWidth;
     }));
   });
 
-  /* ── Handle Choice ── */
+  /* ── Select Choice ── */
   function selectChoice(id) {
     const result = getBatteryResult(id);
     if (!result) return;
@@ -494,14 +534,21 @@
     recordParticipation();
   }
 
+  /* ── Render Result ── */
   function renderResult(r, id) {
     document.documentElement.style.setProperty('--result-color', r.color);
 
-    document.getElementById('resultImage').src = `images/battery/${IMAGE_MAP[id]}.webp`;
-    document.getElementById('resultImage').alt = r.name;
-    document.getElementById('resultType').textContent = r.name;
-    document.getElementById('resultTagline').textContent = r.tagline;
+    const imgSrc = `images/battery/${IMAGE_MAP[id]}.webp`;
 
+    /* populate share card (off-screen) */
+    document.getElementById('scThumbImg').src = imgSrc;
+    document.getElementById('scType').textContent = r.name;
+    document.getElementById('scDesc').textContent = r.tagline;
+
+    /* result text */
+    document.getElementById('resultType').textContent = r.name;
+
+    /* personality cards */
     const cards = document.getElementById('personalityCards');
     cards.innerHTML = '';
     r.personality.forEach(p => {
@@ -513,7 +560,50 @@
       `;
       cards.appendChild(card);
     });
+
+    /* reset placeholder */
+    document.getElementById('shareThumb').style.display = 'none';
+    document.getElementById('shareThumbPlaceholder').style.display = '';
+
+    /* generate card image after image loads */
+    const img = document.getElementById('scThumbImg');
+    if (img.complete) {
+      generateThumb();
+    } else {
+      img.onload = generateThumb;
+    }
   }
+
+  /* ── html2canvas: generate share card thumbnail ── */
+  async function generateThumb() {
+    if (typeof html2canvas === 'undefined') return;
+    try {
+      const canvas = await html2canvas(document.getElementById('shareCard'), {
+        scale: 1.5,
+        useCORS: true,
+        backgroundColor: null,
+        logging: false,
+      });
+      const thumb = document.getElementById('shareThumb');
+      thumb.src = canvas.toDataURL('image/png');
+      thumb.style.display = 'block';
+      document.getElementById('shareThumbPlaceholder').style.display = 'none';
+    } catch (_) {}
+  }
+
+  /* ── Save image ── */
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (typeof html2canvas === 'undefined') { showToast('저장 기능을 불러오는 중이에요'); return; }
+    try {
+      const canvas = await html2canvas(document.getElementById('shareCard'), {
+        scale: 2, useCORS: true, backgroundColor: null, logging: false,
+      });
+      const a = document.createElement('a');
+      a.download = '배터리성격테스트_결과.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    } catch (_) { showToast('저장에 실패했어요'); }
+  });
 
   /* ── Retry ── */
   document.getElementById('retryBtn').addEventListener('click', () => showScreen('quiz'));
@@ -533,18 +623,6 @@
       .catch(() => showToast('복사에 실패했어요'));
   });
 
-  /* ── Web Share API ── */
-  if (navigator.share) {
-    document.getElementById('shareBtn').style.display = '';
-    document.getElementById('shareBtn').addEventListener('click', () => {
-      navigator.share({
-        title: '폰 배터리로 보는 내 성격 — 마음.',
-        text: '내 배터리로 성격을 알아봤더니...😮',
-        url: 'https://testlab.tmhub.co.kr/battery.html'
-      }).catch(() => {});
-    });
-  }
-
   /* ── Kakao Share ── */
   document.getElementById('kakaoBtn').addEventListener('click', () => {
     if (!window.Kakao || !Kakao.isInitialized()) {
@@ -557,9 +635,15 @@
         title: '폰 배터리로 보는 내 성격 — 마음.',
         description: '지금 내 배터리 %로 성격을 알아봐요!',
         imageUrl: 'https://testlab.tmhub.co.kr/images/battery/Thumb.webp',
-        link: { mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html', webUrl: 'https://testlab.tmhub.co.kr/battery.html' }
+        link: {
+          mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html',
+          webUrl: 'https://testlab.tmhub.co.kr/battery.html'
+        }
       },
-      buttons: [{ title: '테스트 하러가기', link: { mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html', webUrl: 'https://testlab.tmhub.co.kr/battery.html' } }]
+      buttons: [{ title: '테스트 하러가기', link: {
+        mobileWebUrl: 'https://testlab.tmhub.co.kr/battery.html',
+        webUrl: 'https://testlab.tmhub.co.kr/battery.html'
+      }}]
     });
   });
 
@@ -568,7 +652,7 @@
     Kakao.init('YOUR_KAKAO_JS_KEY');
   }
 
-  /* ── Firebase participation ── */
+  /* ── Firebase ── */
   function recordParticipation() {
     try {
       import('./firebase-init.js').then(({ db, doc, getDoc, setDoc, updateDoc, increment }) => {
@@ -578,7 +662,7 @@
           else setDoc(ref, { battery: 1 }, { merge: true });
         });
       }).catch(() => {});
-    } catch(_) {}
+    } catch (_) {}
   }
 </script>
 </body>
