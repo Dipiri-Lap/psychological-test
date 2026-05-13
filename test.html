@@ -1883,7 +1883,7 @@ function showResult() {
   }
 
   // Populate result screen
-  document.getElementById('resultDesc').textContent = res.desc;
+  document.getElementById('resultDesc').innerHTML = res.desc;
 
   // Populate share card (off-screen)
   const cardText = res.tagline || (res.desc.length > 55 ? res.desc.slice(0, 55) + '…' : res.desc);
