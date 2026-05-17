@@ -86,6 +86,10 @@
   <!-- ── Weather Data ─────────────────────────────── -->
   <script src="tests/weather/weather-test.js"></script>
 
+  <!-- ── Kkondae Data ──────────────────────────────── -->
+  <script src="tests/kkondae/kkondae-test.js"></script>
+  <script src="tests/kkondae/kkondae-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -716,6 +720,69 @@
       color: var(--c-muted); line-height: 1.8;
     }
 
+    /* ── Kkondae Chart ──────────────────────────────── */
+    #kkondaeStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .kkondae-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .kkondae-total-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--c-muted);
+      padding: 4px 0;
+    }
+    .kkondae-total-pct {
+      font-size: 20px; font-weight: 800;
+      color: var(--c-text);
+    }
+    .kkondae-divider {
+      height: 6px; background: var(--c-text);
+      border-radius: 3px; margin: 10px 0 16px;
+    }
+    .kkondae-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .kkondae-row:last-of-type { border-bottom: none; }
+    .kkondae-row-main { background: var(--c-surf2); border-radius: 10px; padding: 8px 6px; margin: 0 -6px; }
+    .kkondae-row-label { display: flex; align-items: center; gap: 8px; }
+    .kkondae-row-emoji { font-size: 18px; flex-shrink: 0; }
+    .kkondae-row-info { display: flex; flex-direction: column; }
+    .kkondae-row-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .kkondae-row-desc { font-size: 11px; color: var(--c-muted); line-height: 1.4; }
+    .kkondae-bar-wrap {
+      height: 8px; background: var(--c-surf2);
+      border-radius: 4px; overflow: hidden;
+    }
+    .kkondae-bar {
+      height: 100%; border-radius: 4px;
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .kkondae-pct {
+      font-size: 13px; font-weight: 700;
+      min-width: 36px; text-align: right;
+    }
+    .kkondae-footer {
+      margin-top: 12px;
+      font-size: 12px; color: var(--c-muted);
+      text-align: center; line-height: 1.6;
+    }
+
     /* ── Dimension Analysis ────────────────────────── */
     .dim-analysis {
       width: 100%; max-width: 480px;
@@ -1208,6 +1275,9 @@
 
   <!-- 집착 레벨 뱃지/점수 카드 -->
   <div class="finger-traits" id="obsessionStats" style="display:none"></div>
+
+  <!-- 꼰대 성분 분석표 -->
+  <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 핑거러브 특성 카드 (fingerlove에서만 표시) -->
   <div class="finger-traits" id="fingerTraits" style="display:none">
