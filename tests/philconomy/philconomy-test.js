@@ -216,7 +216,7 @@ window.TEST_CONFIGS['philconomy'] = {
     title: "필코노미 지수 테스트",
     emoji: "💳",
     thumb: "images/philconomy/thumb.webp",
-    subtitle: "나는 감정으로 얼마나 소비할까? (10문항)",
+    subtitle: "내 지갑을 여는 건 이성인가 감정인가? (10문항)",
     questions: PHILCONOMY_QUESTIONS.map(q => ({
       q: q.question,
       choices: q.choices.map(c => ({
