@@ -93,6 +93,10 @@
   <!-- ── Philconomy Data ──────────────────────────── -->
   <script src="tests/philconomy/philconomy-test.js"></script>
 
+  <!-- ── Travel Data ───────────────────────────────── -->
+  <script src="tests/travel/travel_compatibility_test.js"></script>
+  <script src="tests/travel/travel-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -786,6 +790,102 @@
       text-align: center; line-height: 1.6;
     }
 
+    /* ── Travel Stats ──────────────────────────────── */
+    #travelStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .travel-my-type {
+      text-align: center;
+      padding-bottom: 16px;
+      border-bottom: 1.5px solid var(--c-border);
+      margin-bottom: 16px;
+    }
+    .travel-my-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--c-accent); text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .travel-my-name {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; font-weight: 800;
+      color: var(--c-text); letter-spacing: -.3px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .travel-my-emoji { font-size: 26px; }
+    .travel-chart-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 12px;
+    }
+    .travel-keywords {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 6px; margin-bottom: 16px;
+    }
+    .travel-keyword {
+      background: var(--c-surf2);
+      border: 1.5px solid var(--c-border);
+      border-radius: 100px;
+      font-size: 12px; font-weight: 600;
+      padding: 4px 12px; color: var(--c-muted);
+    }
+    .travel-axis {
+      margin-bottom: 14px;
+    }
+    .travel-axis-header {
+      display: flex; justify-content: space-between;
+      font-size: 12px; font-weight: 600; color: var(--c-text);
+      margin-bottom: 6px;
+    }
+    .travel-axis-track {
+      height: 10px; background: var(--c-surf2);
+      border-radius: 5px; overflow: hidden;
+    }
+    .travel-axis-fill {
+      height: 100%; background: var(--c-accent);
+      border-radius: 5px;
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .travel-axis-pcts {
+      display: flex; justify-content: space-between;
+      font-size: 12px; font-weight: 700;
+      margin-top: 4px; color: var(--c-muted);
+    }
+    .travel-match-section {
+      background: var(--c-surf2);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+    .travel-tough-section {
+      border-left: 3px solid #E74C3C;
+    }
+    .travel-match-label-row {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .5px; color: var(--c-muted);
+      margin-bottom: 6px;
+    }
+    .travel-match-type-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 8px;
+    }
+    .travel-match-emoji { font-size: 22px; }
+    .travel-match-name {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--c-text);
+    }
+    .travel-match-desc {
+      font-size: 12px; color: var(--c-muted);
+      line-height: 1.7; font-weight: 300;
+    }
+
     /* ── Dimension Analysis ────────────────────────── */
     .dim-analysis {
       width: 100%; max-width: 480px;
@@ -1282,6 +1382,9 @@
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 여행 메이트 유형 분석 -->
+  <div id="travelStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 핑거러브 특성 카드 (fingerlove에서만 표시) -->
   <div class="finger-traits" id="fingerTraits" style="display:none">
     <div class="finger-traits-title">나의 연애 스타일 분석</div>
@@ -1752,6 +1855,7 @@ function updateSEO() {
     sleeplove:  '수면 자세 심리테스트, 잠자는 자세 연애 스타일, 수면 유형',
     pein:         '폐인 테스트, 갓생 테스트, 게으름 지수, 폐인력 측정, 자기계발 심리테스트',
     kakaotalklove:'카톡 연애 유형 테스트, 카카오톡 답장 스타일, 연애 유형 테스트, 카톡 심리테스트',
+    travel:       '여행 궁합 테스트, 여행 메이트 유형, 여행 스타일 테스트, 여행 동행 궁합',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
