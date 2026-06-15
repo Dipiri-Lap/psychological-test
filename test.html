@@ -836,26 +836,21 @@
       padding: 4px 12px; color: var(--c-muted);
     }
     .travel-axis {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .travel-axis-header {
       display: flex; justify-content: space-between;
-      font-size: 12px; font-weight: 600; color: var(--c-text);
-      margin-bottom: 6px;
+      font-size: 13px; font-weight: 500; color: var(--c-text);
+      margin-bottom: 7px;
     }
-    .travel-axis-track {
-      height: 10px; background: var(--c-surf2);
-      border-radius: 5px; overflow: hidden;
+    .travel-axis-header strong { font-weight: 800; }
+    .travel-axis-track-split {
+      display: flex; height: 11px; border-radius: 6px; overflow: hidden;
+      gap: 2px;
     }
-    .travel-axis-fill {
-      height: 100%; background: var(--c-accent);
-      border-radius: 5px;
-      transition: width .6s cubic-bezier(.22,1,.36,1);
-    }
-    .travel-axis-pcts {
-      display: flex; justify-content: space-between;
-      font-size: 12px; font-weight: 700;
-      margin-top: 4px; color: var(--c-muted);
+    .travel-axis-track-split > div {
+      height: 100%;
+      min-width: 0;
     }
     .travel-match-section {
       background: var(--c-surf2);

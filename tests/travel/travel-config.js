@@ -78,32 +78,26 @@ window.TEST_CONFIGS['travel'] = {
         ${keywordBadges ? `<div class="travel-keywords">${keywordBadges}</div>` : ''}
       </div>
 
-      <div class="travel-chart-title">스타일 분석</div>
+      <div class="travel-chart-title">두 축에서 어느 쪽에 가까운지 보여드려요</div>
       <div class="travel-axis">
         <div class="travel-axis-header">
-          <span>📋 계획형</span>
-          <span>🎲 즉흥형</span>
+          <span style="color:#4A90D9">📋 계획형 <strong>${percentages.계획}%</strong></span>
+          <span style="color:#E8943A"><strong>${percentages.즉흥}%</strong> 즉흥형 🎲</span>
         </div>
-        <div class="travel-axis-track">
-          <div class="travel-axis-fill" style="width:${percentages.계획}%"></div>
-        </div>
-        <div class="travel-axis-pcts">
-          <span>${percentages.계획}%</span>
-          <span>${percentages.즉흥}%</span>
+        <div class="travel-axis-track-split">
+          <div style="flex:${percentages.계획}; background:#4A90D9; border-radius:${percentages.즉흥 === 0 ? '5px' : '5px 0 0 5px'}"></div>
+          <div style="flex:${percentages.즉흥}; background:#E8943A; border-radius:${percentages.계획 === 0 ? '5px' : '0 5px 5px 0'}"></div>
         </div>
       </div>
 
       <div class="travel-axis">
         <div class="travel-axis-header">
-          <span>🏃 활동형</span>
-          <span>😴 휴식형</span>
+          <span style="color:#E74C3C">🏃 활동형 <strong>${percentages.활동}%</strong></span>
+          <span style="color:#27AE60"><strong>${percentages.휴식}%</strong> 휴식형 😴</span>
         </div>
-        <div class="travel-axis-track">
-          <div class="travel-axis-fill" style="width:${percentages.활동}%"></div>
-        </div>
-        <div class="travel-axis-pcts">
-          <span>${percentages.활동}%</span>
-          <span>${percentages.휴식}%</span>
+        <div class="travel-axis-track-split">
+          <div style="flex:${percentages.활동}; background:#E74C3C; border-radius:${percentages.휴식 === 0 ? '5px' : '5px 0 0 5px'}"></div>
+          <div style="flex:${percentages.휴식}; background:#27AE60; border-radius:${percentages.활동 === 0 ? '5px' : '0 5px 5px 0'}"></div>
         </div>
       </div>
 
