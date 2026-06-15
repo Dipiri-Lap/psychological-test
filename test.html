@@ -886,6 +886,74 @@
       line-height: 1.7; font-weight: 300;
     }
 
+    /* ── Travel Compat Checker ─────────────────────── */
+    #travelCompatChecker {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.2s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .travel-compat-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      letter-spacing: -.3px;
+      margin-bottom: 4px;
+    }
+    .travel-compat-sub {
+      font-size: 13px; color: var(--c-muted);
+      margin-bottom: 16px;
+    }
+    .travel-compat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .travel-compat-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 14px;
+      background: var(--c-surface);
+      border: 1.5px solid var(--c-border);
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px; font-weight: 600;
+      color: var(--c-text);
+      text-align: left;
+      transition: border-color .2s, background .2s, color .2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .travel-compat-btn:hover {
+      border-color: var(--c-accent);
+    }
+    .travel-compat-btn.selected {
+      border-color: var(--c-accent);
+      border-width: 2px;
+      background: rgba(232,93,117,.06);
+      color: var(--c-accent);
+    }
+    .travel-compat-btn-emoji { font-size: 20px; flex-shrink: 0; }
+    .travel-compat-result {
+      background: var(--c-surf2);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      animation: fadeIn .25s ease both;
+    }
+    .travel-compat-result-header {
+      font-size: 12px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 8px;
+    }
+    .travel-compat-result-header span { color: var(--c-text); }
+    .travel-compat-result-text {
+      font-size: 13px; color: var(--c-text);
+      line-height: 1.75; font-weight: 300;
+    }
+
     /* ── Dimension Analysis ────────────────────────── */
     .dim-analysis {
       width: 100%; max-width: 480px;
@@ -1384,6 +1452,9 @@
 
   <!-- 여행 메이트 유형 분석 -->
   <div id="travelStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 동행 궁합 체커 -->
+  <div id="travelCompatChecker" style="display:none; margin-top:16px;"></div>
 
   <!-- 핑거러브 특성 카드 (fingerlove에서만 표시) -->
   <div class="finger-traits" id="fingerTraits" style="display:none">

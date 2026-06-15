@@ -127,6 +127,51 @@ window.TEST_CONFIGS['travel'] = {
       </div>` : ''}
     `;
     container.style.display = 'block';
+
+    // 동행 궁합 체커
+    const checker = document.getElementById('travelCompatChecker');
+    if (!checker) return;
+
+    checker.innerHTML = `
+      <div class="travel-compat-title">동행 궁합 보기</div>
+      <p class="travel-compat-sub">같이 가는 사람의 유형을 선택해보세요</p>
+      <div class="travel-compat-grid">
+        ${Object.entries(TRAVEL_TYPES).map(([key, t]) => `
+          <button class="travel-compat-btn" data-type="${key}">
+            <span class="travel-compat-btn-emoji">${t.emoji}</span>
+            <span>${t.name}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="travel-compat-result" id="travelCompatResult" style="display:none">
+        <div class="travel-compat-result-header" id="travelCompatHeader"></div>
+        <p class="travel-compat-result-text" id="travelCompatText"></p>
+      </div>
+    `;
+    checker.style.display = 'block';
+
+    checker.querySelectorAll('.travel-compat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        checker.querySelectorAll('.travel-compat-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+
+        const selectedType = btn.dataset.type;
+        const pairKey = [winner, selectedType].sort().join('_');
+        const compatText = TRAVEL_COMPATIBILITY[pairKey] || '';
+        const myInfo = TRAVEL_TYPES[winner];
+        const selInfo = TRAVEL_TYPES[selectedType];
+
+        document.getElementById('travelCompatHeader').innerHTML =
+          `${myInfo.emoji} × ${selInfo.emoji} <span>궁합 결과</span>`;
+        document.getElementById('travelCompatText').textContent = compatText;
+
+        const resultEl = document.getElementById('travelCompatResult');
+        resultEl.style.display = 'block';
+        resultEl.style.animation = 'none';
+        void resultEl.offsetWidth;
+        resultEl.style.animation = '';
+      });
+    });
   },
 
   getShareImage(winner) {
