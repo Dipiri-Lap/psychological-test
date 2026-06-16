@@ -1,4 +1,4 @@
-// ai-config.js — AI 의존도 분석표 테스트
+// ai-config.js — AI 의존도 테스트 테스트
 // 의존: ai_dependency_test.js (AI_QUESTIONS, AI_COMPONENTS, AI_GRADES, calcAiDependency)
 
 window.TEST_CONFIGS = window.TEST_CONFIGS || {};
@@ -13,7 +13,7 @@ const _AI_GRADE_BG = {
 
 window.TEST_CONFIGS['ai'] = {
   data: {
-    title: "AI 의존도 분석표",
+    title: "AI 의존도 테스트",
     emoji: "🤖",
     thumb: "images/ai/thumb.webp",
     subtitle: "나의 AI 의존도를 5가지 성분으로 분석합니다 (12문항)",
@@ -88,7 +88,7 @@ window.TEST_CONFIGS['ai'] = {
     }).join('');
 
     container.innerHTML = `
-      <div class="ai-chart-title">AI 의존도 분석표</div>
+      <div class="ai-chart-title">AI 의존도 테스트</div>
       <div class="ai-total-row">
         <span class="ai-total-label">총 의존 지수</span>
         <span class="ai-total-pct">${result.totalPct}%</span>
