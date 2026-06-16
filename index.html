@@ -63,7 +63,8 @@
       { "@type": "ListItem", "position": 11, "name": "폰 배터리로 보는 내 성격", "url": "https://testlab.tmhub.co.kr/battery.html" },
       { "@type": "ListItem", "position": 12, "name": "꼰대 성분 분석표", "url": "https://testlab.tmhub.co.kr/test.html?id=kkondae" },
       { "@type": "ListItem", "position": 13, "name": "나의 여행 메이트 유형", "url": "https://testlab.tmhub.co.kr/test.html?id=travel" },
-      { "@type": "ListItem", "position": 14, "name": "AI 의존도 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=ai" }
+      { "@type": "ListItem", "position": 14, "name": "AI 의존도 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=ai" },
+      { "@type": "ListItem", "position": 15, "name": "나의 학습 유형 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=study" }
     ]
   }
   </script>
@@ -477,6 +478,7 @@
     { id:"philconomy", emoji:"💳", title:"필코노미 지수 테스트", desc:"내 지갑을 여는 건 이성인가 감정인가? (10문항)", category:"재미", count:1823, thumb:"images/philconomy/thumb.webp" },
     { id:"travel", emoji:"✈️", title:"나의 여행 메이트 유형", desc:"계획형? 즉흥형? 나의 여행 스타일과 동행 궁합 (12문항)", category:"재미", count:1125, thumb:"images/travel/thumb.webp" },
     { id:"ai", emoji:"🤖", title:"AI 의존도 테스트", desc:"나의 AI 의존도를 5가지 성분으로 분석합니다 (12문항)", category:"재미", count:2347, thumb:"images/ai/thumb.webp" },
+    { id:"study", emoji:"📚", title:"나의 학습 유형 테스트", desc:"시각형? 청각형? 체험형? 나에게 맞는 공부법 찾기 (20문항)", category:"성격", count:3742, thumb:"images/study/thumb.webp" },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -677,7 +679,8 @@
     kkondae: 1347,
     philconomy: 1823,
     travel: 1125,
-    ai: 2347
+    ai: 2347,
+    study: 3742
   };
 
   // Sync with Firestore
@@ -690,7 +693,7 @@
       });
     } else {
       // Initialize Firestore with 0 if it doesn't exist
-      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347 });
+      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347, study: 3742 });
     }
   });
 

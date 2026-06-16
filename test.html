@@ -101,6 +101,10 @@
   <script src="tests/ai/ai_dependency_test.js"></script>
   <script src="tests/ai/ai-config.js"></script>
 
+  <!-- ── Study(VARK) Data ──────────────────────────── -->
+  <script src="tests/study/vark_learning_test.js"></script>
+  <script src="tests/study/vark-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -869,6 +873,67 @@
     }
     .ai-footer b { color: var(--c-text); }
 
+    /* ── VARK Study Stats ───────────────────────────── */
+    #varkStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .vark-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 10px;
+    }
+    .vark-divider {
+      height: 5px; background: var(--c-text);
+      border-radius: 3px; margin: 0 0 14px;
+    }
+    .vark-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .vark-row:last-of-type { border-bottom: none; }
+    .vark-row-primary  { background: var(--c-surf2); border-radius: 10px; padding: 10px 8px; margin: 0 -8px 4px; border-bottom: none; }
+    .vark-row-secondary { opacity: .85; }
+    .vark-row-left { display: flex; align-items: center; gap: 8px; }
+    .vark-row-emoji { font-size: 20px; flex-shrink: 0; }
+    .vark-row-info { display: flex; flex-direction: column; }
+    .vark-row-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .vark-row-badge { font-size: 10px; font-weight: 600; color: var(--c-accent); margin-left: 4px; }
+    .vark-row-keyword { font-size: 10px; color: var(--c-muted); margin-top: 1px; line-height: 1.4; }
+    .vark-bar-wrap {
+      height: 8px; background: var(--c-surf2);
+      border-radius: 4px; overflow: hidden;
+    }
+    .vark-bar {
+      height: 100%; border-radius: 4px;
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .vark-pct { font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; }
+    .vark-combo {
+      background: var(--c-surf2); border-radius: 12px;
+      padding: 12px 14px; margin-top: 14px;
+    }
+    .vark-combo-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 4px; }
+    .vark-combo-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    .vark-tip {
+      display: flex; flex-direction: column; gap: 4px;
+      border-top: 1px solid var(--c-border);
+      margin-top: 14px; padding-top: 12px;
+    }
+    .vark-tip-label { font-size: 12px; font-weight: 700; color: var(--c-text); }
+    .vark-tip-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1557,6 +1622,9 @@
   <!-- AI 의존도 테스트 -->
   <div id="aiStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- VARK 학습 유형 테스트 -->
+  <div id="varkStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2044,6 +2112,7 @@ function updateSEO() {
     kakaotalklove:'카톡 연애 유형 테스트, 카카오톡 답장 스타일, 연애 유형 테스트, 카톡 심리테스트',
     travel:       '여행 궁합 테스트, 여행 메이트 유형, 여행 스타일 테스트, 여행 동행 궁합',
     ai:           'AI 의존도 테스트, AI 중독 테스트, AI 의존 지수, 챗GPT 의존도, AI 습관 분석',
+    study:        '학습 유형 테스트, VARK 테스트, 공부 스타일 테스트, 시각형 청각형 체험형, 나에게 맞는 공부법',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;

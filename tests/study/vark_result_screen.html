@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VARK 학습유형 분석표</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+    background: #F7F3EC;
+    color: #2B2B2B;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 480px; margin: 0 auto; padding: 20px 18px 60px; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: #fff;
+    border: none; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor: pointer;
+  }
+  .demo-switcher { display: flex; gap: 4px; background: #fff; border-radius: 999px; padding: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .demo-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: none; background: transparent;
+    font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .demo-btn.active { background: var(--active-bg); }
+
+  h1 { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .subtitle { text-align: center; font-size: 12px; color: #B0A89B; margin-bottom: 22px; }
+
+  /* 유형 카드 */
+  .type-card { border-radius: 24px; padding: 24px; margin-bottom: 16px; border: 1px solid; }
+  .type-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .type-icon {
+    width: 62px; height: 62px; border-radius: 18px; background: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 30px;
+    border: 2px solid; flex-shrink: 0;
+  }
+  .type-tagline { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .type-name { font-size: 20px; font-weight: 800; color: #2B2B2B; }
+  .type-desc { font-size: 14px; line-height: 1.65; color: #6B645A; margin-bottom: 16px; }
+  .keywords { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .keyword-pill { font-size: 12px; font-weight: 600; color: #fff; padding: 5px 12px; border-radius: 999px; }
+  .tip-box { background: #fff; border-radius: 14px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: #4A453E; }
+  .tip-label { font-size: 11px; font-weight: 700; color: #B0A89B; margin-bottom: 4px; display: block; }
+
+  /* 점수 분포 카드 */
+  .card { background: #fff; border-radius: 24px; padding: 22px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+  .card-title { font-size: 17px; font-weight: 800; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; color: #B0A89B; margin-bottom: 16px; }
+
+  .score-row { padding: 12px 0; border-bottom: 1px solid #F0EBE3; }
+  .score-row:last-child { border-bottom: none; }
+  .score-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .score-name { font-size: 14px; font-weight: 700; }
+  .score-name .badge { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; color: #fff; margin-left: 6px; }
+  .score-pct { font-size: 15px; font-weight: 800; }
+  .score-bar-track { height: 7px; border-radius: 999px; background: #EFE9DF; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+
+  /* 조합 노트 */
+  .combo-box { border-radius: 16px; padding: 16px; background: #F7F3EC; }
+  .combo-title { font-size: 12px; font-weight: 700; color: #B0A89B; margin-bottom: 6px; }
+  .combo-text { font-size: 14px; line-height: 1.6; color: #4A453E; }
+
+  .share-row { display: flex; gap: 10px; margin-top: 4px; }
+  .share-btn {
+    flex: 1; padding: 13px; border-radius: 14px; border: none; font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+  .share-btn.primary { background: #2B2B2B; color: #fff; }
+  .share-btn.secondary { background: #fff; color: #2B2B2B; border: 1px solid #E5DFD3; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <button class="icon-btn" onclick="history.back()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8378" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="demo-switcher" id="demoSwitcher"></div>
+    </div>
+
+    <h1>VARK 학습유형 분석표</h1>
+    <p class="subtitle">나는 어떻게 배울 때 제일 잘될까?</p>
+
+    <div class="type-card" id="typeCard"></div>
+
+    <div class="card">
+      <div class="card-title">유형별 점수 분포</div>
+      <div class="card-sub">4가지 학습 채널 중 어디에 강한지 보여드려요</div>
+      <div id="scoreList"></div>
+    </div>
+
+    <div class="card">
+      <div class="combo-box" id="comboBox"></div>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn secondary" onclick="alert('다시 테스트하기')">다시 테스트</button>
+      <button class="share-btn primary" onclick="alert('결과 공유하기')">결과 공유하기</button>
+    </div>
+  </div>
+
+<script>
+  // ============================================
+  // 데이터 (vark_learning_test.js 와 동일)
+  // ============================================
+  const VARK_TYPES = {
+    V: {
+      emoji: "👀", name: "시각형 학습자", tagline: "그림 없으면 이해가 안 돼",
+      desc: "도식, 그래프, 색깔, 이미지로 정보를 정리해야 머릿속에 들어오는 타입. 글로만 된 설명보다 다이어그램 한 장이 훨씬 빠르게 이해돼요. 마인드맵이나 색깔 펜으로 정리하는 걸 좋아해요.",
+      keywords: ["다이어그램", "색깔정리", "이미지기억"], color: "#2980B9",
+      tip: "복잡한 내용은 도표나 마인드맵으로 먼저 그려보세요. 색깔별 분류만으로도 기억률이 확 올라가요."
+    },
+    A: {
+      emoji: "👂", name: "청각형 학습자", tagline: "들어야, 말해야 이해돼",
+      desc: "강의를 듣거나 소리내어 말하면서 학습할 때 가장 효율이 높은 타입. 혼자 조용히 읽기보다 누군가에게 설명하거나 토론하면서 개념이 정리돼요. 팟캐스트, 강의 영상 음성만 들어도 흡수가 잘 돼요.",
+      keywords: ["강의청취", "소리내어읽기", "토론학습"], color: "#F39C12",
+      tip: "공부한 내용을 누군가에게 설명해보거나, 소리내어 읽으면서 복습하면 정착률이 훨씬 좋아져요."
+    },
+    R: {
+      emoji: "📖", name: "읽기-쓰기형 학습자", tagline: "직접 써봐야 외워져",
+      desc: "텍스트를 읽고 직접 노트에 정리하면서 학습 효율이 가장 높은 타입. 요약 노트, 필기, 리스트 작성을 통해 정보를 체계화하는 걸 선호해요. 영상보다 글이 더 편한 경우가 많아요.",
+      keywords: ["노트정리", "요약필기", "텍스트독해"], color: "#27AE60",
+      tip: "들은 내용을 그냥 넘기지 말고 직접 손으로 요약 노트를 써보세요. 쓰는 과정 자체가 기억을 만들어줘요."
+    },
+    K: {
+      emoji: "🙌", name: "체험형 학습자", tagline: "직접 해봐야 내 것이 돼",
+      desc: "이론보다 실습, 설명보다 직접 시행착오를 겪으며 배우는 타입. 가만히 앉아 읽거나 듣기보다 몸을 움직이거나 손으로 만지며 학습할 때 훨씬 잘 기억해요. 체험·실습 중심 활동에서 빛을 발해요.",
+      keywords: ["실습중심", "시행착오", "직접체험"], color: "#E74C3C",
+      tip: "이론을 먼저 다 이해하려 하지 말고, 일단 작게 직접 해보면서 배우는 방식이 더 잘 맞아요."
+    }
+  };
+
+  const VARK_COMBO_NOTES = {
+    A_V: "보고 들을 때 시너지가 나는 조합이에요. 그림과 설명이 함께 있는 자료(영상 강의, 인포그래픽 해설)가 가장 잘 맞아요.",
+    R_V: "보고 읽을 때 강한 조합이에요. 텍스트와 도식이 함께 있는 자료(다이어그램이 포함된 글)가 효율적이에요.",
+    K_V: "보고 직접 해볼 때 시너지가 나는 조합이에요. 그림으로 먼저 구조를 이해한 다음 바로 실습해보는 방식이 잘 맞아요.",
+    A_R: "듣고 읽을 때 강한 조합이에요. 강의를 들으면서 동시에 노트를 정리하면 정착률이 가장 높아요.",
+    A_K: "듣고 움직일 때 시너지가 나는 조합이에요. 설명을 들으며 직접 따라 해보는 방식(요리, 운동 등)이 잘 맞아요.",
+    K_R: "읽고 직접 해볼 때 강한 조합이에요. 글로 먼저 원리를 파악한 다음 실습으로 옮기는 방식이 효율적이에요."
+  };
+
+  // 데모용 4가지 프리셋 (실제 연동 시 calcVarkType(answers) 결과로 교체)
+  const DEMO_RESULTS = {
+    V: { totals: { V: 13, A: 4, R: 2, K: 1 } },
+    A: { totals: { A: 12, V: 3, R: 3, K: 2 } },
+    R: { totals: { R: 11, V: 3, A: 2, K: 4 } },
+    K: { totals: { K: 14, V: 2, A: 2, R: 2 } }
+  };
+
+  let currentType = "V";
+
+  function getComboNote(typeA, typeB) {
+    if (typeA === typeB) return null;
+    const key = [typeA, typeB].sort().join("_");
+    return VARK_COMBO_NOTES[key];
+  }
+
+  function calcDisplay(totals) {
+    const maxScore = 20;
+    const percentages = {};
+    Object.keys(totals).forEach(k => percentages[k] = Math.round((totals[k] / maxScore) * 100));
+    const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+    return { percentages, primaryType: sorted[0][0], secondaryType: sorted[1][0] };
+  }
+
+  function renderDemoSwitcher() {
+    const sw = document.getElementById("demoSwitcher");
+    sw.innerHTML = Object.entries(VARK_TYPES).map(([code, t]) => `
+      <button class="demo-btn ${code === currentType ? "active" : ""}" style="--active-bg:${t.color}20" onclick="setType('${code}')">${t.emoji}</button>
+    `).join("");
+  }
+
+  function setType(code) {
+    currentType = code;
+    render();
+  }
+
+  function renderTypeCard(t) {
+    const card = document.getElementById("typeCard");
+    card.style.background = t.color + "14";
+    card.style.borderColor = t.color + "30";
+    card.innerHTML = `
+      <div class="type-header">
+        <div class="type-icon" style="border-color:${t.color}">${t.emoji}</div>
+        <div>
+          <div class="type-tagline" style="color:${t.color}">${t.tagline}</div>
+          <div class="type-name">${t.name}</div>
+        </div>
+      </div>
+      <p class="type-desc">${t.desc}</p>
+      <div class="keywords">
+        ${t.keywords.map(k => `<span class="keyword-pill" style="background:${t.color}">#${k}</span>`).join("")}
+      </div>
+      <div class="tip-box">
+        <span class="tip-label">💡 이렇게 공부해보세요</span>
+        ${t.tip}
+      </div>
+    `;
+  }
+
+  function renderScoreList(percentages, primaryType, secondaryType) {
+    const sorted = Object.entries(percentages).sort((a, b) => b[1] - a[1]);
+    document.getElementById("scoreList").innerHTML = sorted.map(([code, pct]) => {
+      const t = VARK_TYPES[code];
+      const isPrimary = code === primaryType;
+      const isSecondary = code === secondaryType;
+      const badge = isPrimary ? '<span class="badge" style="background:' + t.color + '">1위</span>' : (isSecondary ? '<span class="badge" style="background:#C8C0B2">2위</span>' : "");
+      return `
+        <div class="score-row">
+          <div class="score-top">
+            <span class="score-name">${t.emoji} ${t.name}${badge}</span>
+            <span class="score-pct" style="color:${t.color}">${pct}%</span>
+          </div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%; background:${t.color}"></div></div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderCombo(primaryType, secondaryType) {
+    const note = getComboNote(primaryType, secondaryType);
+    const pT = VARK_TYPES[primaryType];
+    const sT = VARK_TYPES[secondaryType];
+    document.getElementById("comboBox").innerHTML = `
+      <div class="combo-title">${pT.emoji} × ${sT.emoji} 보조 학습 채널 조합</div>
+      <div class="combo-text">${note}</div>
+    `;
+  }
+
+  function render() {
+    const { percentages, primaryType, secondaryType } = calcDisplay(DEMO_RESULTS[currentType].totals);
+    renderTypeCard(VARK_TYPES[primaryType]);
+    renderScoreList(percentages, primaryType, secondaryType);
+    renderCombo(primaryType, secondaryType);
+    renderDemoSwitcher();
+  }
+
+  render();
+</script>
+</body>
+</html>
