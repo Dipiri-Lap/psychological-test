@@ -2318,7 +2318,10 @@ async function generateThumb() {
     const thumb = document.getElementById('shareThumb');
     thumb.src   = canvas.toDataURL('image/png');
     thumb.style.display = 'block';
-    thumb.onclick = () => openLightbox(thumb.src);
+    const origImg = document.getElementById('scThumbImg');
+    thumb.onclick = () => openLightbox(
+      origImg && origImg.style.display !== 'none' ? origImg.src : thumb.src
+    );
     document.getElementById('shareThumbPlaceholder').style.display = 'none';
   } catch (_) { /* silently skip if unavailable */ }
 }
