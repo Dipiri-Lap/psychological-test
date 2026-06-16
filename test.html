@@ -1183,7 +1183,40 @@
       width: 100%; border-radius: 16px;
       box-shadow: var(--shadow-hover);
       display: block;
+      cursor: zoom-in;
     }
+
+    /* ── Lightbox ───────────────────────────────────── */
+    #lightbox {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 3000;
+      display: none; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; transition: opacity .25s;
+    }
+    #lightbox.active { display: flex; opacity: 1; }
+    #lightboxImg {
+      max-width: min(420px, 90vw);
+      max-height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      transform: scale(.88);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+      object-fit: contain;
+    }
+    #lightbox.active #lightboxImg { transform: scale(1); }
+    #lightboxClose {
+      position: absolute; top: 18px; right: 18px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: none; color: #fff; font-size: 20px;
+      display: grid; place-items: center;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    #lightboxClose:hover { background: rgba(255,255,255,.28); }
 
     /* ── Toast ───────────────────────────────────────── */
     #toast {
@@ -1655,6 +1688,12 @@
       </button>
     </div>
   </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightboxClose" onclick="closeLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="결과 카드" onclick="event.stopPropagation()" />
 </div>
 
 <!-- Toast -->
@@ -2279,6 +2318,7 @@ async function generateThumb() {
     const thumb = document.getElementById('shareThumb');
     thumb.src   = canvas.toDataURL('image/png');
     thumb.style.display = 'block';
+    thumb.onclick = () => openLightbox(thumb.src);
     document.getElementById('shareThumbPlaceholder').style.display = 'none';
   } catch (_) { /* silently skip if unavailable */ }
 }
@@ -2486,6 +2526,24 @@ function renderDimAnalysis(analysis) {
 
   document.getElementById('dimAnalysis').style.display = 'block';
 }
+
+/* ══════════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════════ */
+function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightboxImg').src = src;
+  lb.style.display = 'flex';
+  requestAnimationFrame(() => lb.classList.add('active'));
+  document.addEventListener('keydown', onLightboxKey);
+}
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('active');
+  lb.addEventListener('transitionend', () => { lb.style.display = 'none'; }, { once: true });
+  document.removeEventListener('keydown', onLightboxKey);
+}
+function onLightboxKey(e) { if (e.key === 'Escape') closeLightbox(); }
 
 /* ══════════════════════════════════════════════════
    TOAST
