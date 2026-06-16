@@ -97,6 +97,10 @@
   <script src="tests/travel/travel_compatibility_test.js"></script>
   <script src="tests/travel/travel-config.js"></script>
 
+  <!-- ── AI Dependency Data ────────────────────────── -->
+  <script src="tests/ai/ai_dependency_test.js"></script>
+  <script src="tests/ai/ai-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -790,6 +794,81 @@
       text-align: center; line-height: 1.6;
     }
 
+    /* ── AI Stats ───────────────────────────────────── */
+    #aiStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .ai-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .ai-total-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .ai-total-label { font-size: 13px; color: var(--c-muted); }
+    .ai-total-pct { font-size: 24px; font-weight: 800; color: var(--c-text); }
+    .ai-bar-track {
+      height: 8px; background: var(--c-surf2);
+      border-radius: 4px; overflow: hidden; margin-bottom: 14px;
+    }
+    .ai-bar-fill {
+      height: 100%; border-radius: 4px;
+      background: var(--c-main);
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .ai-grade-banner {
+      border-radius: 12px; padding: 12px 14px;
+      display: flex; gap: 10px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .ai-grade-emoji { font-size: 24px; flex-shrink: 0; }
+    .ai-grade-name { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .ai-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .ai-comp-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--c-border);
+    }
+    .ai-comp-row:last-of-type { border-bottom: none; }
+    .ai-comp-row-main {
+      background: var(--c-surf2); border-radius: 10px;
+      padding: 10px 8px; border-bottom: none; margin: 0 -8px 4px;
+    }
+    .ai-comp-dot {
+      width: 20px; height: 20px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 3px;
+    }
+    .ai-comp-body { flex: 1; }
+    .ai-comp-top {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 2px;
+    }
+    .ai-comp-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .ai-comp-pct  { font-size: 14px; font-weight: 800; }
+    .ai-comp-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .ai-comp-bar-track {
+      height: 6px; background: var(--c-surf2);
+      border-radius: 3px; overflow: hidden;
+    }
+    .ai-comp-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .ai-footer {
+      margin-top: 12px; font-size: 12px;
+      color: var(--c-muted); text-align: center; line-height: 1.6;
+    }
+    .ai-footer b { color: var(--c-text); }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1442,6 +1521,9 @@
   <!-- 집착 레벨 뱃지/점수 카드 -->
   <div class="finger-traits" id="obsessionStats" style="display:none"></div>
 
+  <!-- AI 의존도 분석표 -->
+  <div id="aiStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -1922,6 +2004,7 @@ function updateSEO() {
     pein:         '폐인 테스트, 갓생 테스트, 게으름 지수, 폐인력 측정, 자기계발 심리테스트',
     kakaotalklove:'카톡 연애 유형 테스트, 카카오톡 답장 스타일, 연애 유형 테스트, 카톡 심리테스트',
     travel:       '여행 궁합 테스트, 여행 메이트 유형, 여행 스타일 테스트, 여행 동행 궁합',
+    ai:           'AI 의존도 테스트, AI 중독 테스트, AI 의존 지수, 챗GPT 의존도, AI 습관 분석',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 의존도 분석표</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+    background: #F7F3EC;
+    color: #2B2B2B;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 480px; margin: 0 auto; padding: 20px 18px 60px; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: #fff;
+    border: none; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor: pointer;
+  }
+  .demo-switcher { display: flex; gap: 4px; background: #fff; border-radius: 999px; padding: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .demo-btn {
+    width: 32px; height: 32px; border-radius: 50%; border: none; background: transparent;
+    font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .demo-btn.active { background: var(--active-bg); }
+
+  .card { background: #fff; border-radius: 24px; padding: 26px 22px; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
+
+  h1 { text-align: center; font-size: 22px; font-weight: 800; margin-bottom: 22px; }
+
+  .total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .total-label { font-size: 14px; color: #B0A89B; font-weight: 500; }
+  .total-pct { font-size: 30px; font-weight: 800; }
+  .total-bar-track { height: 8px; border-radius: 999px; background: #EFE9DF; overflow: hidden; margin-bottom: 22px; }
+  .total-bar-fill { height: 100%; border-radius: 999px; background: #2B2B2B; transition: width 0.5s ease; }
+
+  .grade-banner { border-radius: 16px; padding: 14px 16px; margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start; }
+  .grade-emoji { font-size: 26px; line-height: 1; }
+  .grade-name { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+  .grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+
+  .comp-row { padding: 14px 0; border-bottom: 1px solid #F0EBE3; display: flex; align-items: flex-start; gap: 14px; }
+  .comp-row:last-of-type { border-bottom: none; }
+  .comp-row.main { background: #FBF8F2; border-radius: 14px; padding: 14px 12px; border-bottom: none; margin-bottom: 4px; }
+  .comp-dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .comp-body { flex: 1; }
+  .comp-top { display: flex; justify-content: space-between; align-items: baseline; }
+  .comp-name { font-size: 15px; font-weight: 800; }
+  .comp-name .star { font-size: 13px; }
+  .comp-pct { font-size: 16px; font-weight: 800; }
+  .comp-desc { font-size: 12px; color: #9C958A; margin: 2px 0 8px; }
+  .comp-bar-track { height: 6px; border-radius: 999px; background: #EFE9DF; overflow: hidden; }
+  .comp-bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+
+  .main-footer { text-align: center; font-size: 13px; color: #6B645A; margin-top: 18px; }
+  .main-footer b { color: #2B2B2B; }
+
+  .share-row { display: flex; gap: 10px; margin-top: 18px; }
+  .share-btn {
+    flex: 1; padding: 13px; border-radius: 14px; border: none; font-size: 14px; font-weight: 700;
+    cursor: pointer;
+  }
+  .share-btn.primary { background: #2B2B2B; color: #fff; }
+  .share-btn.secondary { background: #fff; color: #2B2B2B; border: 1px solid #E5DFD3; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <button class="icon-btn" onclick="history.back()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A8378" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="demo-switcher" id="demoSwitcher"></div>
+    </div>
+
+    <div class="card">
+      <h1>AI 의존도 분석표</h1>
+
+      <div class="total-row">
+        <span class="total-label">총 의존 지수</span>
+        <span class="total-pct" id="totalPct">0%</span>
+      </div>
+      <div class="total-bar-track"><div class="total-bar-fill" id="totalBar" style="width:0%"></div></div>
+
+      <div class="grade-banner" id="gradeBanner"></div>
+
+      <div id="compList"></div>
+
+      <div class="main-footer" id="mainFooter"></div>
+
+      <div class="share-row">
+        <button class="share-btn secondary" onclick="alert('다시 테스트하기')">다시 테스트</button>
+        <button class="share-btn primary" onclick="alert('결과 공유하기')">결과 공유하기</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ============================================
+  // 데이터 (ai_dependency_test.js 와 동일)
+  // ============================================
+  const AI_COMPONENTS = {
+    검색대체: { emoji: "🔵", name: "검색대체", desc: "검색 대신 AI에게 먼저 묻는 정도", example: "\"그냥 AI한테 물어보면 되지\"", color: "#2980B9" },
+    판단위임: { emoji: "🟣", name: "판단위임", desc: "내 생각보다 AI 답을 더 믿는 정도", example: "\"AI가 그렇다는데 맞겠지\"", color: "#8E44AD" },
+    창작의존: { emoji: "🟡", name: "창작의존", desc: "글쓰기·아이디어를 AI에게 맡기는 정도", example: "\"이거 AI한테 써달라고 하자\"", color: "#F39C12" },
+    감정의존: { emoji: "🔴", name: "감정의존", desc: "고민·감정 상담을 AI에게 하는 정도", example: "\"AI한테 털어놓는 게 제일 편해\"", color: "#E74C3C" },
+    습관화:   { emoji: "🟢", name: "습관화", desc: "일상 작업을 AI 없이 못 하는 정도", example: "\"AI 없으면 일을 못 시작하겠어\"", color: "#27AE60" }
+  };
+
+  const AI_GRADES = {
+    PURE:     { emoji: "🧠", name: "자립형 인간",   tagline: "AI는 그냥 도구일 뿐. 안 써도 아쉽지 않아.", bg: "#EAF3EC" },
+    BALANCED: { emoji: "⚖️", name: "균형 활용형",   tagline: "쓸 땐 쓰고, 안 써도 괜찮아.", bg: "#EAF1F7" },
+    LEANING:  { emoji: "🤔", name: "의존 진입 단계", tagline: "AI 없으면 좀 불편해지는 단계.", bg: "#FBF3E5" },
+    HIGH:     { emoji: "🤖", name: "고의존형",       tagline: "AI가 거의 비서, 때로는 친구 수준.", bg: "#FBEBE9" },
+    MASTER:   { emoji: "👑", name: "완전 동화형",     tagline: "AI 없는 삶은 상상이 안 되는 단계입니다.", bg: "#F2EAF6" }
+  };
+
+  // 데모용 5가지 프리셋 (실제 연동 시 calcAiDependency(answers) 결과로 교체)
+  const DEMO_RESULTS = {
+    PURE:     { percentages: { 검색대체: 8,  판단위임: 4,  창작의존: 0,  감정의존: 0,  습관화: 4  }, totalPct: 8,  grade: "PURE" },
+    BALANCED: { percentages: { 검색대체: 38, 판단위임: 25, 창작의존: 21, 감정의존: 8,  습관화: 33 }, totalPct: 30, grade: "BALANCED" },
+    LEANING:  { percentages: { 검색대체: 58, 판단위임: 50, 창작의존: 46, 감정의존: 33, 습관화: 58 }, totalPct: 49, grade: "LEANING" },
+    HIGH:     { percentages: { 검색대체: 79, 판단위임: 71, 창작의존: 75, 감정의존: 58, 습관화: 83 }, totalPct: 73, grade: "HIGH" },
+    MASTER:   { percentages: { 검색대체: 96, 판단위임: 92, 창작의존: 88, 감정의존: 83, 습관화: 100}, totalPct: 92, grade: "MASTER" }
+  };
+
+  let currentGrade = "LEANING";
+
+  function getMainComponent(percentages) {
+    return Object.entries(percentages).sort((a, b) => b[1] - a[1])[0][0];
+  }
+
+  function renderDemoSwitcher() {
+    const sw = document.getElementById("demoSwitcher");
+    sw.innerHTML = Object.entries(AI_GRADES).map(([key, g]) => `
+      <button class="demo-btn ${key === currentGrade ? "active" : ""}" style="--active-bg:${g.bg}" onclick="setGrade('${key}')">${g.emoji}</button>
+    `).join("");
+  }
+
+  function setGrade(key) {
+    currentGrade = key;
+    render();
+  }
+
+  function render() {
+    const data = DEMO_RESULTS[currentGrade];
+    const gradeInfo = AI_GRADES[currentGrade];
+    const mainKey = getMainComponent(data.percentages);
+    const mainInfo = AI_COMPONENTS[mainKey];
+
+    document.getElementById("totalPct").textContent = data.totalPct + "%";
+    document.getElementById("totalBar").style.width = data.totalPct + "%";
+
+    document.getElementById("gradeBanner").style.background = gradeInfo.bg;
+    document.getElementById("gradeBanner").innerHTML = `
+      <div class="grade-emoji">${gradeInfo.emoji}</div>
+      <div>
+        <div class="grade-name">${gradeInfo.name}</div>
+        <div class="grade-tagline">${gradeInfo.tagline}</div>
+      </div>
+    `;
+
+    const sorted = Object.entries(data.percentages).sort((a, b) => b[1] - a[1]);
+    document.getElementById("compList").innerHTML = sorted.map(([key, pct]) => {
+      const c = AI_COMPONENTS[key];
+      const isMain = key === mainKey;
+      return `
+        <div class="comp-row ${isMain ? "main" : ""}">
+          <div class="comp-dot" style="background:${c.color}"></div>
+          <div class="comp-body">
+            <div class="comp-top">
+              <span class="comp-name">${c.name}${isMain ? ' <span class="star">★</span>' : ""}</span>
+              <span class="comp-pct" style="color:${c.color}">${pct}%</span>
+            </div>
+            <div class="comp-desc">${c.desc}</div>
+            <div class="comp-bar-track"><div class="comp-bar-fill" style="width:${pct}%; background:${c.color}"></div></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    document.getElementById("mainFooter").innerHTML = `주성분: <b>${mainInfo.emoji} ${mainInfo.name}</b> — ${mainInfo.example}`;
+  }
+
+  renderDemoSwitcher();
+  render();
+</script>
+</body>
+</html>
