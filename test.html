@@ -105,6 +105,14 @@
   <script src="tests/study/vark_learning_test.js"></script>
   <script src="tests/study/vark-config.js"></script>
 
+  <!-- ── Nunchi Data ───────────────────────────────── -->
+  <script src="tests/nunchi/nunchi_test.js"></script>
+  <script src="tests/nunchi/nunchi-config.js"></script>
+
+  <!-- ── MBTI Dependency Data ─────────────────────── -->
+  <script src="tests/mbti_dependency_test/mbti_dependency_test.js"></script>
+  <script src="tests/mbti_dependency_test/mbti-dependency-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -934,6 +942,108 @@
     .vark-tip-label { font-size: 12px; font-weight: 700; color: var(--c-text); }
     .vark-tip-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
 
+    /* ── Nunchi Stats ───────────────────────────────── */
+    #nunchiStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .nunchi-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .nunchi-total-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .nunchi-total-label { font-size: 13px; color: var(--c-muted); }
+    .nunchi-total-pct   { font-size: 24px; font-weight: 800; color: var(--c-text); }
+    .nunchi-bar-track {
+      height: 8px; background: var(--c-surf2);
+      border-radius: 4px; overflow: hidden; margin-bottom: 14px;
+    }
+    .nunchi-bar-fill {
+      height: 100%; border-radius: 4px; background: var(--c-main);
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .nunchi-grade-banner {
+      border-radius: 12px; padding: 12px 14px;
+      display: flex; gap: 10px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .nunchi-grade-emoji   { font-size: 24px; flex-shrink: 0; }
+    .nunchi-grade-name    { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .nunchi-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .nunchi-comp-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--c-border);
+    }
+    .nunchi-comp-row:last-of-type { border-bottom: none; }
+    .nunchi-comp-row-main {
+      background: var(--c-surf2); border-radius: 10px;
+      padding: 10px 8px; border-bottom: none; margin: 0 -8px 4px;
+    }
+    .nunchi-comp-dot  { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+    .nunchi-comp-body { flex: 1; }
+    .nunchi-comp-top  { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+    .nunchi-comp-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .nunchi-comp-pct  { font-size: 14px; font-weight: 800; }
+    .nunchi-comp-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .nunchi-comp-bar-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .nunchi-comp-bar-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .nunchi-footer {
+      margin-top: 12px; font-size: 12px;
+      color: var(--c-muted); text-align: center; line-height: 1.6;
+    }
+    .nunchi-footer b { color: var(--c-text); }
+
+    /* ── MBTI Dependency Stats ──────────────────────── */
+    #mbtidepStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .mbtidep-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .mbtidep-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .mbtidep-total-label { font-size: 13px; color: var(--c-muted); }
+    .mbtidep-total-pct   { font-size: 24px; font-weight: 800; color: var(--c-text); }
+    .mbtidep-bar-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+    .mbtidep-bar-fill  { height: 100%; border-radius: 4px; background: var(--c-main); transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .mbtidep-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .mbtidep-grade-emoji   { font-size: 24px; flex-shrink: 0; }
+    .mbtidep-grade-name    { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .mbtidep-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .mbtidep-comp-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--c-border); }
+    .mbtidep-comp-row:last-of-type { border-bottom: none; }
+    .mbtidep-comp-row-main { background: var(--c-surf2); border-radius: 10px; padding: 10px 8px; border-bottom: none; margin: 0 -8px 4px; }
+    .mbtidep-comp-dot  { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+    .mbtidep-comp-body { flex: 1; }
+    .mbtidep-comp-top  { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+    .mbtidep-comp-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .mbtidep-comp-pct  { font-size: 14px; font-weight: 800; }
+    .mbtidep-comp-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .mbtidep-comp-bar-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .mbtidep-comp-bar-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .mbtidep-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .mbtidep-footer b { color: var(--c-text); }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1625,6 +1735,12 @@
   <!-- VARK 학습 유형 테스트 -->
   <div id="varkStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 남 눈치 테스트 -->
+  <div id="nunchiStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- MBTI 의존도 테스트 -->
+  <div id="mbtidepStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2113,6 +2229,8 @@ function updateSEO() {
     travel:       '여행 궁합 테스트, 여행 메이트 유형, 여행 스타일 테스트, 여행 동행 궁합',
     ai:           'AI 의존도 테스트, AI 중독 테스트, AI 의존 지수, 챗GPT 의존도, AI 습관 분석',
     study:        '학습 유형 테스트, VARK 테스트, 공부 스타일 테스트, 시각형 청각형 체험형, 나에게 맞는 공부법',
+    nunchi:       '눈치 테스트, 남눈치 테스트, 눈치 지수, 눈치왕 테스트, 자기검열 심리테스트',
+    mbtidep:      'MBTI 의존도 테스트, MBTI 중독 테스트, MBTI 헤비유저, MBTI 믿는 사람, MBTI 성분 분석',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
