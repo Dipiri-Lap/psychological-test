@@ -113,6 +113,10 @@
   <script src="tests/mbti_dependency_test/mbti_dependency_test.js"></script>
   <script src="tests/mbti_dependency_test/mbti-dependency-config.js"></script>
 
+  <!-- ── Blackhistory Data ────────────────────────── -->
+  <script src="tests/blackhistory/blackhistory-test.js"></script>
+  <script src="tests/blackhistory/blackhistory-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1044,6 +1048,41 @@
     .mbtidep-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
     .mbtidep-footer b { color: var(--c-text); }
 
+    /* ── Blackhistory Stats ─────────────────────────── */
+    #blackhistoryStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .bh-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .bh-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .bh-total-label { font-size: 13px; color: var(--c-muted); }
+    .bh-total-score { font-size: 24px; font-weight: 800; }
+    .bh-total-max   { font-size: 13px; font-weight: 400; color: var(--c-muted); }
+    .bh-bar-track   { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 14px; }
+    .bh-bar-fill    { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .bh-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+    .bh-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .bh-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .bh-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .bh-badge {
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1741,6 +1780,9 @@
   <!-- MBTI 의존도 테스트 -->
   <div id="mbtidepStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 흑역사 보유량 테스트 -->
+  <div id="blackhistoryStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2231,6 +2273,7 @@ function updateSEO() {
     study:        '학습 유형 테스트, VARK 테스트, 공부 스타일 테스트, 시각형 청각형 체험형, 나에게 맞는 공부법',
     nunchi:       '눈치 테스트, 남눈치 테스트, 눈치 지수, 눈치왕 테스트, 자기검열 심리테스트',
     mbtidep:      'MBTI 의존도 테스트, MBTI 중독 테스트, MBTI 헤비유저, MBTI 믿는 사람, MBTI 성분 분석',
+    blackhistory: '흑역사 테스트, 흑역사 보유량, 이불킥 테스트, 과거 흑역사 심리테스트, 흑역사 박물관',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
