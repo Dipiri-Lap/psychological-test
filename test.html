@@ -125,6 +125,10 @@
   <script src="tests/datepay/datepay-test.js"></script>
   <script src="tests/datepay/datepay-config.js"></script>
 
+  <!-- ── Friend Line Data ─────────────────────────── -->
+  <script src="tests/friendline/friendline-test.js"></script>
+  <script src="tests/friendline/friendline-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1200,6 +1204,75 @@
       border-top: 1px solid var(--c-border);
     }
 
+    /* ── Friend Line Stats ──────────────────────────── */
+    #friendlineStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .fl-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px;
+    }
+    .fl-verdict {
+      display: flex; align-items: center; gap: 14px;
+      border: 2px solid; border-radius: 14px;
+      padding: 12px 16px; margin-bottom: 14px;
+    }
+    .fl-verdict-stamp {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; font-weight: 800;
+      letter-spacing: 2px;
+      border: 2.5px solid; border-radius: 8px;
+      padding: 6px 12px;
+      transform: rotate(-6deg);
+      flex-shrink: 0;
+    }
+    .fl-verdict-body { flex: 1; text-align: right; }
+    .fl-verdict-label { font-size: 11px; color: var(--c-muted); letter-spacing: .5px; margin-bottom: 2px; }
+    .fl-verdict-pct { font-size: 30px; font-weight: 800; line-height: 1; }
+    .fl-verdict-pct span { font-size: 16px; margin-left: 1px; }
+    .fl-bar-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
+    .fl-bar-fill  { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .fl-scale     { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-bottom: 14px; }
+    .fl-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .fl-total-label { font-size: 12px; color: var(--c-muted); }
+    .fl-total-score { font-size: 22px; font-weight: 800; white-space: nowrap; }
+    .fl-total-max   { font-size: 13px; font-weight: 400; color: var(--c-muted); }
+    .fl-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .fl-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .fl-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .fl-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .fl-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .fl-area { margin-bottom: 12px; }
+    .fl-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .fl-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .fl-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .fl-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .fl-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .fl-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .fl-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .fl-footer b { color: var(--c-text); }
+    .fl-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1911,6 +1984,9 @@
   <!-- 연애 지갑 테스트 -->
   <div id="datepayStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 남사친 여사친 테스트 -->
+  <div id="friendlineStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2404,6 +2480,7 @@ function updateSEO() {
     blackhistory: '흑역사 테스트, 흑역사 보유량, 이불킥 테스트, 과거 흑역사 심리테스트, 흑역사 박물관',
     cheatline:    '바람 기준선 테스트, 어디까지 바람, 바람 기준 테스트, 연애 허용선, 바람 판단 기준, 커플 심리테스트',
     datepay:      '데이트 비용 테스트, 연애 더치페이, 데이트 비용 분담, 연애 지갑 테스트, 데이트 통장, 커플 소비 성향',
+    friendline:   '남사친 여사친 테스트, 이성 친구 마지노선, 남사친 기준, 여사친 기준, 이성친구 심리테스트, 남사친 여사친 어디까지',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
