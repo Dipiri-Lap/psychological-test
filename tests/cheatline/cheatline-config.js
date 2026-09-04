@@ -14,6 +14,7 @@ const _CL_LEVEL_BG = {
 window.TEST_CONFIGS['cheatline'] = {
   data: {
     title: "어디까지 바람일까? 바람 기준선 테스트",
+    shareTag: "바람 기준선 테스트",
     emoji: "🚧",
     thumb: "images/cheatline/thumb.webp",
     subtitle: "내가 생각하는 바람의 기준선은 어디일까? (15문항)",

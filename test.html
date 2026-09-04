@@ -121,6 +121,10 @@
   <script src="tests/cheatline/cheatline-test.js"></script>
   <script src="tests/cheatline/cheatline-config.js"></script>
 
+  <!-- ── Date Pay Data ────────────────────────────── -->
+  <script src="tests/datepay/datepay-test.js"></script>
+  <script src="tests/datepay/datepay-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1138,6 +1142,64 @@
       border-top: 1px solid var(--c-border);
     }
 
+    /* ── Date Pay Stats ─────────────────────────────── */
+    #datepayStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .dp-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px;
+    }
+    .dp-split { margin-bottom: 16px; }
+    .dp-split-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .dp-split-me   { font-size: 20px; font-weight: 800; }
+    .dp-split-you  { font-size: 15px; font-weight: 700; color: var(--c-muted); }
+    .dp-split-track {
+      height: 14px; background: var(--c-surf2);
+      border-radius: 7px; overflow: hidden;
+    }
+    .dp-split-fill { height: 100%; border-radius: 7px; transition: width .7s cubic-bezier(.22,1,.36,1); }
+    .dp-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-top: 5px; }
+    .dp-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .dp-total-label { font-size: 12px; color: var(--c-muted); }
+    .dp-total-score { font-size: 22px; font-weight: 800; white-space: nowrap; }
+    .dp-total-max   { font-size: 13px; font-weight: 400; color: var(--c-muted); }
+    .dp-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .dp-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .dp-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .dp-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .dp-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .dp-area { margin-bottom: 12px; }
+    .dp-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .dp-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .dp-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .dp-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .dp-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .dp-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .dp-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .dp-footer b { color: var(--c-text); }
+    .dp-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1411,6 +1473,11 @@
       color: #e85d75;
       background: rgba(232,93,117,.14);
       padding: 5px 12px; border-radius: 100px;
+      /* 제목이 길어도 카드 레이아웃이 밀리지 않도록 한 줄 고정 */
+      max-width: 68%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .sc-emoji { font-size: 72px; line-height: 1; }
     .sc-thumb-img {
@@ -1840,6 +1907,9 @@
 
   <!-- 바람 기준선 테스트 -->
   <div id="cheatlineStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 연애 지갑 테스트 -->
+  <div id="datepayStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
@@ -2333,6 +2403,7 @@ function updateSEO() {
     mbtidep:      'MBTI 의존도 테스트, MBTI 중독 테스트, MBTI 헤비유저, MBTI 믿는 사람, MBTI 성분 분석',
     blackhistory: '흑역사 테스트, 흑역사 보유량, 이불킥 테스트, 과거 흑역사 심리테스트, 흑역사 박물관',
     cheatline:    '바람 기준선 테스트, 어디까지 바람, 바람 기준 테스트, 연애 허용선, 바람 판단 기준, 커플 심리테스트',
+    datepay:      '데이트 비용 테스트, 연애 더치페이, 데이트 비용 분담, 연애 지갑 테스트, 데이트 통장, 커플 소비 성향',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
@@ -2541,7 +2612,7 @@ function showResult() {
 
   // Populate share card (off-screen)
   const cardText = res.tagline || (res.desc.length > 55 ? res.desc.slice(0, 55) + '…' : res.desc);
-  document.getElementById('scTag').textContent  = testData.title;
+  document.getElementById('scTag').textContent  = testData.shareTag || testData.title;
   document.getElementById('scType').textContent = res.type;
   document.getElementById('scDesc').textContent = cardText;
   const scThumbImg = document.getElementById('scThumbImg');
