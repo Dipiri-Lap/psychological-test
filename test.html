@@ -129,6 +129,10 @@
   <script src="tests/friendline/friendline-test.js"></script>
   <script src="tests/friendline/friendline-config.js"></script>
 
+  <!-- ── Dopamine Data ────────────────────────────── -->
+  <script src="tests/dopamine/dopamine-test.js"></script>
+  <script src="tests/dopamine/dopamine-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1273,6 +1277,70 @@
       border-top: 1px solid var(--c-border);
     }
 
+    /* ── Dopamine Stats ─────────────────────────────── */
+    #dopamineStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .dm-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .dm-endure {
+      border-radius: 14px;
+      padding: 18px 14px 14px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .dm-endure-num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 52px; font-weight: 800; line-height: 1;
+      letter-spacing: -2px;
+    }
+    .dm-endure-unit { font-size: 24px; margin-left: 3px; letter-spacing: 0; }
+    .dm-endure-cap  { font-size: 12px; color: #6B645A; margin-top: 8px; letter-spacing: .3px; }
+    .dm-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+    .dm-total-label { font-size: 12px; color: var(--c-muted); }
+    .dm-total-score { font-size: 24px; font-weight: 800; white-space: nowrap; }
+    .dm-total-max   { font-size: 12px; font-weight: 400; color: var(--c-muted); }
+    .dm-bar-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
+    .dm-bar-fill  { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .dm-scale     { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-bottom: 14px; }
+    .dm-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .dm-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .dm-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .dm-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .dm-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .dm-area { margin-bottom: 12px; }
+    .dm-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .dm-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .dm-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .dm-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .dm-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .dm-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .dm-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .dm-footer b { color: var(--c-text); }
+    .dm-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -1987,6 +2055,9 @@
   <!-- 남사친 여사친 테스트 -->
   <div id="friendlineStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 도파민 중독 테스트 -->
+  <div id="dopamineStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2481,6 +2552,7 @@ function updateSEO() {
     cheatline:    '바람 기준선 테스트, 어디까지 바람, 바람 기준 테스트, 연애 허용선, 바람 판단 기준, 커플 심리테스트',
     datepay:      '데이트 비용 테스트, 연애 더치페이, 데이트 비용 분담, 연애 지갑 테스트, 데이트 통장, 커플 소비 성향',
     friendline:   '남사친 여사친 테스트, 이성 친구 마지노선, 남사친 기준, 여사친 기준, 이성친구 심리테스트, 남사친 여사친 어디까지',
+    dopamine:     '도파민 중독 테스트, 숏폼 중독, 릴스 중독 테스트, 쇼츠 중독, 도파민 디톡스, 도파민 중독도 자가진단',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
