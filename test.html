@@ -141,6 +141,10 @@
   <script src="tests/reunion/reunion-test.js"></script>
   <script src="tests/reunion/reunion-config.js"></script>
 
+  <!-- ── Love Language Data ───────────────────────── -->
+  <script src="tests/lovelang/lovelang-test.js"></script>
+  <script src="tests/lovelang/lovelang-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -969,6 +973,67 @@
     }
     .vark-tip-label { font-size: 12px; font-weight: 700; color: var(--c-text); }
     .vark-tip-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+
+    /* ── Love Language Stats ───────────────────────────── */
+    #lovelangStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .ll-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 10px;
+    }
+    .ll-divider {
+      height: 5px; background: var(--c-text);
+      border-radius: 3px; margin: 0 0 14px;
+    }
+    .ll-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .ll-row:last-of-type { border-bottom: none; }
+    .ll-row-primary  { background: var(--c-surf2); border-radius: 10px; padding: 10px 8px; margin: 0 -8px 4px; border-bottom: none; }
+    .ll-row-secondary { opacity: .85; }
+    .ll-row-left { display: flex; align-items: center; gap: 8px; }
+    .ll-row-emoji { font-size: 20px; flex-shrink: 0; }
+    .ll-row-info { display: flex; flex-direction: column; }
+    .ll-row-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .ll-row-badge { font-size: 10px; font-weight: 600; color: var(--c-accent); margin-left: 4px; }
+    .ll-row-keyword { font-size: 10px; color: var(--c-muted); margin-top: 1px; line-height: 1.4; }
+    .ll-bar-wrap {
+      height: 8px; background: var(--c-surf2);
+      border-radius: 4px; overflow: hidden;
+    }
+    .ll-bar {
+      height: 100%; border-radius: 4px;
+      transition: width .6s cubic-bezier(.22,1,.36,1);
+    }
+    .ll-pct { font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; }
+    .ll-combo {
+      background: var(--c-surf2); border-radius: 12px;
+      padding: 12px 14px; margin-top: 14px;
+    }
+    .ll-combo-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 4px; }
+    .ll-combo-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    .ll-tip {
+      display: flex; flex-direction: column; gap: 4px;
+      border-top: 1px solid var(--c-border);
+      margin-top: 14px; padding-top: 12px;
+    }
+    .ll-tip-label { font-size: 12px; font-weight: 700; color: var(--c-text); }
+    .ll-tip-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
 
     /* ── Nunchi Stats ───────────────────────────────── */
     #nunchiStats {
@@ -2226,6 +2291,9 @@
   <!-- 재회 가능성 테스트 -->
   <div id="reunionStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 사랑의 언어 테스트 -->
+  <div id="lovelangStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2723,6 +2791,7 @@ function updateSEO() {
     dopamine:     '도파민 중독 테스트, 숏폼 중독, 릴스 중독 테스트, 쇼츠 중독, 도파민 디톡스, 도파민 중독도 자가진단',
     somecheck:    '썸 판독기, 썸 테스트, 이거 썸인가, 썸 확률 테스트, 호감 신호 테스트, 짝사랑 테스트',
     reunion:      '재회 가능성 테스트, 재회 확률, 다시 만날 수 있을까, 재회 신호, 이별 후 재회, 전 애인 재회',
+    lovelang:     '사랑의 언어 테스트, 5가지 사랑의 언어, 게리 채프먼, 사랑 표현 방식, 애정표현 유형, 연애 심리테스트',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
