@@ -145,6 +145,10 @@
   <script src="tests/lovelang/lovelang-test.js"></script>
   <script src="tests/lovelang/lovelang-config.js"></script>
 
+  <!-- ── Boredom Data ─────────────────────────────── -->
+  <script src="tests/boredom/boredom-test.js"></script>
+  <script src="tests/boredom/boredom-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1568,6 +1572,387 @@
       border-top: 1px solid var(--c-border);
     }
 
+    /* ── Boredom Stats ─────────────────────────────── */
+    #boredomStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    
+    .bd-thermo-wrap {
+      display: flex; align-items: flex-end; justify-content: center;
+      gap: 20px; margin-bottom: 18px; padding-top: 6px;
+    }
+    .bd-thermo { display: flex; flex-direction: column; align-items: center; }
+    .bd-thermo-tube {
+      width: 26px; height: 150px;
+      background: var(--c-surf2);
+      border: 2px solid var(--c-border);
+      border-radius: 13px 13px 4px 4px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+      position: relative;
+    }
+    .bd-thermo-fill {
+      width: 100%;
+      border-radius: 0 0 2px 2px;
+      transition: height .8s cubic-bezier(.22,1,.36,1);
+    }
+    .bd-thermo-bulb {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      margin-top: -14px;
+      border: 2px solid var(--c-border);
+      box-shadow: 0 0 0 4px var(--c-surface);
+    }
+    .bd-thermo-readout { text-align: left; padding-bottom: 14px; }
+    .bd-thermo-num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 42px; font-weight: 800; line-height: 1;
+      letter-spacing: -1.5px;
+    }
+    .bd-thermo-num span { font-size: 20px; margin-left: 1px; letter-spacing: 0; }
+    .bd-thermo-cap { font-size: 12px; color: var(--c-muted); margin-top: 6px; letter-spacing: .3px; }
+
+    .bd-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px;
+    }
+    .bd-split { margin-bottom: 16px; }
+    .bd-split-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .bd-split-me   { font-size: 20px; font-weight: 800; }
+    .bd-split-you  { font-size: 15px; font-weight: 700; color: var(--c-muted); }
+    .bd-split-track {
+      height: 14px; background: var(--c-surf2);
+      border-radius: 7px; overflow: hidden;
+    }
+    .bd-split-fill { height: 100%; border-radius: 7px; transition: width .7s cubic-bezier(.22,1,.36,1); }
+    .bd-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-top: 5px; }
+    .bd-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .bd-total-label { font-size: 12px; color: var(--c-muted); }
+    .bd-total-score { font-size: 22px; font-weight: 800; white-space: nowrap; }
+    .bd-total-max   { font-size: 13px; font-weight: 400; color: var(--c-muted); }
+    .bd-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .bd-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .bd-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .bd-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .bd-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .bd-area { margin-bottom: 12px; }
+    .bd-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .bd-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .bd-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .bd-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .bd-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .bd-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .bd-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .bd-footer b { color: var(--c-text); }
+    .bd-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
+    /* ── Friend Line Stats ──────────────────────────── */
+    #friendlineStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .fl-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px;
+    }
+    .fl-verdict {
+      display: flex; align-items: center; gap: 14px;
+      border: 2px solid; border-radius: 14px;
+      padding: 12px 16px; margin-bottom: 14px;
+    }
+    .fl-verdict-stamp {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 22px; font-weight: 800;
+      letter-spacing: 2px;
+      border: 2.5px solid; border-radius: 8px;
+      padding: 6px 12px;
+      transform: rotate(-6deg);
+      flex-shrink: 0;
+    }
+    .fl-verdict-body { flex: 1; text-align: right; }
+    .fl-verdict-label { font-size: 11px; color: var(--c-muted); letter-spacing: .5px; margin-bottom: 2px; }
+    .fl-verdict-pct { font-size: 30px; font-weight: 800; line-height: 1; }
+    .fl-verdict-pct span { font-size: 16px; margin-left: 1px; }
+    .fl-bar-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
+    .fl-bar-fill  { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .fl-scale     { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-bottom: 14px; }
+    .fl-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+    .fl-total-label { font-size: 12px; color: var(--c-muted); }
+    .fl-total-score { font-size: 22px; font-weight: 800; white-space: nowrap; }
+    .fl-total-max   { font-size: 13px; font-weight: 400; color: var(--c-muted); }
+    .fl-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .fl-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .fl-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .fl-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .fl-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .fl-area { margin-bottom: 12px; }
+    .fl-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .fl-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .fl-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .fl-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .fl-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .fl-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .fl-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .fl-footer b { color: var(--c-text); }
+    .fl-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
+    /* ── Dopamine Stats ─────────────────────────────── */
+    #dopamineStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .dm-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 12px;
+    }
+    .dm-endure {
+      border-radius: 14px;
+      padding: 18px 14px 14px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .dm-endure-num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 52px; font-weight: 800; line-height: 1;
+      letter-spacing: -2px;
+    }
+    .dm-endure-unit { font-size: 24px; margin-left: 3px; letter-spacing: 0; }
+    .dm-endure-cap  { font-size: 12px; color: #6B645A; margin-top: 8px; letter-spacing: .3px; }
+    .dm-total-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+    .dm-total-label { font-size: 12px; color: var(--c-muted); }
+    .dm-total-score { font-size: 24px; font-weight: 800; white-space: nowrap; }
+    .dm-total-max   { font-size: 12px; font-weight: 400; color: var(--c-muted); }
+    .dm-bar-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; margin-bottom: 5px; }
+    .dm-bar-fill  { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .dm-scale     { display: flex; justify-content: space-between; font-size: 11px; color: var(--c-muted); margin-bottom: 14px; }
+    .dm-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .dm-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .dm-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .dm-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .dm-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+    }
+    .dm-area { margin-bottom: 12px; }
+    .dm-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .dm-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .dm-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .dm-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .dm-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .dm-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .dm-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .dm-footer b { color: var(--c-text); }
+    .dm-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
+    /* ── Some Check Stats ───────────────────────────── */
+    #somecheckStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .sm-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 16px;
+    }
+    .sm-gauge-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+    .sm-gauge {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    .sm-gauge-hole {
+      width: 142px; height: 142px;
+      border-radius: 50%;
+      background: var(--c-surface);
+      display: grid; place-content: center;
+      text-align: center;
+      transition: background .35s;
+    }
+    .sm-gauge-num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 46px; font-weight: 800; line-height: 1;
+      letter-spacing: -2px;
+    }
+    .sm-gauge-num span { font-size: 22px; margin-left: 1px; letter-spacing: 0; }
+    .sm-gauge-cap { font-size: 12px; color: var(--c-muted); margin-top: 7px; letter-spacing: .5px; }
+    .sm-light {
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .sm-light-emoji  { font-size: 22px; flex-shrink: 0; line-height: 1.3; }
+    .sm-light-body   { flex: 1; }
+    .sm-light-action { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 3px; }
+    .sm-light-advice { font-size: 12px; color: #6B645A; line-height: 1.5; }
+    .sm-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .sm-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .sm-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .sm-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .sm-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .sm-area-score { font-weight: 800; color: var(--c-text); }
+    .sm-area { margin-bottom: 12px; }
+    .sm-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .sm-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .sm-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .sm-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .sm-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .sm-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .sm-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .sm-footer b { color: var(--c-text); }
+    .sm-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
+    /* ── Reunion Stats ───────────────────────────── */
+    #reunionStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .rn-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 16px;
+    }
+    .rn-gauge-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+    .rn-gauge {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+    }
+    .rn-gauge-hole {
+      width: 142px; height: 142px;
+      border-radius: 50%;
+      background: var(--c-surface);
+      display: grid; place-content: center;
+      text-align: center;
+      transition: background .35s;
+    }
+    .rn-gauge-num {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 46px; font-weight: 800; line-height: 1;
+      letter-spacing: -2px;
+    }
+    .rn-gauge-num span { font-size: 22px; margin-left: 1px; letter-spacing: 0; }
+    .rn-gauge-cap { font-size: 12px; color: var(--c-muted); margin-top: 7px; letter-spacing: .5px; }
+    .rn-light {
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .rn-light-emoji  { font-size: 22px; flex-shrink: 0; line-height: 1.3; }
+    .rn-light-body   { flex: 1; }
+    .rn-light-action { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 3px; }
+    .rn-light-advice { font-size: 12px; color: #6B645A; line-height: 1.5; }
+    .rn-grade-banner { border-radius: 12px; padding: 12px 14px; display: flex; gap: 10px; align-items: center; margin-bottom: 16px; }
+    .rn-grade-emoji  { font-size: 24px; flex-shrink: 0; }
+    .rn-grade-name   { font-size: 14px; font-weight: 800; color: #2B2B2B; margin-bottom: 2px; }
+    .rn-grade-tagline { font-size: 12px; color: #6B645A; line-height: 1.4; }
+    .rn-area-title {
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted); letter-spacing: .3px;
+      margin-bottom: 10px;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .rn-area-score { font-weight: 800; color: var(--c-text); }
+    .rn-area { margin-bottom: 12px; }
+    .rn-area-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 2px; }
+    .rn-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .rn-area-tag  { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .rn-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; line-height: 1.4; }
+    .rn-area-track { height: 6px; background: var(--c-surf2); border-radius: 3px; overflow: hidden; }
+    .rn-area-fill  { height: 100%; border-radius: 3px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .rn-footer { margin-top: 12px; font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+    .rn-footer b { color: var(--c-text); }
+    .rn-badge {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 13px; font-weight: 700;
+      color: var(--c-muted);
+      padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+    }
+
     /* ── Travel Stats ──────────────────────────────── */
     #travelStats {
       width: 100%; max-width: 480px;
@@ -2294,6 +2679,9 @@
   <!-- 사랑의 언어 테스트 -->
   <div id="lovelangStats" style="display:none; margin-top:28px;"></div>
 
+  <!-- 권태기 진단 테스트 -->
+  <div id="boredomStats" style="display:none; margin-top:28px;"></div>
+
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
 
@@ -2792,6 +3180,7 @@ function updateSEO() {
     somecheck:    '썸 판독기, 썸 테스트, 이거 썸인가, 썸 확률 테스트, 호감 신호 테스트, 짝사랑 테스트',
     reunion:      '재회 가능성 테스트, 재회 확률, 다시 만날 수 있을까, 재회 신호, 이별 후 재회, 전 애인 재회',
     lovelang:     '사랑의 언어 테스트, 5가지 사랑의 언어, 게리 채프먼, 사랑 표현 방식, 애정표현 유형, 연애 심리테스트',
+    boredom:      '권태기 테스트, 권태기 진단, 우리 권태기일까, 연인 권태기, 관계 온도, 설렘 테스트',
   };
   const base     = 'https://testlab.tmhub.co.kr';
   const title    = `${testData.title} — 마음.`;
