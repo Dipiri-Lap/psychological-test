@@ -149,6 +149,11 @@
   <script src="tests/boredom/boredom-test.js"></script>
   <script src="tests/boredom/boredom-config.js"></script>
 
+  <!-- ── Dog MBTI Data ────────────────────────────── -->
+  <script src="tests/dogmbti/dogmbti-test.js"></script>
+  <script src="tests/dogmbti/dogmbti-situations.js"></script>
+  <script src="tests/dogmbti/dogmbti-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1284,6 +1289,81 @@
       padding: 8px 0 0;
       border-top: 1px solid var(--c-border);
     }
+
+    /* ── Dog MBTI Stats ────────────────────────────── */
+    #dogmbtiStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .dm-code-wrap { text-align: center; margin-bottom: 4px; }
+    .dm-code { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    .dm-code span {
+      width: 48px; height: 56px; line-height: 56px;
+      background: var(--c-surf2); border: 2px solid var(--c-border);
+      border-radius: 12px;
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 30px; font-weight: 800;
+    }
+    .dm-code-name { font-size: 17px; font-weight: 800; color: var(--c-text); }
+    .dm-keywords { font-size: 12px; color: var(--c-muted); margin-top: 4px; }
+    .dm-divider { border-top: 1px solid var(--c-border); margin: 16px 0; }
+    .dm-chart-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px;
+    }
+    .dm-axis { margin-bottom: 18px; }
+    .dm-axis-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+    .dm-axis-title { font-size: 13px; font-weight: 700; color: var(--c-muted); letter-spacing: .3px; }
+    .dm-axis-strength { font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .dm-axis-bar {
+      display: flex; height: 14px;
+      background: var(--c-surf2); border-radius: 7px; overflow: hidden;
+    }
+    .dm-axis-fill { height: 100%; opacity: .45; transition: width .7s cubic-bezier(.22,1,.36,1); }
+    .dm-axis-fill.dm-win { opacity: 1; }
+    .dm-axis-labels { display: flex; justify-content: space-between; font-size: 11px; margin-top: 5px; }
+    .dm-axis-desc { font-size: 12px; color: var(--c-muted); line-height: 1.5; margin-top: 6px; }
+    .dm-secondary {
+      border-radius: 12px; padding: 14px; margin-top: 4px;
+      background: var(--c-surf2); border: 2px dashed var(--c-border);
+    }
+    .dm-secondary-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 8px; }
+    .dm-secondary-main { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .dm-secondary-code { font-family: 'Nanum Myeongjo', serif; font-size: 24px; font-weight: 800; letter-spacing: 1px; }
+    .dm-secondary-name { font-size: 14px; font-weight: 800; color: var(--c-text); }
+    .dm-secondary-desc { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    .dm-secondary-desc b { color: var(--c-text); }
+    .dm-secondary-tagline { font-size: 12px; color: var(--c-muted); margin-top: 8px; font-style: italic; }
+    .dm-secondary-none { border-style: solid; }
+    .dm-situ { padding: 12px 0; border-bottom: 1px solid var(--c-border); }
+    .dm-situ:last-of-type { border-bottom: none; }
+    .dm-situ-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .dm-situ-emoji { font-size: 18px; }
+    .dm-situ-name { font-size: 13px; font-weight: 800; color: var(--c-text); }
+    .dm-situ-desc { font-size: 12px; color: var(--c-muted); line-height: 1.65; }
+    .dm-card {
+      border-radius: 12px; padding: 12px 14px; margin-bottom: 10px;
+      background: var(--c-surf2);
+    }
+    .dm-card-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 4px; }
+    .dm-card-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.6; }
+    .dm-match-row { display: flex; gap: 10px; margin-top: 4px; }
+    .dm-match {
+      flex: 1; text-align: center; border-radius: 12px; padding: 12px 8px;
+      border: 2px solid var(--c-border); background: var(--c-surf2);
+    }
+    .dm-match-label { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; }
+    .dm-match-code { font-family: 'Nanum Myeongjo', serif; font-size: 20px; font-weight: 800; }
+    .dm-match-name { font-size: 11px; color: var(--c-muted); margin-top: 2px; line-height: 1.4; }
+    .dm-footer { margin-top: 14px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.5; }
 
     /* ── Friend Line Stats ──────────────────────────── */
     #friendlineStats {
@@ -2681,6 +2761,9 @@
 
   <!-- 권태기 진단 테스트 -->
   <div id="boredomStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 강아지 MBTI 검사 -->
+  <div id="dogmbtiStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
