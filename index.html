@@ -76,7 +76,8 @@
       { "@type": "ListItem", "position": 24, "name": "우리 다시 만날 수 있을까? 재회 가능성 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=reunion" },
       { "@type": "ListItem", "position": 25, "name": "나의 사랑의 언어는? 5가지 사랑 표현 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=lovelang" },
       { "@type": "ListItem", "position": 26, "name": "우리 권태기일까? 권태기 진단 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=boredom" },
-      { "@type": "ListItem", "position": 27, "name": "우리 강아지 MBTI 검사", "url": "https://testlab.tmhub.co.kr/test.html?id=dogmbti" }
+      { "@type": "ListItem", "position": 27, "name": "우리 강아지 MBTI 검사", "url": "https://testlab.tmhub.co.kr/test.html?id=dogmbti" },
+      { "@type": "ListItem", "position": 28, "name": "우리 고양이 MBTI 검사", "url": "https://testlab.tmhub.co.kr/test.html?id=catmbti" }
     ]
   }
   </script>
@@ -503,6 +504,7 @@
     { id:"lovelang", emoji:"💌", title:"나의 사랑의 언어는? 5가지 사랑 표현 테스트", desc:"인정하는 말·시간·선물·봉사·스킨십, 나를 채우는 사랑은? (15문항)", category:"연애", count:2210, thumb:"images/lovelang/thumb.webp" },
     { id:"boredom", emoji:"🌡️", title:"우리 권태기일까? 권태기 진단 테스트", desc:"설렘부터 미래 계획까지, 우리 관계의 온도는? (15문항)", category:"연애", count:2360, thumb:"images/boredom/thumb.webp" },
     { id:"dogmbti", emoji:"🐶", title:"우리 강아지 MBTI 검사", desc:"사교성·호기심·교감·생활 방식 4축으로 보는 강아지 성격 (28문항)", category:"재미", count:1840, thumb:"images/dogmbti/thumb.webp" },
+    { id:"catmbti", emoji:"🐱", title:"우리 고양이 MBTI 검사", desc:"사교성·호기심·교감·생활 방식 4축으로 보는 고양이 성격 (28문항)", category:"재미", count:1560, thumb:"images/catmbti/thumb.webp" },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -716,7 +718,8 @@
     reunion: 1980,
     lovelang: 2210,
     boredom: 2360,
-    dogmbti: 1840
+    dogmbti: 1840,
+    catmbti: 1560
   };
 
   // Sync with Firestore
@@ -729,7 +732,7 @@
       });
     } else {
       // Initialize Firestore with 0 if it doesn't exist
-      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347, study: 3742, nunchi: 1834, mbtidep: 1263, blackhistory: 1247, cheatline: 1892, datepay: 2156, friendline: 2483, dopamine: 3128, somecheck: 2740, reunion: 1980, lovelang: 2210, boredom: 2360, dogmbti: 1840 });
+      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347, study: 3742, nunchi: 1834, mbtidep: 1263, blackhistory: 1247, cheatline: 1892, datepay: 2156, friendline: 2483, dopamine: 3128, somecheck: 2740, reunion: 1980, lovelang: 2210, boredom: 2360, dogmbti: 1840, catmbti: 1560 });
     }
   });
 
