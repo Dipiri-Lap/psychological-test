@@ -159,6 +159,10 @@
   <script src="tests/catmbti/catmbti-situations.js"></script>
   <script src="tests/catmbti/catmbti-config.js"></script>
 
+  <!-- ── Dog Breed Match Data ─────────────────────── -->
+  <script src="tests/dogbreed/dogbreed-test.js"></script>
+  <script src="tests/dogbreed/dogbreed-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1369,6 +1373,72 @@
     .pm-match-code { font-family: 'Nanum Myeongjo', serif; font-size: 20px; font-weight: 800; }
     .pm-match-name { font-size: 11px; color: var(--c-muted); margin-top: 2px; line-height: 1.4; }
     .pm-footer { margin-top: 14px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.5; }
+
+    /* ── Dog Breed Match Stats ─────────────────────── */
+    #dogbreedStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .brd-head { text-align: center; }
+    .brd-head-label { font-size: 12px; color: var(--c-muted); letter-spacing: .3px; }
+    .brd-head-pct {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 46px; font-weight: 800; line-height: 1.1; color: #E8833A;
+    }
+    .brd-head-pct span { font-size: 22px; margin-left: 2px; }
+    .brd-head-bar { height: 10px; background: var(--c-surf2); border-radius: 5px; overflow: hidden; margin: 8px 0 12px; }
+    .brd-head-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, #F6C177, #E8833A); transition: width .8s cubic-bezier(.22,1,.36,1); }
+    .brd-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .brd-chip { font-size: 11px; padding: 4px 9px; border-radius: 999px; background: var(--c-surf2); color: var(--c-text); }
+    .brd-keywords { font-size: 12px; color: var(--c-muted); margin-top: 8px; }
+    .brd-divider { border-top: 1px solid var(--c-border); margin: 18px 0; }
+    .brd-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 16px; font-weight: 800; letter-spacing: -.3px;
+      margin-bottom: 10px; color: var(--c-text);
+    }
+    .brd-sub { font-size: 11px; color: var(--c-muted); margin: -4px 0 12px; line-height: 1.5; }
+    .brd-list { list-style: none; padding: 0; margin: 0; font-size: 12.5px; line-height: 1.7; color: var(--c-muted); }
+    .brd-list li { margin-bottom: 4px; }
+    .brd-list-good li { color: var(--c-text); }
+    .brd-card { border-radius: 12px; padding: 12px 14px; margin-top: 12px; background: var(--c-surf2); }
+    .brd-card-warn { border: 1px dashed #E2B13C; }
+    .brd-card-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+    .brd-card-desc { font-size: 12px; color: var(--c-muted); line-height: 1.65; }
+    .brd-fit { margin-bottom: 14px; }
+    .brd-fit-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
+    .brd-fit-name { font-size: 12.5px; font-weight: 700; color: var(--c-text); }
+    .brd-fit-badge { font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .brd-good { color: #3E9B6E; }
+    .brd-mid  { color: #C8961E; }
+    .brd-bad  { color: #D2555A; }
+    .brd-fit-line { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+    .brd-fit-who { width: 20px; font-size: 11px; color: var(--c-muted); text-align: center; flex-shrink: 0; }
+    .brd-fit-track { flex: 1; height: 7px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; }
+    .brd-fit-fill { height: 100%; border-radius: 4px; transition: width .6s cubic-bezier(.22,1,.36,1); }
+    .brd-fill-me  { background: #6C9BD2; }
+    .brd-fill-dog { background: #E8833A; }
+    .brd-fit-cap { width: 96px; font-size: 10px; color: var(--c-muted); text-align: right; flex-shrink: 0; }
+    .brd-day { font-size: 12.5px; color: var(--c-text); line-height: 1.75; }
+    .brd-check { list-style: none; padding: 0; margin: 0; font-size: 12px; color: var(--c-muted); line-height: 1.8; }
+    .brd-rank { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+    .brd-rank-no { width: 16px; font-size: 12px; font-weight: 800; color: var(--c-muted); text-align: center; }
+    .brd-rank-name { width: 128px; font-size: 12px; color: var(--c-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brd-rank-track { flex: 1; height: 7px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; }
+    .brd-rank-fill { height: 100%; background: #F2B27A; border-radius: 4px; }
+    .brd-rank-pct { width: 34px; font-size: 12px; font-weight: 700; text-align: right; color: var(--c-text); }
+    .brd-rank-best .brd-rank-name, .brd-rank-best .brd-rank-pct { font-weight: 800; color: #E8833A; }
+    .brd-rank-best .brd-rank-fill { background: #E8833A; }
+    .brd-worst { margin-top: 14px; border-radius: 12px; padding: 12px 14px; border: 2px solid var(--c-border); }
+    .brd-worst-name { font-size: 14px; font-weight: 800; color: var(--c-text); margin-bottom: 4px; }
+    .brd-worst-name span { font-size: 12px; color: var(--c-muted); font-weight: 600; }
+    .brd-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
 
     /* ── Friend Line Stats ──────────────────────────── */
     #friendlineStats {
@@ -2772,6 +2842,9 @@
 
   <!-- 고양이 MBTI 검사 -->
   <div id="catmbtiStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 견종 매칭 테스트 -->
+  <div id="dogbreedStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
