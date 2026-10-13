@@ -163,6 +163,10 @@
   <script src="tests/dogbreed/dogbreed-test.js"></script>
   <script src="tests/dogbreed/dogbreed-config.js"></script>
 
+  <!-- ── Cat Breed Match Data ─────────────────────── -->
+  <script src="tests/catbreed/catbreed-test.js"></script>
+  <script src="tests/catbreed/catbreed-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1374,8 +1378,8 @@
     .pm-match-name { font-size: 11px; color: var(--c-muted); margin-top: 2px; line-height: 1.4; }
     .pm-footer { margin-top: 14px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.5; }
 
-    /* ── Dog Breed Match Stats ─────────────────────── */
-    #dogbreedStats {
+    /* ── Breed Match Stats (dogbreed, catbreed 공용) ─────────────────────── */
+    #dogbreedStats, #catbreedStats {
       width: 100%; max-width: 480px;
       background: var(--c-surface);
       border: 2px solid var(--c-border);
@@ -2845,6 +2849,9 @@
 
   <!-- 견종 매칭 테스트 -->
   <div id="dogbreedStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 묘종 매칭 테스트 -->
+  <div id="catbreedStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
