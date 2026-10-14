@@ -167,6 +167,10 @@
   <script src="tests/catbreed/catbreed-test.js"></script>
   <script src="tests/catbreed/catbreed-config.js"></script>
 
+  <!-- ── Pet Owner Type Data ──────────────────────── -->
+  <script src="tests/petowner/petowner-test.js"></script>
+  <script src="tests/petowner/petowner-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1443,6 +1447,65 @@
     .brd-worst-name { font-size: 14px; font-weight: 800; color: var(--c-text); margin-bottom: 4px; }
     .brd-worst-name span { font-size: 12px; color: var(--c-muted); font-weight: 600; }
     .brd-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+
+    /* ── Pet Owner Type Stats ──────────────────────── */
+    #petownerStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .po-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800;
+      text-align: center; letter-spacing: -.3px;
+      margin-bottom: 14px; color: var(--c-text);
+    }
+    .po-divider { border-top: 1px solid var(--c-border); margin: 18px 0; }
+    .po-row { display: flex; align-items: center; gap: 8px; padding: 7px 0; opacity: .78; }
+    .po-row-primary, .po-row-secondary { opacity: 1; }
+    .po-row-left { display: flex; align-items: center; gap: 8px; width: 150px; flex-shrink: 0; }
+    .po-row-emoji { font-size: 20px; }
+    .po-row-info { display: flex; flex-direction: column; min-width: 0; }
+    .po-row-name { font-size: 12.5px; font-weight: 700; color: var(--c-text); white-space: nowrap; }
+    .po-row-badge { font-size: 10.5px; font-weight: 800; color: #E8833A; margin-left: 4px; }
+    .po-row-key { font-size: 10px; color: var(--c-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .po-bar-wrap { flex: 1; height: 9px; background: var(--c-surf2); border-radius: 5px; overflow: hidden; }
+    .po-bar { height: 100%; border-radius: 5px; transition: width .7s cubic-bezier(.22,1,.36,1); }
+    .po-pct { width: 36px; font-size: 12px; font-weight: 800; text-align: right; }
+    .po-combo { margin-top: 12px; border-radius: 12px; padding: 12px 14px; background: var(--c-surf2); border: 1px dashed var(--c-border); }
+    .po-combo-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 4px; }
+    .po-combo-desc { font-size: 12px; color: var(--c-muted); line-height: 1.65; }
+    .po-cols { display: flex; flex-direction: column; gap: 10px; }
+    .po-col { border-radius: 12px; padding: 12px 14px; background: var(--c-surf2); }
+    .po-col-good { border-left: 4px solid #3E9B6E; }
+    .po-col-warn { border-left: 4px solid #E2B13C; }
+    .po-col-label { font-size: 12.5px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+    .po-col ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--c-muted); line-height: 1.7; }
+    .po-quote { margin-top: 12px; border-radius: 12px; padding: 14px 16px; background: var(--c-surf2); }
+    .po-quote-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+    .po-quote-text { font-size: 13px; color: var(--c-text); line-height: 1.75; font-style: italic; }
+    .po-card { border-radius: 12px; padding: 12px 14px; margin-top: 10px; background: var(--c-surf2); }
+    .po-card-label { font-size: 12px; font-weight: 700; color: var(--c-text); margin-bottom: 5px; }
+    .po-card-desc { font-size: 12.5px; color: var(--c-muted); line-height: 1.65; }
+    .po-card-desc b { color: var(--c-text); }
+    .po-plain { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--c-muted); line-height: 1.75; }
+    .po-links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .po-link {
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px;
+      padding: 12px 8px; border-radius: 12px; border: 2px solid var(--c-border);
+      background: var(--c-surf2); text-decoration: none; color: var(--c-text);
+      transition: transform .15s, border-color .15s;
+    }
+    .po-link:hover { transform: translateY(-2px); border-color: #E8833A; }
+    .po-link span { font-size: 22px; }
+    .po-link b { font-size: 12.5px; }
+    .po-link small { font-size: 10.5px; color: var(--c-muted); }
+    .po-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
 
     /* ── Friend Line Stats ──────────────────────────── */
     #friendlineStats {
@@ -2852,6 +2915,9 @@
 
   <!-- 묘종 매칭 테스트 -->
   <div id="catbreedStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 반려인 유형 테스트 -->
+  <div id="petownerStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
