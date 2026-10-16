@@ -171,6 +171,10 @@
   <script src="tests/petowner/petowner-test.js"></script>
   <script src="tests/petowner/petowner-config.js"></script>
 
+  <!-- ── Mental Age Data ──────────────────────────── -->
+  <script src="tests/mentalage/mentalage-test.js"></script>
+  <script src="tests/mentalage/mentalage-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1506,6 +1510,72 @@
     .po-link b { font-size: 12.5px; }
     .po-link small { font-size: 10.5px; color: var(--c-muted); }
     .po-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
+
+    /* ── Mental Age Stats ──────────────────────────── */
+    #mentalageStats {
+      width: 100%; max-width: 480px;
+      background: var(--c-surface);
+      border: 2px solid var(--c-border);
+      border-radius: var(--r);
+      padding: 20px;
+      animation: slideUp .6s 2.0s ease both;
+      opacity: 0;
+      transition: background .35s, border-color .35s;
+    }
+    .ma-hero { text-align: center; }
+    .ma-hero-label { font-size: 12px; color: var(--c-muted); letter-spacing: .3px; }
+    .ma-hero-age {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 64px; font-weight: 800; line-height: 1.05; color: var(--c-text); letter-spacing: -2px;
+    }
+    .ma-hero-age span { font-size: 26px; margin-left: 3px; letter-spacing: 0; }
+    .ma-hero-band { font-size: 16px; font-weight: 800; margin: 4px 0 18px; }
+    .ma-gauge { padding: 0 6px; }
+    .ma-gauge-track {
+      position: relative; height: 12px; border-radius: 6px;
+      background: linear-gradient(90deg, #F28DB2 0%, #F2C94C 30%, #6BBF8E 50%, #4A9DD0 70%, #8E6BB8 85%, #5F7A70 100%);
+    }
+    .ma-gauge-marker {
+      position: absolute; top: -6px; width: 24px; height: 24px; margin-left: -12px;
+      background: var(--c-surface); border: 3px solid var(--c-text); border-radius: 50%;
+      transition: left .8s cubic-bezier(.22,1,.36,1);
+    }
+    .ma-gauge-marker span {
+      position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; font-weight: 800; color: var(--c-text);
+    }
+    .ma-gauge-scale { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--c-muted); margin-top: 8px; }
+    .ma-keywords { font-size: 12px; color: var(--c-muted); margin-top: 12px; }
+    .ma-gap { margin-top: 16px; border-radius: 12px; padding: 14px; background: var(--c-surf2); text-align: center; }
+    .ma-gap-label { font-size: 12.5px; font-weight: 700; color: var(--c-text); margin-bottom: 10px; }
+    .ma-gap-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+    .ma-gap-btn {
+      font: inherit; font-size: 12px; font-weight: 700; padding: 7px 12px; border-radius: 999px;
+      border: 2px solid var(--c-border); background: var(--c-surface); color: var(--c-text); cursor: pointer;
+    }
+    .ma-gap-btn.ma-on { border-color: #E8833A; background: #E8833A; color: #fff; }
+    .ma-gap-result { font-size: 12.5px; color: var(--c-text); margin-top: 10px; line-height: 1.6; min-height: 20px; }
+    .ma-divider { border-top: 1px solid var(--c-border); margin: 18px 0; }
+    .ma-title {
+      font-family: 'Nanum Myeongjo', serif;
+      font-size: 17px; font-weight: 800; text-align: center; letter-spacing: -.3px;
+      margin-bottom: 6px; color: var(--c-text);
+    }
+    .ma-sub { font-size: 12px; color: var(--c-muted); text-align: center; line-height: 1.6; margin-bottom: 14px; }
+    .ma-sub b { color: var(--c-text); }
+    .ma-area { margin-bottom: 14px; }
+    .ma-area-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+    .ma-area-name { font-size: 13px; font-weight: 700; color: var(--c-text); }
+    .ma-area-age { font-size: 18px; font-weight: 800; color: #E8833A; }
+    .ma-area-desc { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; }
+    .ma-area-desc b { color: var(--c-text); }
+    .ma-area-track { height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; }
+    .ma-area-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #F2C94C, #E8833A); transition: width .7s cubic-bezier(.22,1,.36,1); }
+    .ma-card { border-radius: 12px; padding: 12px 14px; margin-top: 10px; background: var(--c-surf2); }
+    .ma-card-label { font-size: 12.5px; font-weight: 700; color: var(--c-text); margin-bottom: 6px; }
+    .ma-card-desc { font-size: 12.5px; color: var(--c-muted); line-height: 1.65; }
+    .ma-card ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--c-muted); line-height: 1.75; }
+    .ma-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
 
     /* ── Friend Line Stats ──────────────────────────── */
     #friendlineStats {
@@ -2918,6 +2988,9 @@
 
   <!-- 반려인 유형 테스트 -->
   <div id="petownerStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 정신연령 테스트 -->
+  <div id="mentalageStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
