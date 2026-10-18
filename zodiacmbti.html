@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마음. — 별자리 × MBTI 궁합</title>
+  <link rel="icon" href="images/favicon.webp" type="image/webp" />
+  <meta name="description" content="우리 둘의 별자리와 MBTI를 넣으면 궁합 %가 바로! 친구, 연인, 썸 상대와 케미를 확인해 보세요. 친구에게 초대 링크를 보내 같이 해볼 수도 있어요." />
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#100f0e" media="(prefers-color-scheme: dark)" />
+
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="별자리 × MBTI 궁합 — 마음." />
+  <meta property="og:description" content="우리 둘의 별자리와 MBTI로 궁합 %를 확인해 보세요. 친구를 초대해서 같이 해볼 수도 있어요." />
+  <meta property="og:image"       content="https://testlab.tmhub.co.kr/images/zodiacmbti/thumb.webp" />
+  <meta property="og:url"         content="https://testlab.tmhub.co.kr/zodiacmbti.html" />
+  <meta property="og:site_name"   content="마음." />
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="별자리 × MBTI 궁합 — 마음." />
+  <meta name="twitter:description" content="우리 둘의 별자리와 MBTI로 궁합 %를 확인해 보세요." />
+  <meta name="twitter:image"       content="https://testlab.tmhub.co.kr/images/zodiacmbti/thumb.webp" />
+  <meta name="keywords" content="별자리 MBTI 궁합, MBTI 궁합 테스트, 별자리 궁합, 연애 궁합, 친구 궁합, 무료 심리테스트, 마음" />
+  <link rel="canonical" href="https://testlab.tmhub.co.kr/zodiacmbti.html" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
+    integrity="sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4"
+    crossorigin="anonymous"></script>
+  <script src="tests/zodiacmbti/zodiacmbti-test.js"></script>
+
+  <style>
+    :root {
+      --c-main:    #1c1917;
+      --c-accent:  #9b6bd6;
+      --c-accent2: #e85d75;
+      --c-bg:      #faf8f5;
+      --c-surface: #ffffff;
+      --c-surf2:   #f3f0ea;
+      --c-text:    #1c1917;
+      --c-muted:   #9b9490;
+      --c-border:  #e8e3db;
+      --shadow:        0 2px 16px rgba(0,0,0,.06);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.13);
+      --r:   20px;
+      --r-sm: 14px;
+    }
+    [data-theme="dark"] {
+      --c-main:    #f0ece6;
+      --c-accent:  #b48af0;
+      --c-accent2: #ff4d72;
+      --c-bg:      #100f0e;
+      --c-surface: #1a1917;
+      --c-surf2:   #211f1d;
+      --c-text:    #f0ece6;
+      --c-muted:   #8a857f;
+      --c-border:  #2a2724;
+      --shadow:        0 2px 16px rgba(0,0,0,.4);
+      --shadow-hover:  0 12px 40px rgba(0,0,0,.6);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background .35s, color .35s;
+    }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    select { font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    #topNav {
+      position: fixed;
+      top: max(10px, env(safe-area-inset-top)); left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 18px; z-index: 150;
+    }
+    .nav-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--c-surface); border: 1.5px solid var(--c-border);
+      display: grid; place-items: center; font-size: 16px; color: var(--c-text);
+      transition: border-color .2s, transform .2s, background .35s;
+    }
+    .nav-btn:hover { border-color: var(--c-accent); }
+    #themeBtn:hover { transform: rotate(22deg); }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: flex; flex-direction: column; }
+
+    #toast {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--c-main); color: var(--c-bg);
+      font-size: 13px; font-weight: 500;
+      padding: 12px 24px; border-radius: 100px;
+      opacity: 0; transition: opacity .3s, transform .3s;
+      pointer-events: none; z-index: 999; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bumpIn  { from { opacity: 0; transform: scale(.45); } to { opacity: 1; transform: scale(1); } }
+    @keyframes pulse   { 0%,100% { opacity:1; } 50% { opacity:.35; } }
+    @keyframes spin    { to { transform: rotate(360deg); } }
+    @keyframes dotBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+    /* ── Loading ── */
+    #loadingScreen { align-items: center; justify-content: center; text-align: center; gap: 28px; }
+    .loading-spinner {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 3px solid var(--c-border); border-top-color: var(--c-accent);
+      animation: spin 1s linear infinite;
+    }
+    .loading-text { font-family: 'Nanum Myeongjo', serif; font-size: 20px; letter-spacing: -.3px; animation: pulse 1.4s ease-in-out infinite; }
+    .loading-dots span { display: inline-block; animation: dotBounce .8s ease-in-out infinite; font-size: 22px; color: var(--c-accent); }
+    .loading-dots span:nth-child(2) { animation-delay: .15s; }
+    .loading-dots span:nth-child(3) { animation-delay: .30s; }
+
+    /* ── Intro ── */
+    #introScreen { align-items: center; justify-content: center; padding: 88px 24px 56px; text-align: center; animation: fadeIn .6s ease both; }
+    .intro-thumb {
+      width: 100%; max-width: 300px; border-radius: 24px; object-fit: cover;
+      aspect-ratio: 4/3; margin-bottom: 28px; box-shadow: var(--shadow-hover);
+      animation: bumpIn .7s .1s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .intro-title { font-family: 'Nanum Myeongjo', serif; font-size: 28px; letter-spacing: -.5px; line-height: 1.3; margin-bottom: 12px; }
+    .intro-sub { font-size: 14px; font-weight: 300; color: var(--c-muted); line-height: 1.7; margin-bottom: 26px; }
+    .intro-meta { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 34px; }
+    .meta-pill { font-size: 12px; font-weight: 500; color: var(--c-muted); background: var(--c-surf2); padding: 6px 14px; border-radius: 100px; }
+    .invite-banner {
+      width: 100%; max-width: 340px; margin: -8px 0 24px;
+      padding: 14px 16px; border-radius: var(--r-sm);
+      background: linear-gradient(135deg, rgba(155,107,214,.14), rgba(232,93,117,.12));
+      border: 1.5px solid var(--c-accent); font-size: 13px; line-height: 1.7;
+    }
+    .invite-banner b { font-size: 15px; }
+    .start-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--c-main); color: var(--c-bg);
+      font-family: 'Nanum Myeongjo', serif; font-size: 18px;
+      padding: 18px 48px; border-radius: 100px;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, opacity .2s;
+    }
+    .start-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .start-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Input screens ── */
+    .input-screen { max-width: 480px; margin: 0 auto; width: 100%; padding: 76px 20px max(32px, env(safe-area-inset-bottom)); }
+    .step-badge { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--c-accent); margin-bottom: 8px; }
+    .input-title { font-family: 'Nanum Myeongjo', serif; font-size: 24px; letter-spacing: -.4px; text-align: center; margin-bottom: 6px; }
+    .input-sub { font-size: 13px; color: var(--c-muted); text-align: center; margin-bottom: 22px; line-height: 1.6; }
+    .field-label { font-size: 13px; font-weight: 700; margin: 20px 0 8px; display: flex; align-items: baseline; gap: 8px; }
+    .field-label small { font-size: 11px; font-weight: 400; color: var(--c-muted); }
+    .bday-row { display: flex; gap: 8px; }
+    .bday-row select {
+      flex: 1; padding: 13px 12px; font-size: 15px; border-radius: var(--r-sm);
+      border: 1.5px solid var(--c-border); background: var(--c-surface); color: var(--c-text);
+    }
+    .bday-hint { font-size: 12.5px; color: var(--c-accent); font-weight: 700; margin-top: 8px; min-height: 18px; }
+    .sign-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .sign-chip {
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+      padding: 9px 2px; border-radius: 12px; border: 1.5px solid var(--c-border);
+      background: var(--c-surface); color: var(--c-text); transition: border-color .15s, background .15s, transform .15s;
+    }
+    .sign-chip .sym { font-size: 22px; line-height: 1.1; }
+    .sign-chip .nm { font-size: 11.5px; font-weight: 700; }
+    .sign-chip .rg { font-size: 9.5px; color: var(--c-muted); }
+    .sign-chip:hover { border-color: var(--c-accent); }
+    .sign-chip.on { border-color: var(--c-accent); background: var(--c-accent); color: #fff; transform: scale(1.03); }
+    .sign-chip.on .rg { color: rgba(255,255,255,.8); }
+    .mbti-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .mbti-chip {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 10px 2px; border-radius: 12px; border: 1.5px solid var(--c-border);
+      background: var(--c-surface); color: var(--c-text); transition: border-color .15s, background .15s, transform .15s;
+    }
+    .mbti-chip .cd { font-size: 14px; font-weight: 800; letter-spacing: .5px; }
+    .mbti-chip .nk { font-size: 9.5px; color: var(--c-muted); line-height: 1.3; text-align: center; padding: 0 2px; }
+    .mbti-chip:hover { border-color: var(--c-accent2); }
+    .mbti-chip.on { border-color: var(--c-accent2); background: var(--c-accent2); color: #fff; transform: scale(1.03); }
+    .mbti-chip.on .nk { color: rgba(255,255,255,.85); }
+    .mbti-help { display: block; text-align: center; font-size: 12px; color: var(--c-muted); margin-top: 10px; text-decoration: underline; }
+    .input-actions { margin-top: 26px; display: flex; justify-content: center; }
+
+    /* ── Result ── */
+    #resultScreen { align-items: center; padding: 80px 20px 72px; max-width: 480px; margin: 0 auto; width: 100%; }
+    .result-kicker { font-size: 11px; font-weight: 700; letter-spacing: 2px; color: var(--c-accent); margin-bottom: 20px; opacity: 0; animation: fadeIn .5s .1s ease both; }
+    .share-card-preview { width: 100%; max-width: 320px; margin-bottom: 28px; opacity: 0; animation: fadeIn .6s .15s ease both; }
+    .share-thumb-placeholder { width: 100%; aspect-ratio: 340/480; border-radius: 28px; background: var(--c-surf2); animation: pulse 1.4s ease-in-out infinite; }
+    #shareThumb { width: 100%; border-radius: 28px; box-shadow: var(--shadow-hover); display: block; }
+
+    .result-divider { width: 36px; height: 2px; background: var(--c-border); border-radius: 2px; margin: 18px auto 22px; }
+
+    .zm-cards { width: 100%; margin-bottom: 28px; opacity: 0; animation: slideUp .6s .7s ease both; }
+    .zm-card {
+      background: var(--c-surface); border: 1.5px solid var(--c-border); border-radius: var(--r-sm);
+      padding: 16px 16px 14px; margin-bottom: 10px; position: relative; overflow: hidden;
+      transition: background .35s, border-color .35s;
+    }
+    .zm-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--card-color, var(--c-accent)); }
+    .zm-card-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; padding-left: 4px; }
+    .zm-card-desc { font-size: 13px; font-weight: 300; color: var(--c-muted); line-height: 1.8; padding-left: 4px; }
+    .zm-card-desc b { color: var(--c-text); font-weight: 700; }
+    .zm-list { list-style: none; padding-left: 4px; margin-top: 8px; font-size: 13px; line-height: 1.75; color: var(--c-muted); }
+    .zm-list li { margin-bottom: 3px; }
+    .zm-list li.good { color: var(--c-text); }
+    .zm-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 100px; background: var(--c-accent2); color: #fff; margin-left: 6px; vertical-align: middle; }
+    .zm-sub { margin-top: 10px; padding-left: 4px; }
+    .zm-sub-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .zm-sub-name { width: 56px; font-size: 12.5px; font-weight: 700; }
+    .zm-sub-track { flex: 1; height: 8px; background: var(--c-surf2); border-radius: 4px; overflow: hidden; }
+    .zm-sub-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #c9a5f0, #9b6bd6); transition: width .8s cubic-bezier(.22,1,.36,1); }
+    .zm-sub-val { width: 34px; text-align: right; font-size: 12.5px; font-weight: 800; }
+    .zm-who { display: flex; gap: 10px; padding-left: 4px; }
+    .zm-who-item { flex: 1; background: var(--c-surf2); border-radius: 12px; padding: 10px; font-size: 12px; line-height: 1.55; }
+    .zm-who-item b { display: block; font-size: 13px; margin-bottom: 2px; }
+    .zm-who-item span { color: var(--c-muted); }
+
+    .action-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; opacity: 0; animation: slideUp .5s 1.1s ease both; }
+    .action-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px 20px; border-radius: var(--r-sm); font-size: 15px; font-weight: 500;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .25s; cursor: pointer;
+    }
+    .action-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .btn-save   { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-retry  { background: var(--c-surf2); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-kakao  { background: #FEE500; color: #1c1917; }
+    .btn-copy   { background: var(--c-surface); color: var(--c-text); border: 1.5px solid var(--c-border); }
+    .btn-invite { background: linear-gradient(135deg, #9b6bd6, #e85d75); color: #fff; font-weight: 700; }
+    .btn-more   { background: var(--c-main); color: var(--c-bg); }
+    .btn-icon   { font-size: 19px; }
+    .ad-inline { width: 100%; max-width: 380px; margin: 8px 0; }
+
+    /* ── Share card (off-screen) ── */
+    #shareCard {
+      position: fixed; left: -9999px; top: 0; width: 340px; height: 480px;
+      background: #1c1917; border-radius: 28px; overflow: hidden;
+      display: flex; flex-direction: column; padding: 20px 24px;
+      font-family: 'Noto Sans KR', sans-serif; -webkit-font-smoothing: antialiased;
+    }
+    .sc-blobs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .sc-blob { position: absolute; border-radius: 50%; }
+    .sc-blob-1 { width: 240px; height: 240px; top: -80px; right: -70px; background: #9b6bd6; opacity: .28; }
+    .sc-blob-2 { width: 180px; height: 180px; bottom: -60px; left: -40px; background: #e85d75; opacity: .20; }
+    .sc-blob-3 { width: 80px; height: 80px; top: 40%; left: -20px; background: #ffb86b; opacity: .14; }
+    .sc-inner { position: relative; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .sc-header { display: flex; justify-content: space-between; align-items: center; }
+    .sc-logo { font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #faf8f5; letter-spacing: -1px; }
+    .sc-logo-dot { color: #b48af0; }
+    .sc-tag { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #c9a5f0; background: rgba(180,138,240,.16); padding: 5px 12px; border-radius: 100px; }
+    .sc-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 9px; flex: 1; justify-content: center; }
+    .sc-pair { display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .sc-person { display: flex; align-items: center; gap: 6px; }
+    .sc-sym { font-size: 24px; line-height: 1; color: #faf8f5; }
+    .sc-sg { display: none; }
+    .sc-mb { font-size: 15px; font-weight: 800; color: #faf8f5; letter-spacing: .5px; }
+    .sc-heart { font-size: 20px; }
+    .sc-art { width: 252px; height: 252px; border-radius: 16px; object-fit: cover; display: block; box-shadow: 0 6px 24px rgba(0,0,0,.35); }
+    .sc-percent { font-family: 'Nanum Myeongjo', serif; font-size: 54px; font-weight: 800; color: #faf8f5; letter-spacing: -2px; line-height: 1; }
+    .sc-percent span { font-size: 24px; letter-spacing: 0; }
+    .sc-type, .sc-desc { display: none; }
+    #shareCard.no-art .sc-type { display: block; }
+    #shareCard.no-art .sc-desc { display: block; }
+    .sc-type { font-family: 'Nanum Myeongjo', serif; font-size: 20px; color: #faf8f5; letter-spacing: -.5px; line-height: 1.3; }
+    .sc-divider { display: none; }
+    .sc-desc { font-size: 11.5px; color: rgba(250,248,245,.62); line-height: 1.5; font-weight: 300; max-width: 250px; }
+    .sc-footer { font-size: 10px; color: rgba(250,248,245,.3); font-weight: 500; letter-spacing: .5px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<nav id="topNav">
+  <button class="nav-btn" id="backBtn" aria-label="뒤로가기">←</button>
+  <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
+</nav>
+
+<!-- ══════ INTRO ══════ -->
+<section class="screen active" id="introScreen">
+  <img class="intro-thumb" id="introThumb" src="images/zodiacmbti/thumb.webp" alt="별자리 MBTI 궁합" onerror="this.style.display='none'" />
+  <h1 class="intro-title">별자리 × MBTI<br>궁합</h1>
+  <p class="intro-sub">우리 둘의 별자리와 MBTI만 넣으면<br>궁합 %가 바로 나와요.</p>
+  <div id="inviteBanner" class="invite-banner" style="display:none"></div>
+  <div class="intro-meta">
+    <span class="meta-pill">🔮 2인 입력</span>
+    <span class="meta-pill">⚡ 즉시 결과</span>
+    <span class="meta-pill">이름·생년 저장 안 함</span>
+  </div>
+  <button class="start-btn" id="startBtn">궁합 보러 가기 →</button>
+  <div class="ad-inline" style="margin-top:32px;">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-7327562206502398" data-ad-slot="3769192952"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+</section>
+
+<!-- ══════ INPUT (A / B 공용 폼) ══════ -->
+<section class="screen" id="inputScreen">
+  <div class="input-screen">
+    <div class="step-badge" id="stepBadge">STEP 1 / 2</div>
+    <h2 class="input-title" id="inputTitle">나의 정보</h2>
+    <p class="input-sub" id="inputSub">생일(월·일)이나 별자리를 고르고, MBTI를 선택하세요.</p>
+
+    <div class="field-label">🎂 생일 <small>월·일만 입력해요 (연도 X)</small></div>
+    <div class="bday-row">
+      <select id="bdayMonth" aria-label="생일 월"><option value="">월</option></select>
+      <select id="bdayDay" aria-label="생일 일"><option value="">일</option></select>
+    </div>
+    <div class="bday-hint" id="bdayHint"></div>
+
+    <div class="field-label">✨ 별자리 <small>생일을 모르면 직접 골라 주세요</small></div>
+    <div class="sign-grid" id="signGrid"></div>
+
+    <div class="field-label">🧠 MBTI</div>
+    <div class="mbti-grid" id="mbtiGrid"></div>
+    <a class="mbti-help" href="mbti.html" target="_blank" rel="noopener">MBTI를 모르면 여기서 검사해 보세요 →</a>
+
+    <div class="input-actions"><button class="start-btn" id="nextBtn" disabled>다음 →</button></div>
+  </div>
+</section>
+
+<!-- ══════ LOADING ══════ -->
+<section class="screen" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <div>
+    <div class="loading-text">별과 MBTI를 맞춰 보는 중</div>
+    <div class="loading-dots"><span>·</span><span>·</span><span>·</span></div>
+  </div>
+  <button class="start-btn" id="viewResultBtn" style="display:none; margin-top:20px;">결과 확인하기 →</button>
+</section>
+
+<!-- ══════ RESULT ══════ -->
+<section class="screen" id="resultScreen">
+  <div class="result-kicker">우리의 궁합은?</div>
+
+  <div class="share-card-preview">
+    <div class="share-thumb-placeholder" id="shareThumbPlaceholder"></div>
+    <img id="shareThumb" src="" alt="결과 카드 미리보기" style="display:none" />
+  </div>
+
+  <div class="result-divider"></div>
+
+  <div class="zm-cards" id="zmCards"></div>
+
+  <div class="ad-inline" style="margin-bottom:16px;">
+    <ins class="adsbygoogle" style="display:block"
+         data-ad-client="ca-pub-7327562206502398" data-ad-slot="3769192952"
+         data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <div class="action-btns">
+    <button class="action-btn btn-invite" id="inviteBtn">
+      <span class="btn-icon">💌</span> 친구에게 궁합 초대 보내기
+    </button>
+    <button class="action-btn btn-kakao" id="kakaoBtn">
+      <span class="btn-icon">💬</span> 카카오톡으로 결과 공유
+    </button>
+    <button class="action-btn btn-save" id="saveBtn">
+      <span class="btn-icon">💾</span> 결과 이미지 저장
+    </button>
+    <button class="action-btn btn-copy" id="copyBtn">
+      <span class="btn-icon">🔗</span> 결과 링크 복사
+    </button>
+    <button class="action-btn btn-retry" id="retryBtn">
+      <span class="btn-icon">🔄</span> <span id="retryLabel">다시 하기</span>
+    </button>
+    <a class="action-btn btn-more" href="index.html">
+      <span class="btn-icon">✨</span> 다른 테스트 하러 가기
+    </a>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<!-- ══════ SHARE CARD (off-screen, html2canvas 캡처용) ══════ -->
+<div id="shareCard" aria-hidden="true">
+  <div class="sc-blobs"><div class="sc-blob sc-blob-1"></div><div class="sc-blob sc-blob-2"></div><div class="sc-blob sc-blob-3"></div></div>
+  <div class="sc-inner">
+    <div class="sc-header">
+      <div class="sc-logo">마음<span class="sc-logo-dot">.</span></div>
+      <div class="sc-tag">별자리 × MBTI 궁합</div>
+    </div>
+    <div class="sc-center">
+      <img class="sc-art" id="scArt" src="" alt="" />
+      <div class="sc-pair">
+        <div class="sc-person"><div class="sc-sym" id="scSymA"></div><div class="sc-sg" id="scSgA"></div><div class="sc-mb" id="scMbA"></div></div>
+        <div class="sc-heart">💞</div>
+        <div class="sc-person"><div class="sc-sym" id="scSymB"></div><div class="sc-sg" id="scSgB"></div><div class="sc-mb" id="scMbB"></div></div>
+      </div>
+      <div class="sc-percent" id="scPercent"></div>
+      <div class="sc-type" id="scType"></div>
+      <div class="sc-divider"></div>
+      <div class="sc-desc" id="scDesc"></div>
+    </div>
+    <div class="sc-footer">마음. 심리테스트 · testlab.tmhub.co.kr</div>
+  </div>
+</div>
+
+<script>
+  const BASE_URL = 'https://testlab.tmhub.co.kr/zodiacmbti.html';
+
+  /* ── Theme ── */
+  const html = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) {
+    html.dataset.theme = t;
+    themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+    try { localStorage.setItem('theme', t); } catch (_) {}
+  }
+  let savedTheme = null;
+  try { savedTheme = localStorage.getItem('theme'); } catch (_) {}
+  setTheme(savedTheme ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  themeBtn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
+
+  /* ── Screen nav ── */
+  const screens = {
+    intro:   document.getElementById('introScreen'),
+    input:   document.getElementById('inputScreen'),
+    loading: document.getElementById('loadingScreen'),
+    result:  document.getElementById('resultScreen')
+  };
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  /* ── 상태 / URL 파라미터 ── */
+  // a, b = { mbti: 'ENFP', sign: 0~11 } | null
+  const state = { a: null, b: null, step: 'a', mode: 'normal', result: null, inviter: null };
+
+  function parsePerson(v) {
+    const m = /^([EI][NS][TF][JP])-(\d{1,2})$/i.exec(v || '');
+    if (!m) return null;
+    const sign = +m[2];
+    if (sign < 0 || sign > 11) return null;
+    return { mbti: m[1].toUpperCase(), sign };
+  }
+  function personParam(p) { return p.mbti + '-' + p.sign; }
+  function inviteUrl(a) { return BASE_URL + '?a=' + personParam(a); }
+  function resultUrl(a, b) { return BASE_URL + '?a=' + personParam(a) + '&b=' + personParam(b); }
+
+  const params = new URLSearchParams(location.search);
+  const pa = parsePerson(params.get('a'));
+  const pb = parsePerson(params.get('b'));
+
+  /* ── 입력 폼 ── */
+  const monthSel = document.getElementById('bdayMonth');
+  const daySel = document.getElementById('bdayDay');
+  for (let m = 1; m <= 12; m++) monthSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}월</option>`);
+  const daysIn = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  function fillDays(month) {
+    const keep = daySel.value;
+    daySel.innerHTML = '<option value="">일</option>';
+    const n = month ? daysIn[month - 1] : 31;
+    for (let d = 1; d <= n; d++) daySel.insertAdjacentHTML('beforeend', `<option value="${d}">${d}일</option>`);
+    if (keep && +keep <= n) daySel.value = keep;
+  }
+  fillDays(0);
+
+  const signGrid = document.getElementById('signGrid');
+  ZM_SIGNS.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sign-chip'; b.dataset.i = i;
+    b.innerHTML = `<span class="sym">${s.symbol}</span><span class="nm">${s.name}</span><span class="rg">${s.range}</span>`;
+    b.addEventListener('click', () => { form.sign = i; syncForm(); });
+    signGrid.appendChild(b);
+  });
+  const mbtiGrid = document.getElementById('mbtiGrid');
+  Object.entries(ZM_MBTI).forEach(([code, info]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'mbti-chip'; b.dataset.code = code;
+    b.innerHTML = `<span class="cd">${code}</span><span class="nk">${info.nick}</span>`;
+    b.addEventListener('click', () => { form.mbti = code; syncForm(); });
+    mbtiGrid.appendChild(b);
+  });
+
+  const form = { sign: null, mbti: null };
+  const nextBtn = document.getElementById('nextBtn');
+  const bdayHint = document.getElementById('bdayHint');
+
+  function onBdayChange() {
+    const m = +monthSel.value, d = +daySel.value;
+    if (m && d) {
+      form.sign = zmSignIndexFromDate(m, d);
+      bdayHint.textContent = `→ ${ZM_SIGNS[form.sign].symbol} ${ZM_SIGNS[form.sign].name}예요`;
+    } else bdayHint.textContent = '';
+    syncForm();
+  }
+  monthSel.addEventListener('change', () => { fillDays(+monthSel.value); onBdayChange(); });
+  daySel.addEventListener('change', onBdayChange);
+
+  function syncForm() {
+    signGrid.querySelectorAll('.sign-chip').forEach(c => c.classList.toggle('on', +c.dataset.i === form.sign));
+    mbtiGrid.querySelectorAll('.mbti-chip').forEach(c => c.classList.toggle('on', c.dataset.code === form.mbti));
+    nextBtn.disabled = !(form.sign !== null && form.mbti);
+  }
+  function resetForm() {
+    form.sign = null; form.mbti = null;
+    monthSel.value = ''; fillDays(0); daySel.value = ''; bdayHint.textContent = '';
+    syncForm();
+  }
+
+  function openInput(step) {
+    state.step = step;
+    resetForm();
+    const invited = state.mode === 'invited';
+    const badge = document.getElementById('stepBadge');
+    const title = document.getElementById('inputTitle');
+    const sub = document.getElementById('inputSub');
+    if (invited) {
+      badge.textContent = '초대받은 궁합';
+      title.textContent = '나의 정보';
+      sub.textContent = '친구의 정보는 이미 들어 있어요. 내 정보만 입력하면 바로 결과가 나와요.';
+      nextBtn.textContent = '궁합 확인하기 →';
+    } else if (step === 'a') {
+      badge.textContent = 'STEP 1 / 2';
+      title.textContent = '나의 정보';
+      sub.textContent = '생일(월·일)이나 별자리를 고르고, MBTI를 선택하세요.';
+      nextBtn.textContent = '다음 →';
+    } else {
+      badge.textContent = 'STEP 2 / 2';
+      title.textContent = '상대방의 정보';
+      sub.textContent = '궁합을 보고 싶은 사람의 별자리와 MBTI를 입력하세요.';
+      nextBtn.textContent = '궁합 확인하기 →';
+    }
+    showScreen('input');
+  }
+
+  nextBtn.addEventListener('click', () => {
+    const person = { mbti: form.mbti, sign: form.sign };
+    if (state.mode === 'invited') {
+      // 초대 링크: a=초대한 친구, 나=b
+      state.b = person;
+      startResult(true);
+    } else if (state.step === 'a') {
+      state.a = person;
+      openInput('b');
+    } else {
+      state.b = person;
+      startResult(true);
+    }
+  });
+
+  /* ── 결과 ── */
+  function startResult(count) {
+    state.result = calcZodiacMbti(state.a, state.b);
+    renderResult(state.result);
+    showScreen('loading');
+    if (count) recordParticipation();
+    const viewBtn = document.getElementById('viewResultBtn');
+    viewBtn.style.display = 'none';
+    document.querySelector('#loadingScreen .loading-spinner').style.display = '';
+    document.querySelector('#loadingScreen .loading-text').style.display = '';
+    document.querySelector('#loadingScreen .loading-dots').style.display = '';
+    setTimeout(() => {
+      document.querySelector('#loadingScreen .loading-spinner').style.display = 'none';
+      document.querySelector('#loadingScreen .loading-text').style.display = 'none';
+      document.querySelector('#loadingScreen .loading-dots').style.display = 'none';
+      viewBtn.style.display = '';
+      viewBtn.onclick = () => showScreen('result');
+    }, 1800);
+  }
+
+  function renderResult(r) {
+    const [pA, pB] = r.people;
+    const A = state.a, B = state.b;
+    document.documentElement.style.setProperty('--result-color', r.tier.color);
+
+    /* share card */
+    document.getElementById('scSymA').textContent = pA.sign.symbol;
+    document.getElementById('scSgA').textContent = pA.sign.name;
+    document.getElementById('scMbA').textContent = pA.mbti;
+    document.getElementById('scSymB').textContent = pB.sign.symbol;
+    document.getElementById('scSgB').textContent = pB.sign.name;
+    document.getElementById('scMbB').textContent = pB.mbti;
+    document.getElementById('scPercent').innerHTML = `${r.percent}<span>%</span>`;
+    document.getElementById('scType').textContent = `${r.tier.emoji} ${r.tier.name}`;
+    document.getElementById('scDesc').textContent = r.tier.tagline;
+    const art = document.getElementById('scArt');
+    art.style.display = '';
+    const card = document.getElementById('shareCard');
+    card.classList.remove('no-art');
+    // 일러스트(등급 이름·한 줄 소개 포함)를 못 불러오면 코드 텍스트로 대체해 카드를 생성한다
+    art.onerror = () => { art.style.display = 'none'; card.classList.add('no-art'); generateThumb(); };
+    art.onload = () => generateThumb();
+    art.src = r.tier.img;
+
+    /* cards */
+    const e = r.elementPair;
+    const subRows = Object.entries(ZM_SUB_META).map(([k, m]) => `
+      <div class="zm-sub-row">
+        <span class="zm-sub-name">${m.emoji} ${m.name}</span>
+        <div class="zm-sub-track"><div class="zm-sub-fill" style="width:${r.subs[k]}%"></div></div>
+        <span class="zm-sub-val">${r.subs[k]}</span>
+      </div>`).join('');
+    const goods = r.strengths.map(s => `<li class="good">✓ ${s}</li>`).join('');
+    const cares = r.cautions.map(s => `<li>△ ${s}</li>`).join('');
+    const acts = e.acts.map(s => `<li>• ${s}</li>`).join('');
+
+    document.getElementById('zmCards').innerHTML = `
+      <div class="zm-card" style="--card-color:${r.tier.color}">
+        <div class="zm-card-title">${r.tier.emoji} ${r.percent}% · ${r.tier.name}</div>
+        <div class="zm-card-desc">${r.tier.desc}</div>
+      </div>
+      <div class="zm-card" style="--card-color:${r.tier.color}">
+        <div class="zm-card-title">🌠 별자리 궁합 — ${r.aspect.name}</div>
+        <div class="zm-card-desc"><b>${pA.sign.symbol} ${pA.sign.name}</b> × <b>${pB.sign.symbol} ${pB.sign.name}</b> · ${e.e1.emoji}${e.e1.name} × ${e.e2.emoji}${e.e2.name}<br>${r.aspect.text}<br><br>${e.text}</div>
+      </div>
+      <div class="zm-card" style="--card-color:#e85d75">
+        <div class="zm-card-title">🧠 MBTI 궁합 — ${A.mbti} × ${B.mbti}${r.golden ? '<span class="zm-badge">찰떡 조합</span>' : ''}</div>
+        <ul class="zm-list">${goods}${cares}</ul>
+      </div>
+      <div class="zm-card" style="--card-color:#9b6bd6">
+        <div class="zm-card-title">📊 케미 점수</div>
+        <div class="zm-sub">${subRows}</div>
+      </div>
+      <div class="zm-card" style="--card-color:#4A9DD0">
+        <div class="zm-card-title">🙋 우리는 이런 사람들이에요</div>
+        <div class="zm-who">
+          <div class="zm-who-item"><b>${pA.sign.symbol} ${pA.mbti}</b>${pA.mbtiInfo.nick}<br><span>${pA.sign.key}</span></div>
+          <div class="zm-who-item"><b>${pB.sign.symbol} ${pB.mbti}</b>${pB.mbtiInfo.nick}<br><span>${pB.sign.key}</span></div>
+        </div>
+      </div>
+      <div class="zm-card" style="--card-color:#7A9B57">
+        <div class="zm-card-title">💡 이렇게 하면 더 좋아져요</div>
+        <div class="zm-card-desc">${r.tip}</div>
+        <ul class="zm-list">${acts}</ul>
+      </div>
+      <div class="zm-card" style="--card-color:#9b9490">
+        <div class="zm-card-desc" style="font-size:11.5px;">재미로 보는 궁합이에요. 별자리와 MBTI는 사람의 일부만 보여 주고, 계산 방식도 과학적 근거가 있는 것은 아니에요. 입력한 정보는 저장하지 않아요.</div>
+      </div>
+    `;
+
+    /* 모드별 버튼 */
+    const retryLabel = document.getElementById('retryLabel');
+    retryLabel.textContent = state.mode === 'shared' ? '나도 해 보기' : '다시 하기';
+    // 초대 버튼: 내가 입력한 정보로만 초대한다 (일반=내 정보 a, 초대받음=내 정보 b, 공유받은 결과=숨김)
+    state.inviter = state.mode === 'invited' ? state.b : (state.mode === 'shared' ? null : state.a);
+    document.getElementById('inviteBtn').style.display = state.inviter ? '' : 'none';
+
+    document.getElementById('shareThumb').style.display = 'none';
+    document.getElementById('shareThumbPlaceholder').style.display = '';
+    // 일러스트(scArt)가 로드되면 onload에서 카드 이미지를 생성한다. 이미 캐시되어 있으면 바로 생성.
+    if (art.complete && art.naturalWidth > 0) generateThumb();
+  }
+
+  /* ── html2canvas ── */
+  async function generateThumb() {
+    if (typeof html2canvas === 'undefined') return;
+    try {
+      const canvas = await html2canvas(document.getElementById('shareCard'), { scale: 1.5, useCORS: true, backgroundColor: null, logging: false });
+      const thumb = document.getElementById('shareThumb');
+      thumb.src = canvas.toDataURL('image/png');
+      thumb.style.display = 'block';
+      document.getElementById('shareThumbPlaceholder').style.display = 'none';
+    } catch (_) {}
+  }
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (typeof html2canvas === 'undefined') { showToast('저장 기능을 불러오는 중이에요'); return; }
+    try {
+      const canvas = await html2canvas(document.getElementById('shareCard'), { scale: 2, useCORS: true, backgroundColor: null, logging: false });
+      const a = document.createElement('a');
+      a.download = '별자리MBTI궁합_결과.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    } catch (_) { showToast('저장에 실패했어요'); }
+  });
+
+  /* ── 공유 ── */
+  function initKakao() {
+    if (typeof Kakao === 'undefined') return false;
+    if (!Kakao.isInitialized()) Kakao.init('bbe63bfcba108e48b558a6554e0fd9c1');
+    return true;
+  }
+  const THUMB_URL = 'https://testlab.tmhub.co.kr/images/zodiacmbti/thumb.webp';
+
+  document.getElementById('kakaoBtn').addEventListener('click', () => {
+    if (!state.result) return;
+    if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
+    const r = state.result, [pA, pB] = r.people;
+    const url = resultUrl(state.a, state.b);
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: `${pA.sign.symbol}${pA.mbti} × ${pB.sign.symbol}${pB.mbti} 궁합 ${r.percent}%`,
+        description: `${r.tier.emoji} ${r.tier.name} — ${r.tier.tagline}`,
+        imageUrl: THUMB_URL,
+        link: { mobileWebUrl: url, webUrl: url }
+      },
+      buttons: [
+        { title: '결과 보기', link: { mobileWebUrl: url, webUrl: url } },
+        { title: '나도 궁합 보기', link: { mobileWebUrl: BASE_URL, webUrl: BASE_URL } }
+      ]
+    });
+  });
+  document.getElementById('inviteBtn').addEventListener('click', () => {
+    const me = state.inviter;
+    if (!me) return;
+    if (!initKakao()) {
+      navigator.clipboard.writeText(inviteUrl(me)).then(() => showToast('초대 링크를 복사했어요! 친구에게 보내 주세요')).catch(() => showToast('복사에 실패했어요'));
+      return;
+    }
+    const sg = ZM_SIGNS[me.sign];
+    const url = inviteUrl(me);
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '💌 별자리×MBTI 궁합 초대장이 도착했어요',
+        description: `${sg.symbol} ${sg.name} · ${me.mbti}인 친구와 나의 궁합은? 내 정보만 넣으면 바로 알 수 있어요.`,
+        imageUrl: THUMB_URL,
+        link: { mobileWebUrl: url, webUrl: url }
+      },
+      buttons: [{ title: '궁합 확인하기', link: { mobileWebUrl: url, webUrl: url } }]
+    });
+  });
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    if (!state.result) return;
+    navigator.clipboard.writeText(resultUrl(state.a, state.b))
+      .then(() => showToast('결과 링크가 복사됐어요!'))
+      .catch(() => showToast('복사에 실패했어요'));
+  });
+
+  /* ── 다시 하기 / 뒤로 ── */
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    state.a = null; state.b = null; state.result = null; state.mode = 'normal';
+    document.getElementById('inviteBanner').style.display = 'none';
+    history.replaceState(null, '', location.pathname);
+    openInput('a');
+  });
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if (state.mode === 'invited') openInput('b'); else openInput('a');
+  });
+  document.getElementById('backBtn').addEventListener('click', () => {
+    if (screens.result.classList.contains('active') || screens.loading.classList.contains('active')) { showScreen('intro'); return; }
+    if (screens.input.classList.contains('active')) {
+      if (state.mode === 'normal' && state.step === 'b') { openInput('a'); return; }
+      showScreen('intro'); return;
+    }
+    window.location.href = 'index.html';
+  });
+
+  /* ── 진입 모드 결정 ── */
+  if (pa && pb) {
+    // 두 사람 정보가 모두 담긴 결과 링크 → 바로 결과
+    state.mode = 'shared'; state.a = pa; state.b = pb;
+    startResult(false);
+  } else if (pa) {
+    // 친구 초대 링크 → 내 정보만 입력
+    state.mode = 'invited'; state.a = pa;
+    const s = ZM_SIGNS[pa.sign];
+    const banner = document.getElementById('inviteBanner');
+    banner.innerHTML = `💌 친구가 궁합 초대장을 보냈어요<br><b>${s.symbol} ${s.name} · ${pa.mbti}</b><br>내 정보만 입력하면 둘의 궁합이 바로 나와요.`;
+    banner.style.display = '';
+    document.getElementById('startBtn').textContent = '내 정보 입력하기 →';
+  }
+
+  /* ── Firebase 참여 집계 ── */
+  function recordParticipation() {
+    if (window.incrementParticipation) window.incrementParticipation('zodiacmbti');
+  }
+</script>
+
+<script type="module">
+  import { db, doc, updateDoc, increment } from './firebase-init.js';
+  window.incrementParticipation = function(id) {
+    if (!id) return;
+    const statsRef = doc(db, 'stats', 'participation');
+    updateDoc(statsRef, { [id]: increment(1) }).catch(err => { console.error('Firebase update failed:', err); });
+  };
+</script>
+</body>
+</html>

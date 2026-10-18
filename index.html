@@ -81,7 +81,8 @@
       { "@type": "ListItem", "position": 29, "name": "나와 찰떡인 강아지는? 견종 매칭 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=dogbreed" },
       { "@type": "ListItem", "position": 30, "name": "나와 찰떡인 고양이는? 묘종 매칭 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=catbreed" },
       { "@type": "ListItem", "position": 31, "name": "나는 어떤 반려인일까? 집사·견주 유형 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=petowner" },
-      { "@type": "ListItem", "position": 32, "name": "내 정신연령은 몇 살? 정신연령 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=mentalage" }
+      { "@type": "ListItem", "position": 32, "name": "내 정신연령은 몇 살? 정신연령 테스트", "url": "https://testlab.tmhub.co.kr/test.html?id=mentalage" },
+      { "@type": "ListItem", "position": 33, "name": "별자리 × MBTI 궁합", "url": "https://testlab.tmhub.co.kr/zodiacmbti.html" }
     ]
   }
   </script>
@@ -513,6 +514,7 @@
     { id:"catbreed", emoji:"🐈", title:"나와 찰떡인 고양이는? 묘종 매칭 테스트", desc:"성향과 생활 패턴으로 찾는 찰떡궁합 묘종 (26문항 · 20묘종)", category:"재미", count:1480, thumb:"images/catbreed/thumb.webp" },
     { id:"petowner", emoji:"🐾", title:"나는 어떤 반려인일까? 집사·견주 유형 테스트", desc:"케어러? 놀이 파트너? 나의 집사·견주 스타일 6유형 (18문항)", category:"재미", count:1620, thumb:"images/petowner/thumb.webp" },
     { id:"mentalage", emoji:"🧠", title:"내 정신연령은 몇 살? 정신연령 테스트", desc:"취향·생활·소통·멘탈로 알아보는 나의 마음 나이 (12문항)", category:"재미", count:2480, thumb:"images/mentalage/thumb.webp" },
+    { id:"zodiacmbti", emoji:"🔮", title:"별자리 × MBTI 궁합", desc:"둘의 별자리와 MBTI로 궁합 %를 확인해요. 친구를 초대해 같이 볼 수도 있어요", category:"연애", count:2150, thumb:"images/zodiacmbti/thumb.webp", url:"zodiacmbti.html" },
     // { id:"moral",   emoji:"⚖️", title:"도덕 정렬 테스트",   desc:"나는 Lawful Good? Chaotic Evil?",       category:"성격", count:12900 },
     // { id:"humor",   emoji:"😂", title:"유머 스타일 테스트", desc:"나의 웃음 코드는?",                     category:"재미", count:4100  },
   ];
@@ -731,7 +733,8 @@
     dogbreed: 1720,
     catbreed: 1480,
     petowner: 1620,
-    mentalage: 2480
+    mentalage: 2480,
+    zodiacmbti: 2150
   };
 
   // Sync with Firestore
@@ -744,7 +747,7 @@
       });
     } else {
       // Initialize Firestore with 0 if it doesn't exist
-      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347, study: 3742, nunchi: 1834, mbtidep: 1263, blackhistory: 1247, cheatline: 1892, datepay: 2156, friendline: 2483, dopamine: 3128, somecheck: 2740, reunion: 1980, lovelang: 2210, boredom: 2360, dogmbti: 1840, catmbti: 1560, dogbreed: 1720, catbreed: 1480, petowner: 1620, mentalage: 2480 });
+      setDoc(statsRef, { sbti: 0, jealousy: 0, attachment: 0, brain: 0, fingerlove: 0, sleeplove: 0, pein: 0, foodtest1: 0, kakaotalklove: 0, obsession: 0, battery: 0, weather: 0, kkondae: 0, philconomy: 0, travel: 0, ai: 2347, study: 3742, nunchi: 1834, mbtidep: 1263, blackhistory: 1247, cheatline: 1892, datepay: 2156, friendline: 2483, dopamine: 3128, somecheck: 2740, reunion: 1980, lovelang: 2210, boredom: 2360, dogmbti: 1840, catmbti: 1560, dogbreed: 1720, catbreed: 1480, petowner: 1620, mentalage: 2480, zodiacmbti: 2150 });
     }
   });
 
