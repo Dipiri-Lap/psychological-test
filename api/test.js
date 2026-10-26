@@ -37,6 +37,8 @@ const TEST_META = {
   petowner: { title: '나는 어떤 반려인일까? 집사·견주 유형 테스트', desc: '케어러? 놀이 파트너? 나의 집사·견주 스타일 6유형 (18문항)', img: '/images/petowner/thumb.webp' },
   mentalage: { title: '내 정신연령은 몇 살? 정신연령 테스트', desc: '취향·생활·소통·멘탈로 알아보는 나의 마음 나이 (12문항)', img: '/images/mentalage/thumb.webp' },
   mindscape: { title: '그림으로 보는 내 마음 — 마음의 풍경 테스트', desc: '글 대신 그림으로 고르는 6장면, 지금 가장 끌리는 풍경은? (6문항)', img: '/images/mindscape/thumb.webp' },
+  lovevillain: { title: '나는 연애할 때 어떤 빌런일까? 연애 빌런·레드플래그 테스트', desc: '12가지 연애 상황으로 알아보는 나의 빌런 유형과 레드플래그 지수 (12문항)', img: '/images/lovevillain/thumb.webp' },
+  loveshelf: { title: '내 연애의 유통기한은? 연애 지속력 테스트', desc: '설렘·회복·일상·미래, 4가지 힘으로 보는 나의 연애 지속력 (12문항)', img: '/images/loveshelf/thumb.webp' },
   moral:      { title: '도덕 정렬 테스트',        desc: '나는 Lawful Good? Chaotic Evil?',      img: '/images/jealousy/thumb.webp' },
   humor:      { title: '유머 스타일 테스트',       desc: '나의 웃음 코드는?',                    img: '/images/jealousy/thumb.webp' },
 };
