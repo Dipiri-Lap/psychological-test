@@ -43,6 +43,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <!-- Google AdSense -->
+  <script src="analytics.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398"
      crossorigin="anonymous"></script>
 
@@ -2715,6 +2716,11 @@
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-8px); }
     }
+
+    /* ── 푸터(개인정보처리방침 링크) ── */
+    .site-footer { text-align: center; padding: 28px 16px 44px; font-size: 12px; color: var(--c-muted, #9b9490); }
+    .site-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+    .site-footer a:hover { color: var(--c-accent, #e85d75); }
   </style>
 </head>
 <body>
@@ -3130,6 +3136,7 @@
     <a href="index.html" class="action-btn btn-more" style="margin-top:24px;">
       <span class="btn-icon">✨</span> 다른 테스트 하러 가기
     </a>
+    <p class="site-footer" style="padding:18px 0 0;"><a href="privacy.html">개인정보처리방침</a></p>
 
   <!-- AdSense Slot -->
 </div>
@@ -3627,6 +3634,7 @@ function showScreen(id) {
    QUIZ
 ══════════════════════════════════════════════════ */
 function startQuiz() {
+  trackEvent('test_start', { test_id: testId });
   qIndex = 0;
   showScreen('quizScreen');
   renderQuestion(true);
@@ -3737,6 +3745,7 @@ function renderChoices(current, container) {
    LOADING → RESULT
 ══════════════════════════════════════════════════ */
 function showLoading() {
+  trackEvent('test_complete', { test_id: testId });
   document.getElementById('progressFill').style.width = '100%';
   showScreen('loadingScreen');
   
@@ -3756,6 +3765,7 @@ function showLoading() {
 }
 
 function showResult() {
+  trackEvent('result_view', { test_id: testId });
   let winner, res;
 
   if (config && config.calcResult) {
@@ -3848,6 +3858,7 @@ async function generateThumb() {
 }
 
 async function saveImage() {
+  trackEvent('share', { method: 'save_image', content_type: 'test', item_id: testId });
   const btn = document.getElementById('btnSave');
   btn.textContent = '⏳ 생성 중...';
   btn.disabled    = true;
@@ -3890,6 +3901,7 @@ function initKakao() {
 }
 
 function shareIntro() {
+  trackEvent('share', { method: 'kakao_intro', content_type: 'test', item_id: testId });
   if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
   const base    = 'https://testlab.tmhub.co.kr';
   const testUrl = `${base}/test.html?id=${testId}`;
@@ -3913,6 +3925,7 @@ function shareIntro() {
 }
 
 function shareKakao() {
+  trackEvent('share', { method: 'kakao', content_type: 'test', item_id: testId });
   if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
 
   const type  = sessionStorage.getItem('resultType')  || '';
@@ -3942,6 +3955,7 @@ function shareKakao() {
 }
 
 async function shareNative() {
+  trackEvent('share', { method: 'native', content_type: 'test', item_id: testId });
   const type = sessionStorage.getItem('resultType') || '';
   const text = `${testData.emoji} ${testData.title}${type ? ` — ${type}` : ''}`;
   const url  = location.href;
@@ -3991,6 +4005,7 @@ function shareTo(platform) {
 }
 
 function copyLink() {
+  trackEvent('share', { method: 'copy_link', content_type: 'test', item_id: testId });
   const doToast = () => showToast('링크가 복사됐어요 🎉');
 
   if (navigator.clipboard) {

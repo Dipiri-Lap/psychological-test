@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마음. — 개인정보처리방침</title>
+  <link rel="icon" href="images/favicon.webp" type="image/webp" />
+  <meta name="description" content="마음. 심리테스트가 어떤 정보를 수집하고 어떻게 사용하는지 안내합니다." />
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#100f0e" media="(prefers-color-scheme: dark)" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://testlab.tmhub.co.kr/privacy.html" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script src="analytics.js"></script>
+
+  <style>
+    :root {
+      --c-main: #1c1917; --c-accent: #e85d75; --c-bg: #faf8f5; --c-surface: #ffffff; --c-surf2: #f3f0ea;
+      --c-text: #1c1917; --c-muted: #6f6a66; --c-border: #e8e3db; --r: 16px;
+    }
+    [data-theme="dark"] {
+      --c-main: #f0ece6; --c-accent: #ff4d72; --c-bg: #100f0e; --c-surface: #1a1917; --c-surf2: #211f1d;
+      --c-text: #f0ece6; --c-muted: #9b9490; --c-border: #2a2724;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--c-bg); color: var(--c-text); -webkit-font-smoothing: antialiased; line-height: 1.8; transition: background .35s, color .35s; }
+    a { color: var(--c-accent); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    #topNav { position: fixed; top: max(10px, env(safe-area-inset-top)); left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 18px; z-index: 50; }
+    .nav-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--c-surface); border: 1.5px solid var(--c-border); display: grid; place-items: center; font-size: 16px; color: var(--c-text); text-decoration: none; }
+    main { max-width: 720px; margin: 0 auto; padding: 84px 20px 64px; }
+    h1 { font-family: 'Nanum Myeongjo', serif; font-size: 28px; letter-spacing: -.5px; line-height: 1.35; margin-bottom: 8px; }
+    .updated { font-size: 13px; color: var(--c-muted); margin-bottom: 28px; }
+    .lead { font-size: 15px; margin-bottom: 8px; }
+    h2 { font-size: 17px; margin: 34px 0 10px; padding-left: 10px; border-left: 4px solid var(--c-accent); line-height: 1.4; }
+    p, li { font-size: 14.5px; color: var(--c-text); }
+    p { margin-bottom: 10px; }
+    ul { padding-left: 20px; margin-bottom: 10px; }
+    li { margin-bottom: 4px; }
+    .note { font-size: 13px; color: var(--c-muted); }
+    table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 13.5px; }
+    th, td { border: 1px solid var(--c-border); padding: 9px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--c-surf2); font-weight: 700; white-space: nowrap; }
+    .box { background: var(--c-surf2); border-radius: var(--r); padding: 14px 16px; margin: 10px 0; font-size: 14px; }
+    .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tablewrap table { min-width: 560px; }
+    /* 모바일에서는 표를 항목별 카드로 */
+    @media (max-width: 640px) {
+      .tablewrap table { min-width: 0; }
+      .tablewrap table, .tablewrap tbody, .tablewrap tr, .tablewrap td { display: block; width: 100%; }
+      .tablewrap tr:first-child { display: none; }
+      .tablewrap tr { border: 1px solid var(--c-border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--c-surface); }
+      .tablewrap td { border: none; border-bottom: 1px solid var(--c-border); padding: 8px 12px; }
+      .tablewrap td:last-child { border-bottom: none; }
+      .tablewrap td::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 700; color: var(--c-muted); margin-bottom: 1px; }
+      .tablewrap td:first-child { background: var(--c-surf2); font-weight: 700; }
+      .tablewrap td:first-child::before { display: none; }
+    }
+    footer { text-align: center; font-size: 12px; color: var(--c-muted); padding: 24px 16px 40px; }
+  </style>
+</head>
+<body>
+<nav id="topNav">
+  <a class="nav-btn" href="index.html" aria-label="홈으로">←</a>
+  <button class="nav-btn" id="themeBtn" aria-label="테마 전환">🌙</button>
+</nav>
+
+<main>
+  <h1>개인정보처리방침</h1>
+  <p class="updated">시행일: 2026년 10월 27일</p>
+  <p class="lead">'마음.'(testlab.tmhub.co.kr, 이하 "사이트")은 회원가입 없이 이용하는 심리테스트 서비스입니다. 이 문서는 사이트가 이용 중에 어떤 정보를 다루는지, 그 정보를 왜·어떻게 사용하는지 안내합니다.</p>
+
+  <h2>1. 요약</h2>
+  <div class="box">
+    <ul>
+      <li>회원가입이 없고, <b>이름·연락처·생년월일 같은 개인정보를 요구하지 않습니다.</b></li>
+      <li>테스트 응답과 결과는 <b>이용자의 브라우저 안에서만 계산</b>되며 서버에 보내지 않습니다.</li>
+      <li>댓글을 남기면 닉네임(선택)·내용 등이 저장됩니다.</li>
+      <li>방문 통계(Google Analytics)와 광고(Google AdSense)에 쿠키가 사용됩니다.</li>
+    </ul>
+  </div>
+
+  <h2>2. 수집·이용하는 정보</h2>
+  <div class="tablewrap">
+  <table>
+    <tr><th>구분</th><th>항목</th><th>목적</th><th>보관</th></tr>
+    <tr><td data-label="구분">테스트 응답·결과</td><td data-label="항목">선택한 답변, 계산된 결과</td><td data-label="목적">결과 화면 표시</td><td data-label="보관">서버로 전송·저장하지 않음. 결과 화면 이동을 위해 브라우저 세션(탭을 닫으면 삭제)에만 임시 보관</td></tr>
+    <tr><td data-label="구분">참여 횟수</td><td data-label="항목">테스트별 완료 횟수(익명 숫자)</td><td data-label="목적">"N명 참여" 표시</td><td data-label="보관">개인과 연결되지 않는 합계로만 저장</td></tr>
+    <tr><td data-label="구분">댓글</td><td data-label="항목">닉네임(선택, 비우면 "익명"), 댓글 내용, 해당 테스트와 결과 유형, 작성 시각</td><td data-label="목적">사이트 내 댓글 표시</td><td data-label="보관">삭제 시까지. 작성자가 같은 기기에서 직접 삭제하거나 삭제를 요청할 수 있음</td></tr>
+    <tr><td data-label="구분">방문 통계</td><td data-label="항목">방문한 페이지, 이용 환경(기기·브라우저), 대략적인 지역, 테스트 시작·완료·공유 같은 이용 이벤트</td><td data-label="목적">서비스 이용 현황 파악과 개선</td><td data-label="보관">Google Analytics 설정에 따름</td></tr>
+    <tr><td data-label="구분">광고</td><td data-label="항목">광고 식별을 위한 쿠키 등</td><td data-label="목적">광고 게재(Google AdSense)</td><td data-label="보관">Google 정책에 따름</td></tr>
+    <tr><td data-label="구분">브라우저 저장소</td><td data-label="항목">화면 테마(라이트/다크), 댓글 작성 여부</td><td data-label="목적">이용 편의와 댓글 중복 방지</td><td data-label="보관">이용자가 브라우저에서 삭제할 때까지</td></tr>
+  </table>
+  </div>
+  <p class="note">닉네임과 댓글에는 실명, 연락처 등 개인을 알아볼 수 있는 정보를 적지 않도록 주의해 주세요. 사이트는 댓글에 적힌 내용을 별도로 확인하거나 가공하지 않습니다.</p>
+
+  <h2>3. 별자리 × MBTI 궁합 이용 시</h2>
+  <p>별자리·MBTI 궁합에서 입력하는 생일(월·일), 별자리, MBTI는 <b>서버로 전송하거나 저장하지 않고</b> 이용자의 브라우저에서 계산합니다. 다만 "친구에게 초대 보내기"나 "결과 링크 복사"를 사용하면 두 사람의 별자리와 MBTI 코드가 <b>링크 주소 안에</b> 들어갑니다(이름과 생일은 들어가지 않음). 링크를 받은 사람은 그 정보를 볼 수 있으니, 공유하고 싶은 사람에게만 보내 주세요.</p>
+
+  <h2>4. 쿠키와 외부 서비스</h2>
+  <p>사이트는 아래 외부 서비스를 사용하며, 이 과정에서 각 사업자가 쿠키 등을 통해 정보를 처리할 수 있습니다.</p>
+  <ul>
+    <li><b>Google Analytics</b>: 방문 통계 분석. 사이트는 이용자의 이름이나 입력값을 통계 이벤트에 담지 않습니다. 거부하려면 <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics 차단 브라우저 부가기능</a>을 설치하거나 브라우저에서 쿠키를 차단할 수 있습니다.</li>
+    <li><b>Google AdSense</b>: 광고 게재. 광고 개인 최적화는 <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google 광고 설정</a>에서 끌 수 있습니다.</li>
+    <li><b>Google Firebase(Firestore)</b>: 댓글과 참여 횟수 저장.</li>
+    <li><b>카카오 JavaScript SDK</b>: 카카오톡 공유 기능. 공유 버튼을 사용할 때 카카오 서비스와 통신합니다.</li>
+    <li><b>Google Fonts, cdnjs(html2canvas)</b>: 글꼴과 결과 이미지 생성 라이브러리 불러오기.</li>
+  </ul>
+  <p>위 사업자는 서버를 해외에 두고 있어 정보가 해외에서 처리·보관될 수 있습니다. 각 서비스의 처리 방식은 해당 사업자의 개인정보 정책을 따릅니다.</p>
+  <p>쿠키는 브라우저 설정에서 허용 여부를 바꾸거나 삭제할 수 있습니다. 쿠키를 막아도 테스트 이용에는 지장이 없지만 일부 기능(예: 화면 테마 기억, 댓글 중복 방지)이 제한될 수 있습니다.</p>
+
+  <h2>5. 정보의 제3자 제공</h2>
+  <p>사이트는 이용자의 정보를 판매하거나, 법령에 근거가 없는 한 위 외부 서비스 외의 제3자에게 제공하지 않습니다.</p>
+
+  <h2>6. 이용자의 권리</h2>
+  <ul>
+    <li>작성한 댓글은 같은 기기에서 직접 삭제할 수 있습니다.</li>
+    <li>다른 기기나 브라우저 데이터 삭제 등으로 직접 삭제할 수 없는 댓글은 아래 문의처로 요청해 주세요. 확인 후 삭제합니다.</li>
+    <li>브라우저의 저장 데이터(로컬 저장소·쿠키)는 이용자가 직접 삭제할 수 있습니다.</li>
+  </ul>
+
+  <h2>7. 아동</h2>
+  <p>사이트는 만 14세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다. 댓글에 개인정보를 적지 않도록 보호자의 지도 부탁드립니다.</p>
+
+  <h2>8. 안전성 확보</h2>
+  <p>사이트는 개인을 식별할 수 있는 정보를 받지 않는 구조를 기본으로 하며, 댓글 데이터는 Google Firebase의 보안 환경에 저장됩니다.</p>
+
+  <h2>9. 문의처</h2>
+  <p>개인정보와 관련한 문의, 댓글 삭제 요청은 아래로 연락해 주세요.</p>
+  <div class="box" id="contactBox">운영자 이메일: <a id="contactEmail" href="mailto:ehrbs50@gmail.com">ehrbs50@gmail.com</a></div>
+
+  <h2>10. 방침의 변경</h2>
+  <p>이 방침은 서비스 변경이나 법령에 따라 바뀔 수 있으며, 변경 시 이 페이지에 시행일과 함께 게시합니다.</p>
+  <p class="note">이 문서는 사이트의 실제 동작을 바탕으로 작성한 안내이며 법률 자문이 아닙니다.</p>
+</main>
+
+<footer>© 마음. 심리테스트 · <a href="index.html">홈으로</a></footer>
+
+<script>
+  const html = document.documentElement, themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) { html.dataset.theme = t; themeBtn.textContent = t === 'dark' ? '☀️' : '🌙'; try { localStorage.setItem('theme', t); } catch (_) {} }
+  let saved = null; try { saved = localStorage.getItem('theme'); } catch (_) {}
+  setTheme(saved ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  themeBtn.addEventListener('click', () => setTheme(html.dataset.theme === 'dark' ? 'light' : 'dark'));
+</script>
+</body>
+</html>

@@ -27,6 +27,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
+  <script src="analytics.js"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7327562206502398" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"
@@ -277,6 +278,11 @@
     .sc-divider { display: none; }
     .sc-desc { font-size: 11.5px; color: rgba(250,248,245,.62); line-height: 1.5; font-weight: 300; max-width: 250px; }
     .sc-footer { font-size: 10px; color: rgba(250,248,245,.3); font-weight: 500; letter-spacing: .5px; text-align: center; }
+
+    /* ── 푸터(개인정보처리방침 링크) ── */
+    .site-footer { text-align: center; padding: 28px 16px 44px; font-size: 12px; color: var(--c-muted, #9b9490); }
+    .site-footer a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+    .site-footer a:hover { color: var(--c-accent, #e85d75); }
   </style>
 </head>
 <body>
@@ -380,6 +386,7 @@
     <a class="action-btn btn-more" href="index.html">
       <span class="btn-icon">✨</span> 다른 테스트 하러 가기
     </a>
+    <p class="site-footer" style="padding:14px 0 0;"><a href="privacy.html">개인정보처리방침</a></p>
   </div>
 </section>
 
@@ -562,6 +569,7 @@
 
   /* ── 결과 ── */
   function startResult(count) {
+    if (count) trackEvent('test_complete', { test_id: 'zodiacmbti', mode: state.mode });
     state.result = calcZodiacMbti(state.a, state.b);
     renderResult(state.result);
     showScreen('loading');
@@ -675,6 +683,7 @@
     } catch (_) {}
   }
   document.getElementById('saveBtn').addEventListener('click', async () => {
+    trackEvent('share', { method: 'save_image', content_type: 'test', item_id: 'zodiacmbti' });
     if (typeof html2canvas === 'undefined') { showToast('저장 기능을 불러오는 중이에요'); return; }
     try {
       const canvas = await html2canvas(document.getElementById('shareCard'), { scale: 2, useCORS: true, backgroundColor: null, logging: false });
@@ -694,6 +703,7 @@
   const THUMB_URL = 'https://testlab.tmhub.co.kr/images/zodiacmbti/thumb.webp';
 
   document.getElementById('kakaoBtn').addEventListener('click', () => {
+    trackEvent('share', { method: 'kakao', content_type: 'test', item_id: 'zodiacmbti' });
     if (!state.result) return;
     if (!initKakao()) { showToast('카카오 SDK를 불러오는 중이에요.'); return; }
     const r = state.result, [pA, pB] = r.people;
@@ -713,6 +723,7 @@
     });
   });
   document.getElementById('inviteBtn').addEventListener('click', () => {
+    trackEvent('share', { method: 'invite', content_type: 'test', item_id: 'zodiacmbti' });
     const me = state.inviter;
     if (!me) return;
     if (!initKakao()) {
@@ -733,6 +744,7 @@
     });
   });
   document.getElementById('copyBtn').addEventListener('click', () => {
+    trackEvent('share', { method: 'copy_link', content_type: 'test', item_id: 'zodiacmbti' });
     if (!state.result) return;
     navigator.clipboard.writeText(resultUrl(state.a, state.b))
       .then(() => showToast('결과 링크가 복사됐어요!'))
@@ -747,6 +759,7 @@
     openInput('a');
   });
   document.getElementById('startBtn').addEventListener('click', () => {
+    trackEvent('test_start', { test_id: 'zodiacmbti', mode: state.mode });
     if (state.mode === 'invited') openInput('b'); else openInput('a');
   });
   document.getElementById('backBtn').addEventListener('click', () => {
