@@ -186,6 +186,10 @@
   <script src="tests/loveshelf/loveshelf-test.js"></script>
   <script src="tests/loveshelf/loveshelf-config.js"></script>
 
+  <!-- ── Cutoff (손절 유형) ───────────── -->
+  <script src="tests/cutoff/cutoff-test.js"></script>
+  <script src="tests/cutoff/cutoff-config.js"></script>
+
   <style>
     /* ── Design Tokens ───────────────────────────────── */
     :root {
@@ -1650,7 +1654,7 @@
     .ms-footer { margin-top: 16px; font-size: 11px; color: var(--c-muted); text-align: center; line-height: 1.6; }
 
     /* ── Love Villain Stats ────────────────────────── */
-    #lovevillainStats, #loveshelfStats {
+    #lovevillainStats, #loveshelfStats, #cutoffStats {
       width: 100%; max-width: 480px;
       background: var(--c-surface);
       border: 2px solid var(--c-border);
@@ -3152,6 +3156,9 @@
 
   <!-- 연애 유통기한 테스트 -->
   <div id="loveshelfStats" style="display:none; margin-top:28px;"></div>
+
+  <!-- 손절 유형 테스트 -->
+  <div id="cutoffStats" style="display:none; margin-top:28px;"></div>
 
   <!-- 꼰대 성분 분석표 -->
   <div id="kkondaeStats" style="display:none; margin-top:28px;"></div>
